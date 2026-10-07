@@ -1,0 +1,7 @@
+.secrets.env
+node_modules/
+.wrangler/
+build/
+*.xcodeproj/
+DerivedData/
+.DS_Store

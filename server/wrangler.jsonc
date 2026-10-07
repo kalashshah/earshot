@@ -1,0 +1,26 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "earshot-api",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-10-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "d1_databases": [
+    { "binding": "DB", "database_name": "earshot-db", "database_id": "dedcaa9a-582b-49db-b49d-300842db6278" }
+  ],
+  // Raw recordings from the watch, kept so a failed transcription can be retried.
+  "r2_buckets": [{ "binding": "AUDIO", "bucket_name": "earshot-audio" }],
+  "ai": { "binding": "AI" },
+  // Upload returns as soon as audio is stored; transcription + memory extraction run here,
+  // retried on failure, so a slow model never times out the phone's upload.
+  "queues": {
+    "producers": [{ "binding": "PROCESS", "queue": "earshot-process" }],
+    "consumers": [{ "queue": "earshot-process", "max_batch_size": 5, "max_retries": 3 }]
+  },
+  // Worker→Worker over workers.dev on the same account is blocked (error 1042): go direct.
+  "services": [{ "binding": "MEMORYHQ", "service": "memoryhq" }],
+  "vars": {
+    "MEMORYHQ_URL": "https://memoryhq.kalashshah47.workers.dev"
+  },
+  // Secrets: APP_TOKEN, MEMORYHQ_WORKSPACE, MEMORYHQ_KEY
+  "observability": { "enabled": true }
+}
