@@ -14,13 +14,47 @@
   // retried on failure, so a slow model never times out the phone's upload.
   "queues": {
     "producers": [{ "binding": "PROCESS", "queue": "earshot-process" }],
-    "consumers": [{ "queue": "earshot-process", "max_batch_size": 5, "max_retries": 3 }]
+    "consumers": [{ "queue": "earshot-process", "max_batch_size": 1, "max_retries": 3 }]
   },
   // Worker→Worker over workers.dev on the same account is blocked (error 1042): go direct.
   "services": [{ "binding": "MEMORYHQ", "service": "memoryhq" }],
   "vars": {
-    "MEMORYHQ_URL": "https://memoryhq.kalashshah47.workers.dev"
+    "MEMORYHQ_URL": "https://memoryhq.kalashshah47.workers.dev",
+    "TZ": "Asia/Kolkata",
+    "RETENTION_DAYS": "30",
+    "USER_NAME": "Kalash"
   },
-  // Secrets: APP_TOKEN, MEMORYHQ_WORKSPACE, MEMORYHQ_KEY
-  "observability": { "enabled": true }
+  // Hourly: each user gets their brief at 07:00 in their own timezone.
+  "triggers": { "crons": ["0 * * * *"] },
+  // Dashboard (public/) is served as static files; every API path falls through to the Worker.
+  "assets": { "directory": "./public" },
+  // Secrets: NEBIUS_API_KEY, TAVILY_API_KEY, INTERNAL_SECRET (shared with earshot-web),
+  // MEMORYHQ_WORKSPACE + MEMORYHQ_KEY (one workspace; each user is an end user in it),
+  // and APP_TOKEN for the legacy single-user token (user "me", settings from the vars above)
+  "observability": { "enabled": true },
+  // Public demo for judges: same code, its own data (a staged day), its own MemoryHQ workspace + token.
+  // Deploy: npx wrangler deploy --env demo
+  "env": {
+    "demo": {
+      "name": "earshot-demo",
+      "d1_databases": [
+        { "binding": "DB", "database_name": "earshot-demo-db", "database_id": "739dd3fb-2bfd-467b-9d38-1d515c0bd748" }
+      ],
+      "r2_buckets": [{ "binding": "AUDIO", "bucket_name": "earshot-demo-audio" }],
+      "queues": {
+        "producers": [{ "binding": "PROCESS", "queue": "earshot-demo-process" }],
+        "consumers": [{ "queue": "earshot-demo-process", "max_batch_size": 1, "max_retries": 3 }]
+      },
+      "ai": { "binding": "AI" },
+      "services": [{ "binding": "MEMORYHQ", "service": "memoryhq" }],
+      "vars": {
+        "MEMORYHQ_URL": "https://memoryhq.kalashshah47.workers.dev",
+        "TZ": "Asia/Kolkata",
+        "RETENTION_DAYS": "3650",
+        "DAILY_USD_CAP": "1",
+        "USER_NAME": "Dev"
+      },
+      "triggers": { "crons": [] }
+    }
+  }
 }

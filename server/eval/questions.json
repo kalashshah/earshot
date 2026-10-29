@@ -1,0 +1,48 @@
+[
+  { "id": 1, "type": "fact", "q": "What company does Priya work for?", "gold": "Halden Outdoor.", "evidence": ["it's Priya", "Halden Outdoor was looking at a pilot"] },
+  { "id": 2, "type": "fact", "q": "When and where is Ava's birthday party?", "gold": "Saturday at 3 PM at the trampoline park on Elm Street.", "evidence": ["Saturday at 3 PM at the trampoline park on Elm Street"] },
+  { "id": 3, "type": "fact", "q": "Which company does Leo work at?", "gold": "Stripe (in solutions engineering).", "evidence": ["how's Stripe treating you", "Solutions engineering never sleeps"] },
+  { "id": 4, "type": "fact", "q": "What is Maya's dietary preference?", "gold": "She is vegetarian.", "evidence": ["I'm vegetarian"] },
+  { "id": 5, "type": "fact", "q": "Where will Dad's birthday dinner be?", "gold": "At Olive and Ash, Sunday at 7, a table for 6.", "evidence": ["book a table for 6 at Olive and Ash for Sunday at 7", "Dad's birthday dinner"] },
+  { "id": 6, "type": "fact", "q": "Where does the candidate Sofia work right now?", "gold": "At Shopify, as a backend engineer on the checkout team.", "evidence": ["what you're doing at Shopify", "backend engineer on the checkout team"] },
+  { "id": 7, "type": "fact", "q": "What present am I getting for Ava?", "gold": "The Lego space shuttle.", "evidence": ["I'll get the Lego space shuttle for Ava's party"] },
+
+  { "id": 8, "type": "who", "q": "Who proposed pushing the Shopify launch to November 10?", "gold": "Maya.", "evidence": ["My proposal is we push the launch to November 10"] },
+  { "id": 9, "type": "who", "q": "Who said there are 3 more pilots in the pipeline?", "gold": "Jordan.", "evidence": ["I've got 3 more pilots in the pipeline"] },
+  { "id": 10, "type": "who", "q": "Who recommended reserving 8 H200 GPUs?", "gold": "Elena from Nebius.", "evidence": ["it's Elena from Nebius", "reserving 8 H200 GPUs"] },
+  { "id": 11, "type": "who", "q": "Who wanted to lower the pilot price to $1,500 a month?", "gold": "Jordan.", "evidence": ["Sure, Jordan", "I want to go in at $1,500"] },
+  { "id": 12, "type": "who", "q": "Who suggested the Lego space shuttle as a gift?", "gold": "Nina, my sister.", "evidence": ["it's Nina", "Hey sis", "The Lego space shuttle. Every kid loves it."] },
+
+  { "id": 13, "type": "commitment", "q": "What do I owe Priya, and by when?", "gold": "The pilot contract by Friday and the SOC 2 Type I letter by Wednesday.", "evidence": ["I'll send you the pilot contract by Friday", "SOC 2 Type I letter. I'll send it to you by Wednesday"] },
+  { "id": 14, "type": "commitment", "q": "What did Maya promise to send me by Thursday?", "gold": "The Nebius GPU usage report.", "evidence": ["I'll send you the Nebius GPU usage report by Thursday"] },
+  { "id": 15, "type": "commitment", "q": "What is Rachel going to do for me, and by when?", "gold": "Introduce me to two retail CTOs from her network by next Wednesday.", "evidence": ["I'll introduce you to two retail CTOs from our network. I'll do that by next Wednesday"] },
+  { "id": 16, "type": "commitment", "q": "What do I owe Rachel?", "gold": "The updated investor deck by Friday.", "evidence": ["I'll send you the updated deck by Friday"] },
+  { "id": 17, "type": "commitment", "q": "By when do I have to give Nebius a decision on the GPU commitment?", "gold": "By October 23.", "evidence": ["I'll give you a decision by October 23"] },
+  { "id": 18, "type": "commitment", "q": "What did Jordan commit to sending by Monday?", "gold": "All three pilot proposals.", "evidence": ["I'll send all three pilot proposals by Monday"] },
+  { "id": 19, "type": "commitment", "q": "When are Tomás's onboarding mockups due?", "gold": "Wednesday.", "evidence": ["onboarding mockups for you by Wednesday", "full mockups on Wednesday"] },
+  { "id": 20, "type": "commitment", "q": "What did I promise Nina?", "gold": "To book a table for 6 at Olive and Ash for Sunday at 7 (tonight) for Dad's birthday dinner.", "evidence": ["I'll book a table for 6 at Olive and Ash for Sunday at 7. Tonight, I promise."] },
+
+  { "id": 21, "type": "number", "q": "What monthly price did I quote Halden Outdoor?", "gold": "$1,800 a month, covering up to 50 stores.", "evidence": ["$1,800 a month, and that covers up to 50 stores"] },
+  { "id": 22, "type": "number", "q": "How much was last month's Nebius GPU bill?", "gold": "$14,200.", "evidence": ["The Nebius GPU bill last month was $14,200"] },
+  { "id": 23, "type": "number", "q": "What is our current MRR?", "gold": "$42,000.", "evidence": ["MRR is $42,000"] },
+  { "id": 24, "type": "number", "q": "How much runway do we have, and what is the monthly burn?", "gold": "14 months of runway at about $95,000 a month burn.", "evidence": ["Burn is about $95,000 a month, and runway is 14 months"] },
+  { "id": 25, "type": "number", "q": "What is the salary band for the backend roles?", "gold": "$150,000 to $170,000.", "evidence": ["salary band at $150,000 to $170,000"] },
+  { "id": 26, "type": "number", "q": "How much did latency improve after moving the recommendation model to Nemotron?", "gold": "From 900 milliseconds to 350 milliseconds.", "evidence": ["Latency dropped from 900 milliseconds to 350 milliseconds"] },
+  { "id": 27, "type": "number", "q": "What discount did Nebius offer, and for what commitment?", "gold": "20% off for a six-month commitment.", "evidence": ["If you commit for six months, we can do a 20% discount"] },
+  { "id": 28, "type": "number", "q": "What discount is Jordan allowed to offer pilots?", "gold": "10% off for annual prepay only; list price stays $1,800 a month.", "evidence": ["If they prepay annually, give them a 10% discount"] },
+
+  { "id": 29, "type": "temporal", "q": "What changed about the Shopify launch date between the morning and the afternoon?", "gold": "In the morning it was pushed from October 27 to November 10 to ship with Stripe; in the afternoon that was reversed: launch on October 27 (Shopify only) with Stripe as a fast follow on November 10.", "evidence": ["we move the Shopify launch from October 27 to November 10", "launch October 27, Shopify only, Stripe fast follow on November 10"] },
+  { "id": 30, "type": "temporal", "q": "What is the final launch date for the Shopify app?", "gold": "October 27.", "evidence": ["final decision: launch October 27"] },
+  { "id": 31, "type": "temporal", "q": "How did the size of the Halden pilot change during the day?", "gold": "Halden has 40 stores; in the afternoon Priya decided to start the pilot with 12 stores and expand in January.", "evidence": ["we have 40 stores", "start the pilot with 12 stores and expand in January"] },
+  { "id": 32, "type": "temporal", "q": "When is the intro with Mark Delaney?", "gold": "Tuesday at 10 AM (Priya first promised an intro next week, then set it up for Tuesday at 10 AM).", "evidence": ["I'll introduce you to Mark next week", "Tuesday at 10 AM works for him"] },
+
+  { "id": 33, "type": "synthesis", "q": "Why was the launch decision reversed?", "gold": "Halden Outdoor's Black Friday code freeze starts November 1, so a November 10 launch would lose them until January; Jordan's 3 other pilots have the same holiday freeze.", "evidence": ["Black Friday code freeze that starts November 1", "we'd have to wait until January", "all of them are retailers with the same holiday freeze"] },
+  { "id": 34, "type": "synthesis", "q": "What am I waiting on before deciding on the Nebius GPU commitment?", "gold": "Maya's Nebius GPU usage report (due Thursday) and Elena's formal quote (due Friday).", "evidence": ["I want to see Maya's usage report first", "I'll send you a formal quote by Friday"] },
+  { "id": 35, "type": "synthesis", "q": "Is Sofia's salary ask within our band?", "gold": "Yes: she asked for about $165,000 and the band is $150,000 to $170,000.", "evidence": ["around $165,000", "$150,000 to $170,000", "That's within our band"] },
+  { "id": 36, "type": "synthesis", "q": "What dietary restrictions came up across the day's conversations?", "gold": "Maya is vegetarian, Ava is lactose intolerant (dairy-free cake), and Nina is gluten-free.", "evidence": ["I'm vegetarian", "she's lactose intolerant", "I'm still gluten-free"] },
+
+  { "id": 37, "type": "unanswerable", "q": "What valuation did Rachel suggest for our next round?", "gold": "not mentioned", "absent": ["valuation", "series a"] },
+  { "id": 38, "type": "unanswerable", "q": "What hourly price did Elena quote for an H200?", "gold": "not mentioned", "absent": ["per hour", "an hour", "hourly"] },
+  { "id": 39, "type": "unanswerable", "q": "What is Sofia's current salary at Shopify?", "gold": "not mentioned", "absent": ["current salary", "making now", "earn"] },
+  { "id": 40, "type": "unanswerable", "q": "What is Leo's wife's name?", "gold": "not mentioned", "absent": ["wife", "married"] }
+]

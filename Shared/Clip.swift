@@ -43,4 +43,6 @@ enum Link {
     static let since = "since"        // ms epoch the current session started
     static let error = "error"
     static let pending = "pending"    // clips still on the watch
+    static let capturing = "capturing" // a conversation is being recorded right now
+    static let token = "token"        // phone → watch device token; "" = unpaired
 }

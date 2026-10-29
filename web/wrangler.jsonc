@@ -1,0 +1,40 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "earshot-web",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-05-26",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "assets": {
+    "binding": "ASSETS",
+    "directory": ".open-next/assets"
+  },
+  "routes": [{ "pattern": "earshot.keronlabs.com", "custom_domain": true }],
+  "workers_dev": true,
+  "services": [
+    { "binding": "WORKER_SELF_REFERENCE", "service": "earshot-web" },
+    // All app data (recordings, promises, briefs, memories, devices) lives in earshot-api.
+    { "binding": "EARSHOT_API", "service": "earshot-api" }
+  ],
+  // better-auth tables only (user/session/account/verification).
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "earshot-web-db",
+      "database_id": "c94fafec-b22b-48bc-b877-5980edad7fb6",
+      "migrations_dir": "migrations"
+    }
+  ],
+  // Sign-in codes. Without the binding (plain local dev) the code is logged instead.
+  "send_email": [{ "name": "EMAIL", "remote": true }],
+  "vars": {
+    "BETTER_AUTH_URL": "https://earshot.keronlabs.com",
+    "EMAIL_FROM": "Earshot <earshot@mail.keronlabs.com>"
+  },
+  // Secrets (wrangler secret put <NAME>):
+  //   BETTER_AUTH_SECRET   session signing key
+  //   INTERNAL_SECRET      shared with earshot-api, sent as x-earshot-internal
+  //   GOOGLE_CLIENT_ID     optional; Google sign-in shows only when set
+  //   GOOGLE_CLIENT_SECRET
+  "observability": { "enabled": true },
+  "upload_source_maps": true
+}

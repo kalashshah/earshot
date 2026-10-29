@@ -9,18 +9,28 @@ settings:
     DEVELOPMENT_TEAM: J99B88X7CK
     CODE_SIGN_STYLE: Automatic
     MARKETING_VERSION: "1.0"
-    CURRENT_PROJECT_VERSION: "1"
+    CURRENT_PROJECT_VERSION: "10"
     SWIFT_VERSION: "5.0"
     GENERATE_INFOPLIST_FILE: YES
     ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
     INFOPLIST_KEY_CFBundleDisplayName: Earshot
     INFOPLIST_KEY_ITSAppUsesNonExemptEncryption: NO
 
+packages:
+  Libraries.dev:
+    url: https://github.com/Jakubantalik/Libraries.dev
+    revision: bfcb86329da15235a5ee2dcdb6417c8a80f82bb1   # VoiceGlowKit (MIT); repo has no usable tags
+
 targets:
   Earshot:
     type: application
     platform: iOS
     sources: [iOS, Shared]
+    info:
+      path: iOS/Info.plist
+      properties:
+        UIBackgroundModes: [fetch]
+        BGTaskSchedulerPermittedIdentifiers: [com.kalashshah.earshot.prep]
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.kalashshah.earshot
@@ -28,8 +38,12 @@ targets:
         INFOPLIST_KEY_UILaunchScreen_Generation: YES
         INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait
         INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
+        INFOPLIST_KEY_NSLocationWhenInUseUsageDescription: Earshot uses your location only on this iPhone, to remind you of things when you arrive at or leave a place you asked about. It is never sent anywhere.
+        INFOPLIST_KEY_NSCalendarsFullAccessUsageDescription: Earshot reads the title and attendees of meetings in the next two hours so it can send you a short prep note before each one. Your calendar is never changed.
     dependencies:
       - target: EarshotWatch
+      - package: Libraries.dev
+        product: VoiceGlowKit
 
   EarshotWatch:
     type: application

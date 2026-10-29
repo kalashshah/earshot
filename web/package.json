@@ -1,0 +1,40 @@
+{
+  "name": "earshot-web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "node scripts/check-format.mjs",
+    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+    "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
+    "cf-typegen": "wrangler types --include-runtime false --env-interface CloudflareEnv ./cloudflare-env.d.ts",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate:local": "wrangler d1 migrations apply earshot-web-db --local",
+    "db:migrate:remote": "wrangler d1 migrations apply earshot-web-db --remote"
+  },
+  "dependencies": {
+    "@opennextjs/cloudflare": "1.19.11",
+    "better-auth": "1.6.11",
+    "drizzle-orm": "0.45.2",
+    "next": "16.2.6",
+    "react": "19.2.6",
+    "react-dom": "19.2.6"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "4.20260527.1",
+    "@tailwindcss/postcss": "4.3.0",
+    "@types/node": "^20.19.41",
+    "@types/react": "^19.1.7",
+    "@types/react-dom": "^19.1.7",
+    "drizzle-kit": "0.31.10",
+    "eslint": "9.39.4",
+    "eslint-config-next": "16.2.6",
+    "tailwindcss": "4.3.0",
+    "typescript": "5.9.3",
+    "wrangler": "4.95.0"
+  }
+}

@@ -1,7 +1,7 @@
 import Foundation
 import WatchConnectivity
 
-/// Ships finished clips to the iPhone and takes start/stop commands from it.
+/// Ships finished clips to the iPhone and takes start/stop commands and the device token from it.
 /// `transferFile` queues while the phone is away and survives app relaunches; the clip is
 /// deleted only once the phone confirms receipt.
 final class PhoneLink: NSObject, ObservableObject, WCSessionDelegate {
@@ -39,7 +39,7 @@ final class PhoneLink: NSObject, ObservableObject, WCSessionDelegate {
     }
 
     private func state() -> [String: Any] {
-        var s: [String: Any] = [Link.isOn: recorder.isOn, Link.pending: Clip.pending().count]
+        var s: [String: Any] = [Link.isOn: recorder.isOn, Link.capturing: recorder.inConversation, Link.pending: Clip.pending().count]
         if let since = recorder.since { s[Link.since] = Int64(since.timeIntervalSince1970 * 1000) }
         if let e = recorder.lastError { s[Link.error] = e }
         return s
@@ -54,6 +54,16 @@ final class PhoneLink: NSObject, ObservableObject, WCSessionDelegate {
 
     func session(_ session: WCSession, activationDidCompleteWith state: WCSessionActivationState, error: Error?) {
         if state == .activated { DispatchQueue.main.async { self.flush() } }
+        applyToken(session.receivedApplicationContext)
+    }
+
+    func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String: Any]) {
+        applyToken(applicationContext)
+    }
+
+    private func applyToken(_ ctx: [String: Any]) {
+        guard let token = ctx[Link.token] as? String else { return }
+        token.isEmpty ? DeviceToken.clear() : DeviceToken.save(token)
     }
 
     func session(_ session: WCSession, didFinish fileTransfer: WCSessionFileTransfer, error: Error?) {

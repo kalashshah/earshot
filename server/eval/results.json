@@ -1,0 +1,2908 @@
+{
+  "ranAt": "2026-10-17T15:38:59.400Z",
+  "api": "https://earshot-demo.kalashshah47.workers.dev",
+  "ingestDay": "2026-10-17",
+  "ingestUsd": 0.3912319733333333,
+  "askUsd": 0.030586440000000048,
+  "judgeUsd": 0.014324399999999987,
+  "summary": [
+    {
+      "system": "Earshot (/ask, memory)",
+      "accuracy": "73%",
+      "byType": {
+        "fact": "57%",
+        "who": "80%",
+        "commitment": "63%",
+        "number": "100%",
+        "temporal": "50%",
+        "synthesis": "75%",
+        "unanswerable": "75%"
+      },
+      "hallucination": "25%",
+      "errors": 0,
+      "meanLatencyMs": 5117,
+      "usdPerQuestion": 0.0007646610000000012,
+      "usdPerDay": 0.42181841333333336
+    },
+    {
+      "system": "Lightning, full day in prompt",
+      "accuracy": "63%",
+      "byType": {
+        "fact": "71%",
+        "who": "20%",
+        "commitment": "75%",
+        "number": "100%",
+        "temporal": "50%",
+        "synthesis": "25%",
+        "unanswerable": "50%"
+      },
+      "hallucination": "50%",
+      "errors": 0,
+      "meanLatencyMs": 454,
+      "usdPerQuestion": 0.00023790299999999998,
+      "usdPerDay": 0.00951612
+    },
+    {
+      "system": "Super, full day in prompt",
+      "accuracy": "75%",
+      "byType": {
+        "fact": "71%",
+        "who": "60%",
+        "commitment": "63%",
+        "number": "100%",
+        "temporal": "75%",
+        "synthesis": "50%",
+        "unanswerable": "100%"
+      },
+      "hallucination": "0%",
+      "errors": 0,
+      "meanLatencyMs": 879,
+      "usdPerQuestion": 0.0011946150000000002,
+      "usdPerDay": 0.04778460000000001
+    },
+    {
+      "system": "Ultra, full day in prompt",
+      "accuracy": "83%",
+      "byType": {
+        "fact": "71%",
+        "who": "60%",
+        "commitment": "75%",
+        "number": "100%",
+        "temporal": "100%",
+        "synthesis": "75%",
+        "unanswerable": "100%"
+      },
+      "hallucination": "0%",
+      "errors": 0,
+      "meanLatencyMs": 2490,
+      "usdPerQuestion": 0.003971775,
+      "usdPerDay": 0.158871
+    }
+  ],
+  "rows": [
+    {
+      "id": 1,
+      "type": "fact",
+      "q": "What company does Priya work for?",
+      "gold": "Halden Outdoor.",
+      "evidence": [
+        "it's Priya",
+        "Halden Outdoor was looking at a pilot"
+      ],
+      "system": "Earshot (/ask, memory)",
+      "answer": "Outdoor",
+      "latency_ms": 4009,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": 0,
+      "correct": false,
+      "reason": "The answer 'Outdoor' does not match the full company name 'Halden Outdoor' given in the gold answer."
+    },
+    {
+      "id": 1,
+      "type": "fact",
+      "q": "What company does Priya work for?",
+      "gold": "Halden Outdoor.",
+      "evidence": [
+        "it's Priya",
+        "Halden Outdoor was looking at a pilot"
+      ],
+      "system": "Lightning, full day in prompt",
+      "answer": "Haldan outdoor",
+      "latency_ms": 1066,
+      "input_tokens": 3921,
+      "output_tokens": 5,
+      "cost_usd": 0.00023645999999999997,
+      "correct": false,
+      "reason": "The name 'Haldan outdoor' misspells 'Halden Outdoor', which is a key factual error."
+    },
+    {
+      "id": 1,
+      "type": "fact",
+      "q": "What company does Priya work for?",
+      "gold": "Halden Outdoor.",
+      "evidence": [
+        "it's Priya",
+        "Halden Outdoor was looking at a pilot"
+      ],
+      "system": "Super, full day in prompt",
+      "answer": "Haldan outdoor (from context: 'Priya' refers to her as being from Haldan outdoor)",
+      "latency_ms": 1613,
+      "input_tokens": 3921,
+      "output_tokens": 24,
+      "cost_usd": 0.0011978999999999998,
+      "correct": false,
+      "reason": "The name of the company is misspelled ('Haldan' instead of 'Halden'), which makes it an incorrect statement of the key fact."
+    },
+    {
+      "id": 1,
+      "type": "fact",
+      "q": "What company does Priya work for?",
+      "gold": "Halden Outdoor.",
+      "evidence": [
+        "it's Priya",
+        "Halden Outdoor was looking at a pilot"
+      ],
+      "system": "Ultra, full day in prompt",
+      "answer": "Haldan outdoor",
+      "latency_ms": 2962,
+      "input_tokens": 3921,
+      "output_tokens": 5,
+      "cost_usd": 0.003936,
+      "correct": false,
+      "reason": "The name 'Haldan outdoor' misspells 'Halden Outdoor', which is a key factual error."
+    },
+    {
+      "id": 2,
+      "type": "fact",
+      "q": "When and where is Ava's birthday party?",
+      "gold": "Saturday at 3 PM at the trampoline park on Elm Street.",
+      "evidence": [
+        "Saturday at 3 PM at the trampoline park on Elm Street"
+      ],
+      "system": "Earshot (/ask, memory)",
+      "answer": "Ava's birthday party is on Saturday at 3 PM at the trampoline park on Elm Street.",
+      "latency_ms": 3858,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": 0,
+      "correct": true,
+      "reason": "The answer matches all key facts in the gold answer: day (Saturday), time (3 PM), location (trampoline park on Elm Street)."
+    },
+    {
+      "id": 2,
+      "type": "fact",
+      "q": "When and where is Ava's birthday party?",
+      "gold": "Saturday at 3 PM at the trampoline park on Elm Street.",
+      "evidence": [
+        "Saturday at 3 PM at the trampoline park on Elm Street"
+      ],
+      "system": "Lightning, full day in prompt",
+      "answer": "Saturday at 3PM at the trampoline park on Elm Street.",
+      "latency_ms": 595,
+      "input_tokens": 3922,
+      "output_tokens": 16,
+      "cost_usd": 0.00023916,
+      "correct": true,
+      "reason": "The answer matches the gold answer exactly in time, location, and details."
+    },
+    {
+      "id": 2,
+      "type": "fact",
+      "q": "When and where is Ava's birthday party?",
+      "gold": "Saturday at 3 PM at the trampoline park on Elm Street.",
+      "evidence": [
+        "Saturday at 3 PM at the trampoline park on Elm Street"
+      ],
+      "system": "Super, full day in prompt",
+      "answer": "Ava's birthday party is on Saturday at 3 PM at the trampoline park on Elm Street.",
+      "latency_ms": 854,
+      "input_tokens": 3922,
+      "output_tokens": 23,
+      "cost_usd": 0.0011972999999999999,
+      "correct": true,
+      "reason": "The answer matches all key facts in the gold answer: day (Saturday), time (3 PM), location (trampoline park on Elm Street)."
+    },
+    {
+      "id": 2,
+      "type": "fact",
+      "q": "When and where is Ava's birthday party?",
+      "gold": "Saturday at 3 PM at the trampoline park on Elm Street.",
+      "evidence": [
+        "Saturday at 3 PM at the trampoline park on Elm Street"
+      ],
+      "system": "Ultra, full day in prompt",
+      "answer": "Ava's birthday party is on Saturday at 3 PM at the trampoline park on Elm Street.",
+      "latency_ms": 2308,
+      "input_tokens": 3922,
+      "output_tokens": 23,
+      "cost_usd": 0.003991,
+      "correct": true,
+      "reason": "The answer matches all key facts in the gold answer: day (Saturday), time (3 PM), location (trampoline park on Elm Street)."
+    },
+    {
+      "id": 3,
+      "type": "fact",
+      "q": "Which company does Leo work at?",
+      "gold": "Stripe (in solutions engineering).",
+      "evidence": [
+        "how's Stripe treating you",
+        "Solutions engineering never sleeps"
+      ],
+      "system": "Earshot (/ask, memory)",
+      "answer": "I didn't hear that.",
+      "latency_ms": 3220,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": 0,
+      "correct": false,
+      "reason": "The answer declined when the gold answer provided a specific company."
+    },
+    {
+      "id": 3,
+      "type": "fact",
+      "q": "Which company does Leo work at?",
+      "gold": "Stripe (in solutions engineering).",
+      "evidence": [
+        "how's Stripe treating you",
+        "Solutions engineering never sleeps"
+      ],
+      "system": "Lightning, full day in prompt",
+      "answer": "Leo works at Stripe.",
+      "latency_ms": 511,
+      "input_tokens": 3920,
+      "output_tokens": 7,
+      "cost_usd": 0.00023688,
+      "correct": true,
+      "reason": "The answer correctly states that Leo works at Stripe, matching the gold answer."
+    },
+    {
+      "id": 3,
+      "type": "fact",
+      "q": "Which company does Leo work at?",
+      "gold": "Stripe (in solutions engineering).",
+      "evidence": [
+        "how's Stripe treating you",
+        "Solutions engineering never sleeps"
+      ],
+      "system": "Super, full day in prompt",
+      "answer": "Shopify",
+      "latency_ms": 988,
+      "input_tokens": 3920,
+      "output_tokens": 3,
+      "cost_usd": 0.0011787,
+      "correct": false,
+      "reason": "The answer claims Leo works at Shopify, but the gold answer states he works at Stripe in solutions engineering."
+    },
+    {
+      "id": 3,
+      "type": "fact",
+      "q": "Which company does Leo work at?",
+      "gold": "Stripe (in solutions engineering).",
+      "evidence": [
+        "how's Stripe treating you",
+        "Solutions engineering never sleeps"
+      ],
+      "system": "Ultra, full day in prompt",
+      "answer": "Stripe",
+      "latency_ms": 1926,
+      "input_tokens": 3920,
+      "output_tokens": 3,
+      "cost_usd": 0.003929,
+      "correct": true,
+      "reason": "The answer correctly identifies the company as Stripe, matching the gold answer."
+    },
+    {
+      "id": 4,
+      "type": "fact",
+      "q": "What is Maya's dietary preference?",
+      "gold": "She is vegetarian.",
+      "evidence": [
+        "I'm vegetarian"
+      ],
+      "system": "Earshot (/ask, memory)",
+      "answer": "Maya follows a vegetarian diet.",
+      "latency_ms": 3043,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": 0,
+      "correct": true,
+      "reason": "The answer correctly states Maya's vegetarian dietary preference."
+    },
+    {
+      "id": 4,
+      "type": "fact",
+      "q": "What is Maya's dietary preference?",
+      "gold": "She is vegetarian.",
+      "evidence": [
+        "I'm vegetarian"
+      ],
+      "system": "Lightning, full day in prompt",
+      "answer": "Vegetarian",
+      "latency_ms": 604,
+      "input_tokens": 3920,
+      "output_tokens": 4,
+      "cost_usd": 0.00023616,
+      "correct": true,
+      "reason": "The answer 'Vegetarian' matches the gold answer 'She is vegetarian.' in meaning."
+    },
+    {
+      "id": 4,
+      "type": "fact",
+      "q": "What is Maya's dietary preference?",
+      "gold": "She is vegetarian.",
+      "evidence": [
+        "I'm vegetarian"
+      ],
+      "system": "Super, full day in prompt",
+      "answer": "Maya is vegetarian.",
+      "latency_ms": 800,
+      "input_tokens": 3920,
+      "output_tokens": 6,
+      "cost_usd": 0.0011814,
+      "correct": true,
+      "reason": "The answer matches the gold answer exactly."
+    },
+    {
+      "id": 4,
+      "type": "fact",
+      "q": "What is Maya's dietary preference?",
+      "gold": "She is vegetarian.",
+      "evidence": [
+        "I'm vegetarian"
+      ],
+      "system": "Ultra, full day in prompt",
+      "answer": "Maya is vegetarian.",
+      "latency_ms": 1744,
+      "input_tokens": 3920,
+      "output_tokens": 6,
+      "cost_usd": 0.003938,
+      "correct": true,
+      "reason": "The answer matches the gold answer exactly in stating Maya's dietary preference as vegetarian."
+    },
+    {
+      "id": 5,
+      "type": "fact",
+      "q": "Where will Dad's birthday dinner be?",
+      "gold": "At Olive and Ash, Sunday at 7, a table for 6.",
+      "evidence": [
+        "book a table for 6 at Olive and Ash for Sunday at 7",
+        "Dad's birthday dinner"
+      ],
+      "system": "Earshot (/ask, memory)",
+      "answer": "Dad's birthday dinner will be at Olive and Ash.",
+      "latency_ms": 2539,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": 0,
+      "correct": true,
+      "reason": "The answer correctly identifies the location as Olive and Ash, which matches the key fact in the gold answer."
+    },
+    {
+      "id": 5,
+      "type": "fact",
+      "q": "Where will Dad's birthday dinner be?",
+      "gold": "At Olive and Ash, Sunday at 7, a table for 6.",
+      "evidence": [
+        "book a table for 6 at Olive and Ash for Sunday at 7",
+        "Dad's birthday dinner"
+      ],
+      "system": "Lightning, full day in prompt",
+      "answer": "Olive and Ash",
+      "latency_ms": 400,
+      "input_tokens": 3921,
+      "output_tokens": 5,
+      "cost_usd": 0.00023645999999999997,
+      "correct": false,
+      "reason": "The answer provides the location but omits the time (Sunday at 7) and party size (table for 6), which are key facts in the gold answer."
+    },
+    {
+      "id": 5,
+      "type": "fact",
+      "q": "Where will Dad's birthday dinner be?",
+      "gold": "At Olive and Ash, Sunday at 7, a table for 6.",
+      "evidence": [
+        "book a table for 6 at Olive and Ash for Sunday at 7",
+        "Dad's birthday dinner"
+      ],
+      "system": "Super, full day in prompt",
+      "answer": "Dad's birthday dinner will be at Olive and Ash.",
+      "latency_ms": 958,
+      "input_tokens": 3921,
+      "output_tokens": 13,
+      "cost_usd": 0.001188,
+      "correct": true,
+      "reason": "The answer correctly identifies the location as Olive and Ash, which matches the key fact in the gold answer."
+    },
+    {
+      "id": 5,
+      "type": "fact",
+      "q": "Where will Dad's birthday dinner be?",
+      "gold": "At Olive and Ash, Sunday at 7, a table for 6.",
+      "evidence": [
+        "book a table for 6 at Olive and Ash for Sunday at 7",
+        "Dad's birthday dinner"
+      ],
+      "system": "Ultra, full day in prompt",
+      "answer": "Olive and Ash",
+      "latency_ms": 3582,
+      "input_tokens": 3921,
+      "output_tokens": 5,
+      "cost_usd": 0.003936,
+      "correct": false,
+      "reason": "The answer omits the time (Sunday at 7) and party size (table for 6), which are key facts in the gold answer."
+    },
+    {
+      "id": 6,
+      "type": "fact",
+      "q": "Where does the candidate Sofia work right now?",
+      "gold": "At Shopify, as a backend engineer on the checkout team.",
+      "evidence": [
+        "what you're doing at Shopify",
+        "backend engineer on the checkout team"
+      ],
+      "system": "Earshot (/ask, memory)",
+      "answer": "Sofia works at Shopify.",
+      "latency_ms": 6663,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": 0,
+      "correct": false,
+      "reason": "The answer omits the key details about Sofia's role as a backend engineer on the checkout team."
+    },
+    {
+      "id": 6,
+      "type": "fact",
+      "q": "Where does the candidate Sofia work right now?",
+      "gold": "At Shopify, as a backend engineer on the checkout team.",
+      "evidence": [
+        "what you're doing at Shopify",
+        "backend engineer on the checkout team"
+      ],
+      "system": "Lightning, full day in prompt",
+      "answer": "Shopify",
+      "latency_ms": 388,
+      "input_tokens": 3922,
+      "output_tokens": 3,
+      "cost_usd": 0.00023604,
+      "correct": true,
+      "reason": "The answer correctly identifies the company where Sofia works."
+    },
+    {
+      "id": 6,
+      "type": "fact",
+      "q": "Where does the candidate Sofia work right now?",
+      "gold": "At Shopify, as a backend engineer on the checkout team.",
+      "evidence": [
+        "what you're doing at Shopify",
+        "backend engineer on the checkout team"
+      ],
+      "system": "Super, full day in prompt",
+      "answer": "Sofia currently works at Shopify as a backend engineer on the checkout team.",
+      "latency_ms": 937,
+      "input_tokens": 3922,
+      "output_tokens": 18,
+      "cost_usd": 0.0011928,
+      "correct": true,
+      "reason": "The answer matches the gold answer exactly in stating Sofia's current workplace, role, and team."
+    },
+    {
+      "id": 6,
+      "type": "fact",
+      "q": "Where does the candidate Sofia work right now?",
+      "gold": "At Shopify, as a backend engineer on the checkout team.",
+      "evidence": [
+        "what you're doing at Shopify",
+        "backend engineer on the checkout team"
+      ],
+      "system": "Ultra, full day in prompt",
+      "answer": "Sofia works at Shopify right now.",
+      "latency_ms": 3814,
+      "input_tokens": 3922,
+      "output_tokens": 11,
+      "cost_usd": 0.003955,
+      "correct": true,
+      "reason": "The answer correctly states that Sofia currently works at Shopify, matching the gold answer's claim about her current workplace."
+    },
+    {
+      "id": 7,
+      "type": "fact",
+      "q": "What present am I getting for Ava?",
+      "gold": "The Lego space shuttle.",
+      "evidence": [
+        "I'll get the Lego space shuttle for Ava's party"
+      ],
+      "system": "Earshot (/ask, memory)",
+      "answer": "LEGO Space Shuttle.",
+      "latency_ms": 7292,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": 0,
+      "correct": true,
+      "reason": "The answer matches the gold answer in meaning with minor formatting differences."
+    },
+    {
+      "id": 7,
+      "type": "fact",
+      "q": "What present am I getting for Ava?",
+      "gold": "The Lego space shuttle.",
+      "evidence": [
+        "I'll get the Lego space shuttle for Ava's party"
+      ],
+      "system": "Lightning, full day in prompt",
+      "answer": "LEGO Space Shuttle",
+      "latency_ms": 395,
+      "input_tokens": 3921,
+      "output_tokens": 5,
+      "cost_usd": 0.00023645999999999997,
+      "correct": true,
+      "reason": "The answer matches the gold answer exactly in content."
+    },
+    {
+      "id": 7,
+      "type": "fact",
+      "q": "What present am I getting for Ava?",
+      "gold": "The Lego space shuttle.",
+      "evidence": [
+        "I'll get the Lego space shuttle for Ava's party"
+      ],
+      "system": "Super, full day in prompt",
+      "answer": "LEGO Space Shuttle",
+      "latency_ms": 626,
+      "input_tokens": 3921,
+      "output_tokens": 5,
+      "cost_usd": 0.0011807999999999999,
+      "correct": true,
+      "reason": "The answer matches the gold answer exactly in content."
+    },
+    {
+      "id": 7,
+      "type": "fact",
+      "q": "What present am I getting for Ava?",
+      "gold": "The Lego space shuttle.",
+      "evidence": [
+        "I'll get the Lego space shuttle for Ava's party"
+      ],
+      "system": "Ultra, full day in prompt",
+      "answer": "You're getting the LEGO Space Shuttle for Ava's party on Saturday.",
+      "latency_ms": 2618,
+      "input_tokens": 3921,
+      "output_tokens": 17,
+      "cost_usd": 0.003972,
+      "correct": true,
+      "reason": "The answer correctly identifies the gift as the LEGO Space Shuttle, matching the gold answer."
+    },
+    {
+      "id": 8,
+      "type": "who",
+      "q": "Who proposed pushing the Shopify launch to November 10?",
+      "gold": "Maya.",
+      "evidence": [
+        "My proposal is we push the launch to November 10"
+      ],
+      "system": "Earshot (/ask, memory)",
+      "answer": "Maya proposed pushing the Shopify launch to November 10.",
+      "latency_ms": 3811,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": 0,
+      "correct": true,
+      "reason": "The answer correctly identifies Maya as the person who proposed pushing the Shopify launch to November 10."
+    },
+    {
+      "id": 8,
+      "type": "who",
+      "q": "Who proposed pushing the Shopify launch to November 10?",
+      "gold": "Maya.",
+      "evidence": [
+        "My proposal is we push the launch to November 10"
+      ],
+      "system": "Lightning, full day in prompt",
+      "answer": "Speaker 0",
+      "latency_ms": 471,
+      "input_tokens": 3926,
+      "output_tokens": 5,
+      "cost_usd": 0.00023676,
+      "correct": false,
+      "reason": "The answer 'Speaker 0' does not match the gold answer 'Maya' and provides no confirmation that Speaker 0 is Maya."
+    },
+    {
+      "id": 8,
+      "type": "who",
+      "q": "Who proposed pushing the Shopify launch to November 10?",
+      "gold": "Maya.",
+      "evidence": [
+        "My proposal is we push the launch to November 10"
+      ],
+      "system": "Super, full day in prompt",
+      "answer": "I heard Speaker 0 propose moving the Shopify launch to November 10 during the conversation at 09:00.",
+      "latency_ms": 1163,
+      "input_tokens": 3926,
+      "output_tokens": 28,
+      "cost_usd": 0.001203,
+      "correct": false,
+      "reason": "The answer attributes the proposal to 'Speaker 0' instead of naming Maya as specified in the gold answer."
+    },
+    {
+      "id": 8,
+      "type": "who",
+      "q": "Who proposed pushing the Shopify launch to November 10?",
+      "gold": "Maya.",
+      "evidence": [
+        "My proposal is we push the launch to November 10"
+      ],
+      "system": "Ultra, full day in prompt",
+      "answer": "Maya proposed pushing the Shopify launch to November 10.",
+      "latency_ms": 5691,
+      "input_tokens": 3926,
+      "output_tokens": 15,
+      "cost_usd": 0.003971,
+      "correct": true,
+      "reason": "The answer correctly identifies Maya as the person who proposed pushing the Shopify launch to November 10."
+    },
+    {
+      "id": 9,
+      "type": "who",
+      "q": "Who said there are 3 more pilots in the pipeline?",
+      "gold": "Jordan.",
+      "evidence": [
+        "I've got 3 more pilots in the pipeline"
+      ],
+      "system": "Earshot (/ask, memory)",
+      "answer": "I didn't catch that.",
+      "latency_ms": 2756,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": 0,
+      "correct": false,
+      "reason": "The answer declined while the gold answer provided a name."
+    },
+    {
+      "id": 9,
+      "type": "who",
+      "q": "Who said there are 3 more pilots in the pipeline?",
+      "gold": "Jordan.",
+      "evidence": [
+        "I've got 3 more pilots in the pipeline"
+      ],
+      "system": "Lightning, full day in prompt",
+      "answer": "Speaker 2",
+      "latency_ms": 400,
+      "input_tokens": 3925,
+      "output_tokens": 5,
+      "cost_usd": 0.00023669999999999998,
+      "correct": false,
+      "reason": "The answer 'Speaker 2' does not match the gold answer 'Jordan', which identifies who made the statement."
+    },
+    {
+      "id": 9,
+      "type": "who",
+      "q": "Who said there are 3 more pilots in the pipeline?",
+      "gold": "Jordan.",
+      "evidence": [
+        "I've got 3 more pilots in the pipeline"
+      ],
+      "system": "Super, full day in prompt",
+      "answer": "Maya (Speaker 2) said there are 3 more pilots in the pipeline.",
+      "latency_ms": 846,
+      "input_tokens": 3925,
+      "output_tokens": 20,
+      "cost_usd": 0.0011955,
+      "correct": false,
+      "reason": "The answer incorrectly attributes the statement to Maya instead of Jordan."
+    },
+    {
+      "id": 9,
+      "type": "who",
+      "q": "Who said there are 3 more pilots in the pipeline?",
+      "gold": "Jordan.",
+      "evidence": [
+        "I've got 3 more pilots in the pipeline"
+      ],
+      "system": "Ultra, full day in prompt",
+      "answer": "Speaker 2",
+      "latency_ms": 4827,
+      "input_tokens": 3925,
+      "output_tokens": 5,
+      "cost_usd": 0.00394,
+      "correct": false,
+      "reason": "The answer 'Speaker 2' does not match the gold answer 'Jordan', which identifies who made the statement."
+    },
+    {
+      "id": 10,
+      "type": "who",
+      "q": "Who recommended reserving 8 H200 GPUs?",
+      "gold": "Elena from Nebius.",
+      "evidence": [
+        "it's Elena from Nebius",
+        "reserving 8 H200 GPUs"
+      ],
+      "system": "Earshot (/ask, memory)",
+      "answer": "Elena from Nevius suggested reserving eight H200 GPUs.",
+      "latency_ms": 5863,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": 0,
+      "correct": true,
+      "reason": "The answer correctly identifies Elena as recommending reserving eight H200 GPUs, with 'Nevius' being a minor spelling variation of 'Nebius' that does not change the factual correctness."
+    },
+    {
+      "id": 10,
+      "type": "who",
+      "q": "Who recommended reserving 8 H200 GPUs?",
+      "gold": "Elena from Nebius.",
+      "evidence": [
+        "it's Elena from Nebius",
+        "reserving 8 H200 GPUs"
+      ],
+      "system": "Lightning, full day in prompt",
+      "answer": "Elena from Nebius",
+      "latency_ms": 393,
+      "input_tokens": 3926,
+      "output_tokens": 6,
+      "cost_usd": 0.000237,
+      "correct": true,
+      "reason": "The answer matches the gold answer exactly."
+    },
+    {
+      "id": 10,
+      "type": "who",
+      "q": "Who recommended reserving 8 H200 GPUs?",
+      "gold": "Elena from Nebius.",
+      "evidence": [
+        "it's Elena from Nebius",
+        "reserving 8 H200 GPUs"
+      ],
+      "system": "Super, full day in prompt",
+      "answer": "Elena from Nevius suggested reserving eight H200 GPUs to cover peak usage with headroom.",
+      "latency_ms": 897,
+      "input_tokens": 3926,
+      "output_tokens": 25,
+      "cost_usd": 0.0012002999999999998,
+      "correct": true,
+      "reason": "The answer correctly identifies Elena as recommending reserving eight H200 GPUs, matching the gold answer despite a minor typo in 'Nevius'."
+    },
+    {
+      "id": 10,
+      "type": "who",
+      "q": "Who recommended reserving 8 H200 GPUs?",
+      "gold": "Elena from Nebius.",
+      "evidence": [
+        "it's Elena from Nebius",
+        "reserving 8 H200 GPUs"
+      ],
+      "system": "Ultra, full day in prompt",
+      "answer": "Elena from Nevius recommended reserving 8 H200 GPUs.",
+      "latency_ms": 9400,
+      "input_tokens": 3926,
+      "output_tokens": 19,
+      "cost_usd": 0.003983,
+      "correct": false,
+      "reason": "The name 'Nevius' is incorrect; the gold answer specifies 'Nebius', so the answer contains a factual error."
+    },
+    {
+      "id": 11,
+      "type": "who",
+      "q": "Who wanted to lower the pilot price to $1,500 a month?",
+      "gold": "Jordan.",
+      "evidence": [
+        "Sure, Jordan",
+        "I want to go in at $1,500"
+      ],
+      "system": "Earshot (/ask, memory)",
+      "answer": "Jordan wanted to lower the pilot price to $1,500 a month.",
+      "latency_ms": 6884,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": 0,
+      "correct": true,
+      "reason": "The answer correctly identifies Jordan as wanting to lower the pilot price to $1,500 a month."
+    },
+    {
+      "id": 11,
+      "type": "who",
+      "q": "Who wanted to lower the pilot price to $1,500 a month?",
+      "gold": "Jordan.",
+      "evidence": [
+        "Sure, Jordan",
+        "I want to go in at $1,500"
+      ],
+      "system": "Lightning, full day in prompt",
+      "answer": "Dev",
+      "latency_ms": 435,
+      "input_tokens": 3930,
+      "output_tokens": 2,
+      "cost_usd": 0.00023627999999999998,
+      "correct": false,
+      "reason": "The answer 'Dev' does not match the gold answer 'Jordan', which specifies who wanted to lower the pilot price."
+    },
+    {
+      "id": 11,
+      "type": "who",
+      "q": "Who wanted to lower the pilot price to $1,500 a month?",
+      "gold": "Jordan.",
+      "evidence": [
+        "Sure, Jordan",
+        "I want to go in at $1,500"
+      ],
+      "system": "Super, full day in prompt",
+      "answer": "Jordan wanted to lower the pilot price to $1,500 a month.",
+      "latency_ms": 637,
+      "input_tokens": 3930,
+      "output_tokens": 18,
+      "cost_usd": 0.0011952,
+      "correct": true,
+      "reason": "The answer correctly identifies Jordan as the person who wanted to lower the pilot price to $1,500 a month."
+    },
+    {
+      "id": 11,
+      "type": "who",
+      "q": "Who wanted to lower the pilot price to $1,500 a month?",
+      "gold": "Jordan.",
+      "evidence": [
+        "Sure, Jordan",
+        "I want to go in at $1,500"
+      ],
+      "system": "Ultra, full day in prompt",
+      "answer": "Jordan wanted to lower the pilot price to $1,500 a month.",
+      "latency_ms": 14552,
+      "input_tokens": 3930,
+      "output_tokens": 18,
+      "cost_usd": 0.003984,
+      "correct": true,
+      "reason": "The answer correctly identifies Jordan as the person who wanted to lower the pilot price to $1,500 a month."
+    },
+    {
+      "id": 12,
+      "type": "who",
+      "q": "Who suggested the Lego space shuttle as a gift?",
+      "gold": "Nina, my sister.",
+      "evidence": [
+        "it's Nina",
+        "Hey sis",
+        "The Lego space shuttle. Every kid loves it."
+      ],
+      "system": "Earshot (/ask, memory)",
+      "answer": "Nina suggested the Lego space shuttle.",
+      "latency_ms": 7084,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": 0,
+      "correct": true,
+      "reason": "The answer correctly identifies Nina as the person who suggested the Lego space shuttle as a gift."
+    },
+    {
+      "id": 12,
+      "type": "who",
+      "q": "Who suggested the Lego space shuttle as a gift?",
+      "gold": "Nina, my sister.",
+      "evidence": [
+        "it's Nina",
+        "Hey sis",
+        "The Lego space shuttle. Every kid loves it."
+      ],
+      "system": "Lightning, full day in prompt",
+      "answer": "Speaker 1",
+      "latency_ms": 401,
+      "input_tokens": 3924,
+      "output_tokens": 5,
+      "cost_usd": 0.00023663999999999998,
+      "correct": false,
+      "reason": "The answer 'Speaker 1' does not match the gold answer 'Nina, my sister,' which identifies the suggester by name and relationship."
+    },
+    {
+      "id": 12,
+      "type": "who",
+      "q": "Who suggested the Lego space shuttle as a gift?",
+      "gold": "Nina, my sister.",
+      "evidence": [
+        "it's Nina",
+        "Hey sis",
+        "The Lego space shuttle. Every kid loves it."
+      ],
+      "system": "Super, full day in prompt",
+      "answer": "Nina suggested the Lego space shuttle as a gift for Ava's party.",
+      "latency_ms": 731,
+      "input_tokens": 3924,
+      "output_tokens": 17,
+      "cost_usd": 0.0011925,
+      "correct": true,
+      "reason": "The answer correctly identifies Nina as the person who suggested the Lego space shuttle as a gift."
+    },
+    {
+      "id": 12,
+      "type": "who",
+      "q": "Who suggested the Lego space shuttle as a gift?",
+      "gold": "Nina, my sister.",
+      "evidence": [
+        "it's Nina",
+        "Hey sis",
+        "The Lego space shuttle. Every kid loves it."
+      ],
+      "system": "Ultra, full day in prompt",
+      "answer": "Nina suggested the Lego space shuttle as a gift.",
+      "latency_ms": 13143,
+      "input_tokens": 3924,
+      "output_tokens": 13,
+      "cost_usd": 0.003963,
+      "correct": true,
+      "reason": "The answer correctly identifies Nina as the person who suggested the Lego space shuttle as a gift."
+    },
+    {
+      "id": 13,
+      "type": "commitment",
+      "q": "What do I owe Priya, and by when?",
+      "gold": "The pilot contract by Friday and the SOC 2 Type I letter by Wednesday.",
+      "evidence": [
+        "I'll send you the pilot contract by Friday",
+        "SOC 2 Type I letter. I'll send it to you by Wednesday"
+      ],
+      "system": "Earshot (/ask, memory)",
+      "answer": "Priya wants the pilot contract sent by Friday.",
+      "latency_ms": 6113,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": 0,
+      "correct": false,
+      "reason": "The answer omits the requirement for the SOC 2 Type I letter due by Wednesday."
+    },
+    {
+      "id": 13,
+      "type": "commitment",
+      "q": "What do I owe Priya, and by when?",
+      "gold": "The pilot contract by Friday and the SOC 2 Type I letter by Wednesday.",
+      "evidence": [
+        "I'll send you the pilot contract by Friday",
+        "SOC 2 Type I letter. I'll send it to you by Wednesday"
+      ],
+      "system": "Lightning, full day in prompt",
+      "answer": "Priya wants the pilot contract by Friday, and you'll introduce her to Mark next week.",
+      "latency_ms": 460,
+      "input_tokens": 3924,
+      "output_tokens": 20,
+      "cost_usd": 0.00024024000000000002,
+      "correct": false,
+      "reason": "The answer incorrectly adds introducing Priya to Mark next week and omits the requirement for the SOC 2 Type I letter by Wednesday."
+    },
+    {
+      "id": 13,
+      "type": "commitment",
+      "q": "What do I owe Priya, and by when?",
+      "gold": "The pilot contract by Friday and the SOC 2 Type I letter by Wednesday.",
+      "evidence": [
+        "I'll send you the pilot contract by Friday",
+        "SOC 2 Type I letter. I'll send it to you by Wednesday"
+      ],
+      "system": "Super, full day in prompt",
+      "answer": "$1,800 per month for the pilot, with payment due monthly as agreed.",
+      "latency_ms": 979,
+      "input_tokens": 3924,
+      "output_tokens": 20,
+      "cost_usd": 0.0011952,
+      "correct": false,
+      "reason": "The answer mentions an amount ($1,800/month) and payment schedule not present in the gold answer, which specifies deliverables (pilot contract by Friday, SOC 2 letter by Wednesday), so it does not state the key facts correctly."
+    },
+    {
+      "id": 13,
+      "type": "commitment",
+      "q": "What do I owe Priya, and by when?",
+      "gold": "The pilot contract by Friday and the SOC 2 Type I letter by Wednesday.",
+      "evidence": [
+        "I'll send you the pilot contract by Friday",
+        "SOC 2 Type I letter. I'll send it to you by Wednesday"
+      ],
+      "system": "Ultra, full day in prompt",
+      "answer": "You owe Priya the SOC 2 Type I letter by Wednesday.",
+      "latency_ms": 1400,
+      "input_tokens": 3924,
+      "output_tokens": 15,
+      "cost_usd": 0.003969,
+      "correct": false,
+      "reason": "The answer omits the pilot contract due by Friday, which is a required part of what you owe Priya."
+    },
+    {
+      "id": 14,
+      "type": "commitment",
+      "q": "What did Maya promise to send me by Thursday?",
+      "gold": "The Nebius GPU usage report.",
+      "evidence": [
+        "I'll send you the Nebius GPU usage report by Thursday"
+      ],
+      "system": "Earshot (/ask, memory)",
+      "answer": "I didn't catch that.",
+      "latency_ms": 6076,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": 0,
+      "correct": false,
+      "reason": "The answer declined when the gold answer specified a concrete item."
+    },
+    {
+      "id": 14,
+      "type": "commitment",
+      "q": "What did Maya promise to send me by Thursday?",
+      "gold": "The Nebius GPU usage report.",
+      "evidence": [
+        "I'll send you the Nebius GPU usage report by Thursday"
+      ],
+      "system": "Lightning, full day in prompt",
+      "answer": "Nebius GPU usage report",
+      "latency_ms": 418,
+      "input_tokens": 3923,
+      "output_tokens": 7,
+      "cost_usd": 0.00023706,
+      "correct": true,
+      "reason": "The answer matches the gold answer exactly."
+    },
+    {
+      "id": 14,
+      "type": "commitment",
+      "q": "What did Maya promise to send me by Thursday?",
+      "gold": "The Nebius GPU usage report.",
+      "evidence": [
+        "I'll send you the Nebius GPU usage report by Thursday"
+      ],
+      "system": "Super, full day in prompt",
+      "answer": "Maya promised to send the Nebius GPU usage report by Thursday.",
+      "latency_ms": 934,
+      "input_tokens": 3923,
+      "output_tokens": 15,
+      "cost_usd": 0.0011903999999999999,
+      "correct": true,
+      "reason": "The answer correctly states the key fact that Maya promised to send the Nebius GPU usage report by Thursday."
+    },
+    {
+      "id": 14,
+      "type": "commitment",
+      "q": "What did Maya promise to send me by Thursday?",
+      "gold": "The Nebius GPU usage report.",
+      "evidence": [
+        "I'll send you the Nebius GPU usage report by Thursday"
+      ],
+      "system": "Ultra, full day in prompt",
+      "answer": "Maya promised to send the Nebius GPU usage report by Thursday.",
+      "latency_ms": 1228,
+      "input_tokens": 3923,
+      "output_tokens": 15,
+      "cost_usd": 0.003968,
+      "correct": true,
+      "reason": "The answer correctly states the key fact that Maya promised to send the Nebius GPU usage report by Thursday."
+    },
+    {
+      "id": 15,
+      "type": "commitment",
+      "q": "What is Rachel going to do for me, and by when?",
+      "gold": "Introduce me to two retail CTOs from her network by next Wednesday.",
+      "evidence": [
+        "I'll introduce you to two retail CTOs from our network. I'll do that by next Wednesday"
+      ],
+      "system": "Earshot (/ask, memory)",
+      "answer": "Rachel will introduce you to two retail CTOs from her network by next Wednesday.",
+      "latency_ms": 6798,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": 0,
+      "correct": true,
+      "reason": "The answer matches the gold answer exactly in stating Rachel will introduce two retail CTOs by next Wednesday."
+    },
+    {
+      "id": 15,
+      "type": "commitment",
+      "q": "What is Rachel going to do for me, and by when?",
+      "gold": "Introduce me to two retail CTOs from her network by next Wednesday.",
+      "evidence": [
+        "I'll introduce you to two retail CTOs from our network. I'll do that by next Wednesday"
+      ],
+      "system": "Lightning, full day in prompt",
+      "answer": "Rachel is going to send me the updated investor deck by Friday.",
+      "latency_ms": 445,
+      "input_tokens": 3926,
+      "output_tokens": 14,
+      "cost_usd": 0.00023892000000000002,
+      "correct": false,
+      "reason": "The answer claims Rachel will send an investor deck by Friday, which contradicts the gold answer stating she will introduce two retail CTOs by next Wednesday."
+    },
+    {
+      "id": 15,
+      "type": "commitment",
+      "q": "What is Rachel going to do for me, and by when?",
+      "gold": "Introduce me to two retail CTOs from her network by next Wednesday.",
+      "evidence": [
+        "I'll introduce you to two retail CTOs from our network. I'll do that by next Wednesday"
+      ],
+      "system": "Super, full day in prompt",
+      "answer": "Rachel will send you the updated investor deck by Friday and introduce you to two retail CTOs from her network by next Wednesday.",
+      "latency_ms": 639,
+      "input_tokens": 3926,
+      "output_tokens": 27,
+      "cost_usd": 0.0012021,
+      "correct": true,
+      "reason": "The answer includes the required action—introducing two retail CTOs by next Wednesday—and adds extra information about sending an investor deck, which does not contradict the gold answer."
+    },
+    {
+      "id": 15,
+      "type": "commitment",
+      "q": "What is Rachel going to do for me, and by when?",
+      "gold": "Introduce me to two retail CTOs from her network by next Wednesday.",
+      "evidence": [
+        "I'll introduce you to two retail CTOs from our network. I'll do that by next Wednesday"
+      ],
+      "system": "Ultra, full day in prompt",
+      "answer": "Rachel will introduce you to two retail CTOs from her network by next Wednesday.",
+      "latency_ms": 1302,
+      "input_tokens": 3926,
+      "output_tokens": 18,
+      "cost_usd": 0.00398,
+      "correct": true,
+      "reason": "The answer matches the gold answer exactly in stating Rachel will introduce two retail CTOs by next Wednesday."
+    },
+    {
+      "id": 16,
+      "type": "commitment",
+      "q": "What do I owe Rachel?",
+      "gold": "The updated investor deck by Friday.",
+      "evidence": [
+        "I'll send you the updated deck by Friday"
+      ],
+      "system": "Earshot (/ask, memory)",
+      "answer": "Rachel will introduce you to two retail CTOs from her network by next Wednesday.",
+      "latency_ms": 4176,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": 0,
+      "correct": false,
+      "reason": "The answer claims Rachel will make introductions, but the gold answer states what is owed is an updated investor deck by Friday."
+    },
+    {
+      "id": 16,
+      "type": "commitment",
+      "q": "What do I owe Rachel?",
+      "gold": "The updated investor deck by Friday.",
+      "evidence": [
+        "I'll send you the updated deck by Friday"
+      ],
+      "system": "Lightning, full day in prompt",
+      "answer": "You owe Rachel the updated investor deck by Friday.",
+      "latency_ms": 419,
+      "input_tokens": 3919,
+      "output_tokens": 11,
+      "cost_usd": 0.00023777999999999996,
+      "correct": true,
+      "reason": "The answer correctly states the key fact: you owe Rachel the updated investor deck by Friday."
+    },
+    {
+      "id": 16,
+      "type": "commitment",
+      "q": "What do I owe Rachel?",
+      "gold": "The updated investor deck by Friday.",
+      "evidence": [
+        "I'll send you the updated deck by Friday"
+      ],
+      "system": "Super, full day in prompt",
+      "answer": "I didn't hear anything about owing Rachel money.",
+      "latency_ms": 812,
+      "input_tokens": 3919,
+      "output_tokens": 11,
+      "cost_usd": 0.0011856000000000002,
+      "correct": false,
+      "reason": "The answer incorrectly claims no information was heard when the gold answer specifies an obligation (updated investor deck by Friday), so it fails to state the key fact."
+    },
+    {
+      "id": 16,
+      "type": "commitment",
+      "q": "What do I owe Rachel?",
+      "gold": "The updated investor deck by Friday.",
+      "evidence": [
+        "I'll send you the updated deck by Friday"
+      ],
+      "system": "Ultra, full day in prompt",
+      "answer": "You owe Rachel an updated investor deck by Friday.",
+      "latency_ms": 1310,
+      "input_tokens": 3919,
+      "output_tokens": 11,
+      "cost_usd": 0.003952,
+      "correct": true,
+      "reason": "The answer correctly states the key fact: you owe Rachel an updated investor deck by Friday."
+    },
+    {
+      "id": 17,
+      "type": "commitment",
+      "q": "By when do I have to give Nebius a decision on the GPU commitment?",
+      "gold": "By October 23.",
+      "evidence": [
+        "I'll give you a decision by October 23"
+      ],
+      "system": "Earshot (/ask, memory)",
+      "answer": "October 23.",
+      "latency_ms": 7589,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": 0,
+      "correct": true,
+      "reason": "The answer matches the gold answer exactly."
+    },
+    {
+      "id": 17,
+      "type": "commitment",
+      "q": "By when do I have to give Nebius a decision on the GPU commitment?",
+      "gold": "By October 23.",
+      "evidence": [
+        "I'll give you a decision by October 23"
+      ],
+      "system": "Lightning, full day in prompt",
+      "answer": "October 23",
+      "latency_ms": 378,
+      "input_tokens": 3929,
+      "output_tokens": 5,
+      "cost_usd": 0.00023693999999999996,
+      "correct": true,
+      "reason": "The answer 'October 23' matches the gold answer exactly."
+    },
+    {
+      "id": 17,
+      "type": "commitment",
+      "q": "By when do I have to give Nebius a decision on the GPU commitment?",
+      "gold": "By October 23.",
+      "evidence": [
+        "I'll give you a decision by October 23"
+      ],
+      "system": "Super, full day in prompt",
+      "answer": "October 23.",
+      "latency_ms": 863,
+      "input_tokens": 3929,
+      "output_tokens": 6,
+      "cost_usd": 0.0011841000000000002,
+      "correct": true,
+      "reason": "The answer matches the exact date given in the gold answer."
+    },
+    {
+      "id": 17,
+      "type": "commitment",
+      "q": "By when do I have to give Nebius a decision on the GPU commitment?",
+      "gold": "By October 23.",
+      "evidence": [
+        "I'll give you a decision by October 23"
+      ],
+      "system": "Ultra, full day in prompt",
+      "answer": "October 23",
+      "latency_ms": 1048,
+      "input_tokens": 3929,
+      "output_tokens": 5,
+      "cost_usd": 0.003944,
+      "correct": true,
+      "reason": "The answer 'October 23' matches the gold answer exactly."
+    },
+    {
+      "id": 18,
+      "type": "commitment",
+      "q": "What did Jordan commit to sending by Monday?",
+      "gold": "All three pilot proposals.",
+      "evidence": [
+        "I'll send all three pilot proposals by Monday"
+      ],
+      "system": "Earshot (/ask, memory)",
+      "answer": "Jordan committed to sending all three pilot proposals by Monday.",
+      "latency_ms": 7223,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": 0,
+      "correct": true,
+      "reason": "The answer correctly restates the commitment to send all three pilot proposals by Monday."
+    },
+    {
+      "id": 18,
+      "type": "commitment",
+      "q": "What did Jordan commit to sending by Monday?",
+      "gold": "All three pilot proposals.",
+      "evidence": [
+        "I'll send all three pilot proposals by Monday"
+      ],
+      "system": "Lightning, full day in prompt",
+      "answer": "all three pilot proposals",
+      "latency_ms": 474,
+      "input_tokens": 3922,
+      "output_tokens": 5,
+      "cost_usd": 0.00023652,
+      "correct": true,
+      "reason": "The answer matches the gold answer exactly."
+    },
+    {
+      "id": 18,
+      "type": "commitment",
+      "q": "What did Jordan commit to sending by Monday?",
+      "gold": "All three pilot proposals.",
+      "evidence": [
+        "I'll send all three pilot proposals by Monday"
+      ],
+      "system": "Super, full day in prompt",
+      "answer": "Jordan committed to sending the introduction to the Stripe partnerships team by Monday.",
+      "latency_ms": 875,
+      "input_tokens": 3922,
+      "output_tokens": 16,
+      "cost_usd": 0.001191,
+      "correct": false,
+      "reason": "The answer claims Jordan committed to sending an introduction to the Stripe partnerships team, but the gold answer states he committed to sending all three pilot proposals."
+    },
+    {
+      "id": 18,
+      "type": "commitment",
+      "q": "What did Jordan commit to sending by Monday?",
+      "gold": "All three pilot proposals.",
+      "evidence": [
+        "I'll send all three pilot proposals by Monday"
+      ],
+      "system": "Ultra, full day in prompt",
+      "answer": "Jordan committed to sending all three pilot proposals by Monday.",
+      "latency_ms": 1204,
+      "input_tokens": 3922,
+      "output_tokens": 12,
+      "cost_usd": 0.003958,
+      "correct": true,
+      "reason": "The answer matches the gold answer exactly in stating that Jordan committed to sending all three pilot proposals by Monday."
+    },
+    {
+      "id": 19,
+      "type": "commitment",
+      "q": "When are Tomás's onboarding mockups due?",
+      "gold": "Wednesday.",
+      "evidence": [
+        "onboarding mockups for you by Wednesday",
+        "full mockups on Wednesday"
+      ],
+      "system": "Earshot (/ask, memory)",
+      "answer": "Wednesday.",
+      "latency_ms": 3351,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": 0,
+      "correct": true,
+      "reason": "The answer matches the gold answer exactly."
+    },
+    {
+      "id": 19,
+      "type": "commitment",
+      "q": "When are Tomás's onboarding mockups due?",
+      "gold": "Wednesday.",
+      "evidence": [
+        "onboarding mockups for you by Wednesday",
+        "full mockups on Wednesday"
+      ],
+      "system": "Lightning, full day in prompt",
+      "answer": "Wednesday",
+      "latency_ms": 387,
+      "input_tokens": 3923,
+      "output_tokens": 2,
+      "cost_usd": 0.00023585999999999998,
+      "correct": true,
+      "reason": "The answer matches the gold answer exactly."
+    },
+    {
+      "id": 19,
+      "type": "commitment",
+      "q": "When are Tomás's onboarding mockups due?",
+      "gold": "Wednesday.",
+      "evidence": [
+        "onboarding mockups for you by Wednesday",
+        "full mockups on Wednesday"
+      ],
+      "system": "Super, full day in prompt",
+      "answer": "Tomás's onboarding mockups are due on Wednesday.",
+      "latency_ms": 1048,
+      "input_tokens": 3923,
+      "output_tokens": 13,
+      "cost_usd": 0.0011886,
+      "correct": true,
+      "reason": "The answer correctly states that Tomás's onboarding mockups are due on Wednesday."
+    },
+    {
+      "id": 19,
+      "type": "commitment",
+      "q": "When are Tomás's onboarding mockups due?",
+      "gold": "Wednesday.",
+      "evidence": [
+        "onboarding mockups for you by Wednesday",
+        "full mockups on Wednesday"
+      ],
+      "system": "Ultra, full day in prompt",
+      "answer": "Thomas said he'll have the new onboarding mockups ready by Wednesday.",
+      "latency_ms": 1517,
+      "input_tokens": 3923,
+      "output_tokens": 16,
+      "cost_usd": 0.003971,
+      "correct": true,
+      "reason": "The answer correctly states that the onboarding mockups are due by Wednesday, matching the gold answer."
+    },
+    {
+      "id": 20,
+      "type": "commitment",
+      "q": "What did I promise Nina?",
+      "gold": "To book a table for 6 at Olive and Ash for Sunday at 7 (tonight) for Dad's birthday dinner.",
+      "evidence": [
+        "I'll book a table for 6 at Olive and Ash for Sunday at 7. Tonight, I promise."
+      ],
+      "system": "Earshot (/ask, memory)",
+      "answer": "I promised to book a table for six at Olive and Ash for Sunday at seven.",
+      "latency_ms": 7376,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": 0,
+      "correct": true,
+      "reason": "The answer correctly captures all key facts: booking a table for six at Olive and Ash on Sunday at seven."
+    },
+    {
+      "id": 20,
+      "type": "commitment",
+      "q": "What did I promise Nina?",
+      "gold": "To book a table for 6 at Olive and Ash for Sunday at 7 (tonight) for Dad's birthday dinner.",
+      "evidence": [
+        "I'll book a table for 6 at Olive and Ash for Sunday at 7. Tonight, I promise."
+      ],
+      "system": "Lightning, full day in prompt",
+      "answer": "I promised to book a table for six at Olive and Ash for Sunday at seven tonight.",
+      "latency_ms": 560,
+      "input_tokens": 3919,
+      "output_tokens": 19,
+      "cost_usd": 0.0002397,
+      "correct": true,
+      "reason": "The answer correctly captures all key details: booking a table for six at Olive and Ash on Sunday at 7 PM tonight."
+    },
+    {
+      "id": 20,
+      "type": "commitment",
+      "q": "What did I promise Nina?",
+      "gold": "To book a table for 6 at Olive and Ash for Sunday at 7 (tonight) for Dad's birthday dinner.",
+      "evidence": [
+        "I'll book a table for 6 at Olive and Ash for Sunday at 7. Tonight, I promise."
+      ],
+      "system": "Super, full day in prompt",
+      "answer": "I promised to book a table for six at Olive and Ash for Sunday at seven.",
+      "latency_ms": 1039,
+      "input_tokens": 3919,
+      "output_tokens": 18,
+      "cost_usd": 0.0011919,
+      "correct": true,
+      "reason": "The answer correctly captures all key details: booking a table for six at Olive and Ash on Sunday at seven."
+    },
+    {
+      "id": 20,
+      "type": "commitment",
+      "q": "What did I promise Nina?",
+      "gold": "To book a table for 6 at Olive and Ash for Sunday at 7 (tonight) for Dad's birthday dinner.",
+      "evidence": [
+        "I'll book a table for 6 at Olive and Ash for Sunday at 7. Tonight, I promise."
+      ],
+      "system": "Ultra, full day in prompt",
+      "answer": "You promised to book a table for six at Olive and Ash for Sunday at 7 PM and to get a LEGO Space Shuttle for Ava's party on Saturday.",
+      "latency_ms": 1470,
+      "input_tokens": 3919,
+      "output_tokens": 35,
+      "cost_usd": 0.004024,
+      "correct": false,
+      "reason": "The answer includes an extra claim about getting a LEGO Space Shuttle for Ava's party, which is not in the gold answer and thus makes it incorrect."
+    },
+    {
+      "id": 21,
+      "type": "number",
+      "q": "What monthly price did I quote Halden Outdoor?",
+      "gold": "$1,800 a month, covering up to 50 stores.",
+      "evidence": [
+        "$1,800 a month, and that covers up to 50 stores"
+      ],
+      "system": "Earshot (/ask, memory)",
+      "answer": "$1,800 per month.",
+      "latency_ms": 3709,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": 0,
+      "correct": true,
+      "reason": "The answer correctly quotes the monthly price as $1,800 per month, matching the gold answer."
+    },
+    {
+      "id": 21,
+      "type": "number",
+      "q": "What monthly price did I quote Halden Outdoor?",
+      "gold": "$1,800 a month, covering up to 50 stores.",
+      "evidence": [
+        "$1,800 a month, and that covers up to 50 stores"
+      ],
+      "system": "Lightning, full day in prompt",
+      "answer": "$1,800",
+      "latency_ms": 383,
+      "input_tokens": 3923,
+      "output_tokens": 7,
+      "cost_usd": 0.00023706,
+      "correct": true,
+      "reason": "The answer correctly quotes the monthly price as $1,800."
+    },
+    {
+      "id": 21,
+      "type": "number",
+      "q": "What monthly price did I quote Halden Outdoor?",
+      "gold": "$1,800 a month, covering up to 50 stores.",
+      "evidence": [
+        "$1,800 a month, and that covers up to 50 stores"
+      ],
+      "system": "Super, full day in prompt",
+      "answer": "$1,800 per month.",
+      "latency_ms": 854,
+      "input_tokens": 3923,
+      "output_tokens": 10,
+      "cost_usd": 0.0011859,
+      "correct": true,
+      "reason": "The answer matches the gold answer's key fact of $1,800 per month."
+    },
+    {
+      "id": 21,
+      "type": "number",
+      "q": "What monthly price did I quote Halden Outdoor?",
+      "gold": "$1,800 a month, covering up to 50 stores.",
+      "evidence": [
+        "$1,800 a month, and that covers up to 50 stores"
+      ],
+      "system": "Ultra, full day in prompt",
+      "answer": "$1,800 a month",
+      "latency_ms": 1094,
+      "input_tokens": 3923,
+      "output_tokens": 9,
+      "cost_usd": 0.00395,
+      "correct": true,
+      "reason": "The answer matches the gold answer exactly in stating the quoted monthly price."
+    },
+    {
+      "id": 22,
+      "type": "number",
+      "q": "How much was last month's Nebius GPU bill?",
+      "gold": "$14,200.",
+      "evidence": [
+        "The Nebius GPU bill last month was $14,200"
+      ],
+      "system": "Earshot (/ask, memory)",
+      "answer": "$14,200",
+      "latency_ms": 4013,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": 0,
+      "correct": true,
+      "reason": "The answer matches the exact amount stated in the gold answer."
+    },
+    {
+      "id": 22,
+      "type": "number",
+      "q": "How much was last month's Nebius GPU bill?",
+      "gold": "$14,200.",
+      "evidence": [
+        "The Nebius GPU bill last month was $14,200"
+      ],
+      "system": "Lightning, full day in prompt",
+      "answer": "$14,200",
+      "latency_ms": 386,
+      "input_tokens": 3924,
+      "output_tokens": 8,
+      "cost_usd": 0.00023736,
+      "correct": true,
+      "reason": "The answer matches the exact amount stated in the gold answer."
+    },
+    {
+      "id": 22,
+      "type": "number",
+      "q": "How much was last month's Nebius GPU bill?",
+      "gold": "$14,200.",
+      "evidence": [
+        "The Nebius GPU bill last month was $14,200"
+      ],
+      "system": "Super, full day in prompt",
+      "answer": "$14,200",
+      "latency_ms": 878,
+      "input_tokens": 3924,
+      "output_tokens": 8,
+      "cost_usd": 0.0011844000000000002,
+      "correct": true,
+      "reason": "The answer matches the exact amount stated in the gold answer."
+    },
+    {
+      "id": 22,
+      "type": "number",
+      "q": "How much was last month's Nebius GPU bill?",
+      "gold": "$14,200.",
+      "evidence": [
+        "The Nebius GPU bill last month was $14,200"
+      ],
+      "system": "Ultra, full day in prompt",
+      "answer": "$14,200",
+      "latency_ms": 1403,
+      "input_tokens": 3924,
+      "output_tokens": 8,
+      "cost_usd": 0.003948,
+      "correct": true,
+      "reason": "The answer matches the exact amount stated in the gold answer."
+    },
+    {
+      "id": 23,
+      "type": "number",
+      "q": "What is our current MRR?",
+      "gold": "$42,000.",
+      "evidence": [
+        "MRR is $42,000"
+      ],
+      "system": "Earshot (/ask, memory)",
+      "answer": "$42,000.",
+      "latency_ms": 5092,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": 0,
+      "correct": true,
+      "reason": "The answer matches the gold answer exactly."
+    },
+    {
+      "id": 23,
+      "type": "number",
+      "q": "What is our current MRR?",
+      "gold": "$42,000.",
+      "evidence": [
+        "MRR is $42,000"
+      ],
+      "system": "Lightning, full day in prompt",
+      "answer": "$42,000",
+      "latency_ms": 393,
+      "input_tokens": 3920,
+      "output_tokens": 8,
+      "cost_usd": 0.00023711999999999998,
+      "correct": true,
+      "reason": "The answer matches the gold answer exactly."
+    },
+    {
+      "id": 23,
+      "type": "number",
+      "q": "What is our current MRR?",
+      "gold": "$42,000.",
+      "evidence": [
+        "MRR is $42,000"
+      ],
+      "system": "Super, full day in prompt",
+      "answer": "$42,000",
+      "latency_ms": 831,
+      "input_tokens": 3920,
+      "output_tokens": 8,
+      "cost_usd": 0.0011832000000000001,
+      "correct": true,
+      "reason": "The answer matches the gold answer exactly."
+    },
+    {
+      "id": 23,
+      "type": "number",
+      "q": "What is our current MRR?",
+      "gold": "$42,000.",
+      "evidence": [
+        "MRR is $42,000"
+      ],
+      "system": "Ultra, full day in prompt",
+      "answer": "MRR is $42,000.",
+      "latency_ms": 1215,
+      "input_tokens": 3920,
+      "output_tokens": 12,
+      "cost_usd": 0.003956,
+      "correct": true,
+      "reason": "The answer correctly states the MRR as $42,000, matching the gold answer."
+    },
+    {
+      "id": 24,
+      "type": "number",
+      "q": "How much runway do we have, and what is the monthly burn?",
+      "gold": "14 months of runway at about $95,000 a month burn.",
+      "evidence": [
+        "Burn is about $95,000 a month, and runway is 14 months"
+      ],
+      "system": "Earshot (/ask, memory)",
+      "answer": "Runway is fourteen months. Monthly burn is $95,000.",
+      "latency_ms": 3080,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": 0,
+      "correct": true,
+      "reason": "The answer correctly states both the runway duration (fourteen months) and the monthly burn ($95,000), matching the gold answer."
+    },
+    {
+      "id": 24,
+      "type": "number",
+      "q": "How much runway do we have, and what is the monthly burn?",
+      "gold": "14 months of runway at about $95,000 a month burn.",
+      "evidence": [
+        "Burn is about $95,000 a month, and runway is 14 months"
+      ],
+      "system": "Lightning, full day in prompt",
+      "answer": "We have fourteen months of runway with a monthly burn of about $95,000.",
+      "latency_ms": 474,
+      "input_tokens": 3927,
+      "output_tokens": 21,
+      "cost_usd": 0.00024066,
+      "correct": true,
+      "reason": "The answer matches the gold answer in stating 14 months of runway and approximately $95,000 monthly burn."
+    },
+    {
+      "id": 24,
+      "type": "number",
+      "q": "How much runway do we have, and what is the monthly burn?",
+      "gold": "14 months of runway at about $95,000 a month burn.",
+      "evidence": [
+        "Burn is about $95,000 a month, and runway is 14 months"
+      ],
+      "system": "Super, full day in prompt",
+      "answer": "We have fourteen months of runway and a monthly burn of about $95,000.",
+      "latency_ms": 1037,
+      "input_tokens": 3927,
+      "output_tokens": 21,
+      "cost_usd": 0.001197,
+      "correct": true,
+      "reason": "The answer matches the gold answer in stating 14 months of runway and approximately $95,000 monthly burn."
+    },
+    {
+      "id": 24,
+      "type": "number",
+      "q": "How much runway do we have, and what is the monthly burn?",
+      "gold": "14 months of runway at about $95,000 a month burn.",
+      "evidence": [
+        "Burn is about $95,000 a month, and runway is 14 months"
+      ],
+      "system": "Ultra, full day in prompt",
+      "answer": "Runway is fourteen months and monthly burn is about $95,000.",
+      "latency_ms": 1367,
+      "input_tokens": 3927,
+      "output_tokens": 19,
+      "cost_usd": 0.003984,
+      "correct": true,
+      "reason": "The answer correctly states both the runway duration (fourteen months) and the monthly burn rate ($95,000), matching the gold answer."
+    },
+    {
+      "id": 25,
+      "type": "number",
+      "q": "What is the salary band for the backend roles?",
+      "gold": "$150,000 to $170,000.",
+      "evidence": [
+        "salary band at $150,000 to $170,000"
+      ],
+      "system": "Earshot (/ask, memory)",
+      "answer": "$150,000 to $170,000.",
+      "latency_ms": 3367,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": 0,
+      "correct": true,
+      "reason": "The answer matches the gold answer exactly."
+    },
+    {
+      "id": 25,
+      "type": "number",
+      "q": "What is the salary band for the backend roles?",
+      "gold": "$150,000 to $170,000.",
+      "evidence": [
+        "salary band at $150,000 to $170,000"
+      ],
+      "system": "Lightning, full day in prompt",
+      "answer": "$150,000 to $170,000",
+      "latency_ms": 430,
+      "input_tokens": 3923,
+      "output_tokens": 18,
+      "cost_usd": 0.0002397,
+      "correct": true,
+      "reason": "The answer matches the gold answer exactly."
+    },
+    {
+      "id": 25,
+      "type": "number",
+      "q": "What is the salary band for the backend roles?",
+      "gold": "$150,000 to $170,000.",
+      "evidence": [
+        "salary band at $150,000 to $170,000"
+      ],
+      "system": "Super, full day in prompt",
+      "answer": "$150,000 to $170,000",
+      "latency_ms": 885,
+      "input_tokens": 3923,
+      "output_tokens": 18,
+      "cost_usd": 0.0011930999999999999,
+      "correct": true,
+      "reason": "The answer matches the gold answer exactly."
+    },
+    {
+      "id": 25,
+      "type": "number",
+      "q": "What is the salary band for the backend roles?",
+      "gold": "$150,000 to $170,000.",
+      "evidence": [
+        "salary band at $150,000 to $170,000"
+      ],
+      "system": "Ultra, full day in prompt",
+      "answer": "$150,000 to $170,000",
+      "latency_ms": 836,
+      "input_tokens": 3923,
+      "output_tokens": 18,
+      "cost_usd": 0.003977,
+      "correct": true,
+      "reason": "The answer matches the gold answer exactly."
+    },
+    {
+      "id": 26,
+      "type": "number",
+      "q": "How much did latency improve after moving the recommendation model to Nemotron?",
+      "gold": "From 900 milliseconds to 350 milliseconds.",
+      "evidence": [
+        "Latency dropped from 900 milliseconds to 350 milliseconds"
+      ],
+      "system": "Earshot (/ask, memory)",
+      "answer": "Latency improved from 900 ms to 350 ms.",
+      "latency_ms": 3638,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": 0,
+      "correct": true,
+      "reason": "The answer correctly states the latency improvement from 900 ms to 350 ms, matching the gold answer."
+    },
+    {
+      "id": 26,
+      "type": "number",
+      "q": "How much did latency improve after moving the recommendation model to Nemotron?",
+      "gold": "From 900 milliseconds to 350 milliseconds.",
+      "evidence": [
+        "Latency dropped from 900 milliseconds to 350 milliseconds"
+      ],
+      "system": "Lightning, full day in prompt",
+      "answer": "From nine hundred milliseconds to three hundred and fifty milliseconds.",
+      "latency_ms": 409,
+      "input_tokens": 3927,
+      "output_tokens": 12,
+      "cost_usd": 0.0002385,
+      "correct": true,
+      "reason": "The answer correctly states the latency improvement from 900 ms to 350 ms using word-form numbers, matching the gold answer's key facts."
+    },
+    {
+      "id": 26,
+      "type": "number",
+      "q": "How much did latency improve after moving the recommendation model to Nemotron?",
+      "gold": "From 900 milliseconds to 350 milliseconds.",
+      "evidence": [
+        "Latency dropped from 900 milliseconds to 350 milliseconds"
+      ],
+      "system": "Super, full day in prompt",
+      "answer": "Latency improved from 900ms to 350ms, a reduction of 550ms.",
+      "latency_ms": 938,
+      "input_tokens": 3927,
+      "output_tokens": 26,
+      "cost_usd": 0.0012015,
+      "correct": true,
+      "reason": "The answer correctly states the before/after latency values (900ms → 350ms), matching the gold answer."
+    },
+    {
+      "id": 26,
+      "type": "number",
+      "q": "How much did latency improve after moving the recommendation model to Nemotron?",
+      "gold": "From 900 milliseconds to 350 milliseconds.",
+      "evidence": [
+        "Latency dropped from 900 milliseconds to 350 milliseconds"
+      ],
+      "system": "Ultra, full day in prompt",
+      "answer": "Latency dropped from 900 milliseconds to 350 milliseconds.",
+      "latency_ms": 853,
+      "input_tokens": 3927,
+      "output_tokens": 17,
+      "cost_usd": 0.003978,
+      "correct": true,
+      "reason": "The answer matches the gold answer exactly in stating the latency improvement from 900 ms to 350 ms."
+    },
+    {
+      "id": 27,
+      "type": "number",
+      "q": "What discount did Nebius offer, and for what commitment?",
+      "gold": "20% off for a six-month commitment.",
+      "evidence": [
+        "If you commit for six months, we can do a 20% discount"
+      ],
+      "system": "Earshot (/ask, memory)",
+      "answer": "Nebius offered a 20% discount for a six-month commitment.",
+      "latency_ms": 4295,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": 0,
+      "correct": true,
+      "reason": "The answer matches the gold answer exactly in stating the 20% discount and six-month commitment."
+    },
+    {
+      "id": 27,
+      "type": "number",
+      "q": "What discount did Nebius offer, and for what commitment?",
+      "gold": "20% off for a six-month commitment.",
+      "evidence": [
+        "If you commit for six months, we can do a 20% discount"
+      ],
+      "system": "Lightning, full day in prompt",
+      "answer": "Nebius offered a 20% discount for a six-month committed use.",
+      "latency_ms": 442,
+      "input_tokens": 3925,
+      "output_tokens": 18,
+      "cost_usd": 0.00023982,
+      "correct": true,
+      "reason": "The answer matches the gold answer's key facts: 20% discount for a six-month commitment."
+    },
+    {
+      "id": 27,
+      "type": "number",
+      "q": "What discount did Nebius offer, and for what commitment?",
+      "gold": "20% off for a six-month commitment.",
+      "evidence": [
+        "If you commit for six months, we can do a 20% discount"
+      ],
+      "system": "Super, full day in prompt",
+      "answer": "Nebius offered a 20% discount for a six-month committed use reservation of eight H200 GPUs.",
+      "latency_ms": 693,
+      "input_tokens": 3925,
+      "output_tokens": 27,
+      "cost_usd": 0.0012018,
+      "correct": true,
+      "reason": "The answer correctly states the 20% discount for a six-month commitment, matching the gold answer's key facts."
+    },
+    {
+      "id": 27,
+      "type": "number",
+      "q": "What discount did Nebius offer, and for what commitment?",
+      "gold": "20% off for a six-month commitment.",
+      "evidence": [
+        "If you commit for six months, we can do a 20% discount"
+      ],
+      "system": "Ultra, full day in prompt",
+      "answer": "Nebius offered a 20% discount on committed use for a six-month commitment.",
+      "latency_ms": 872,
+      "input_tokens": 3925,
+      "output_tokens": 20,
+      "cost_usd": 0.003985,
+      "correct": true,
+      "reason": "The answer correctly states the 20% discount and six-month commitment as specified in the gold answer."
+    },
+    {
+      "id": 28,
+      "type": "number",
+      "q": "What discount is Jordan allowed to offer pilots?",
+      "gold": "10% off for annual prepay only; list price stays $1,800 a month.",
+      "evidence": [
+        "If they prepay annually, give them a 10% discount"
+      ],
+      "system": "Earshot (/ask, memory)",
+      "answer": "Jordan can offer a 10% discount for annual prepayment.",
+      "latency_ms": 5088,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": 0,
+      "correct": true,
+      "reason": "The answer correctly states the 10% discount for annual prepayment, matching the gold answer's key fact."
+    },
+    {
+      "id": 28,
+      "type": "number",
+      "q": "What discount is Jordan allowed to offer pilots?",
+      "gold": "10% off for annual prepay only; list price stays $1,800 a month.",
+      "evidence": [
+        "If they prepay annually, give them a 10% discount"
+      ],
+      "system": "Lightning, full day in prompt",
+      "answer": "10% off for annual prepay",
+      "latency_ms": 407,
+      "input_tokens": 3922,
+      "output_tokens": 9,
+      "cost_usd": 0.00023747999999999998,
+      "correct": true,
+      "reason": "The answer correctly states the 10% discount for annual prepay, matching the key fact in the gold answer."
+    },
+    {
+      "id": 28,
+      "type": "number",
+      "q": "What discount is Jordan allowed to offer pilots?",
+      "gold": "10% off for annual prepay only; list price stays $1,800 a month.",
+      "evidence": [
+        "If they prepay annually, give them a 10% discount"
+      ],
+      "system": "Super, full day in prompt",
+      "answer": "Jordan can offer a 10% discount for annual prepayment as the only discount available for pilots.",
+      "latency_ms": 714,
+      "input_tokens": 3922,
+      "output_tokens": 22,
+      "cost_usd": 0.0011963999999999998,
+      "correct": true,
+      "reason": "The answer correctly states the 10% discount for annual prepayment as the only discount available for pilots, matching the gold answer."
+    },
+    {
+      "id": 28,
+      "type": "number",
+      "q": "What discount is Jordan allowed to offer pilots?",
+      "gold": "10% off for annual prepay only; list price stays $1,800 a month.",
+      "evidence": [
+        "If they prepay annually, give them a 10% discount"
+      ],
+      "system": "Ultra, full day in prompt",
+      "answer": "10% off for annual prepay",
+      "latency_ms": 2332,
+      "input_tokens": 3922,
+      "output_tokens": 9,
+      "cost_usd": 0.003949,
+      "correct": true,
+      "reason": "The answer correctly states the 10% discount for annual prepay, matching the key fact in the gold answer."
+    },
+    {
+      "id": 29,
+      "type": "temporal",
+      "q": "What changed about the Shopify launch date between the morning and the afternoon?",
+      "gold": "In the morning it was pushed from October 27 to November 10 to ship with Stripe; in the afternoon that was reversed: launch on October 27 (Shopify only) with Stripe as a fast follow on November 10.",
+      "evidence": [
+        "we move the Shopify launch from October 27 to November 10",
+        "launch October 27, Shopify only, Stripe fast follow on November 10"
+      ],
+      "system": "Earshot (/ask, memory)",
+      "answer": "The Shopify launch date was first delayed from October 27 to November 10 in the morning due to incomplete Stripe integration, but reversed in the afternoon to keep the original October 27 launch date (Shopify-only) with a Stripe fast follow on November 10, because of Haldan Outdoor’s November 1 Black Friday code freeze.",
+      "latency_ms": 6513,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": 0,
+      "correct": true,
+      "reason": "The answer correctly captures both the morning delay to Nov 10 for Stripe integration and the afternoon reversal to Oct 27 (Shopify-only) with Stripe as a fast follow on Nov 10, matching all key facts in the gold answer."
+    },
+    {
+      "id": 29,
+      "type": "temporal",
+      "q": "What changed about the Shopify launch date between the morning and the afternoon?",
+      "gold": "In the morning it was pushed from October 27 to November 10 to ship with Stripe; in the afternoon that was reversed: launch on October 27 (Shopify only) with Stripe as a fast follow on November 10.",
+      "evidence": [
+        "we move the Shopify launch from October 27 to November 10",
+        "launch October 27, Shopify only, Stripe fast follow on November 10"
+      ],
+      "system": "Lightning, full day in prompt",
+      "answer": "The Shopify launch was moved back from October 27 to November 10 in the morning, but then reverted to October 27 without Stripe in the afternoon.",
+      "latency_ms": 546,
+      "input_tokens": 3928,
+      "output_tokens": 37,
+      "cost_usd": 0.00024455999999999995,
+      "correct": false,
+      "reason": "The answer incorrectly says 'without Stripe' for the afternoon launch, while the gold answer specifies Stripe would be a fast follow on November 10."
+    },
+    {
+      "id": 29,
+      "type": "temporal",
+      "q": "What changed about the Shopify launch date between the morning and the afternoon?",
+      "gold": "In the morning it was pushed from October 27 to November 10 to ship with Stripe; in the afternoon that was reversed: launch on October 27 (Shopify only) with Stripe as a fast follow on November 10.",
+      "evidence": [
+        "we move the Shopify launch from October 27 to November 10",
+        "launch October 27, Shopify only, Stripe fast follow on November 10"
+      ],
+      "system": "Super, full day in prompt",
+      "answer": "The Shopify launch was initially proposed to move from October 27 to November 10, but due to the Black Friday code freeze starting November 1, the decision reverted to launching on October 27 without Stripe, followed by a fast-follow release with Stripe on November 10.",
+      "latency_ms": 1149,
+      "input_tokens": 3928,
+      "output_tokens": 64,
+      "cost_usd": 0.0012359999999999997,
+      "correct": true,
+      "reason": "The answer correctly captures both the initial push to Nov 10 for Stripe integration and the reversal back to Oct 27 for Shopify-only launch with Stripe as a fast follow on Nov 10."
+    },
+    {
+      "id": 29,
+      "type": "temporal",
+      "q": "What changed about the Shopify launch date between the morning and the afternoon?",
+      "gold": "In the morning it was pushed from October 27 to November 10 to ship with Stripe; in the afternoon that was reversed: launch on October 27 (Shopify only) with Stripe as a fast follow on November 10.",
+      "evidence": [
+        "we move the Shopify launch from October 27 to November 10",
+        "launch October 27, Shopify only, Stripe fast follow on November 10"
+      ],
+      "system": "Ultra, full day in prompt",
+      "answer": "The launch was moved from November 10 back to October 27, with Stripe integration as a fast follow on November 10.",
+      "latency_ms": 1150,
+      "input_tokens": 3928,
+      "output_tokens": 31,
+      "cost_usd": 0.004021,
+      "correct": true,
+      "reason": "The answer correctly captures the reversal described in the gold answer: moving the launch from November 10 back to October 27, with Stripe following on November 10."
+    },
+    {
+      "id": 30,
+      "type": "temporal",
+      "q": "What is the final launch date for the Shopify app?",
+      "gold": "October 27.",
+      "evidence": [
+        "final decision: launch October 27"
+      ],
+      "system": "Earshot (/ask, memory)",
+      "answer": "The final launch date for the Shopify app is October 27.",
+      "latency_ms": 5366,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": 0,
+      "correct": true,
+      "reason": "The answer matches the gold answer exactly."
+    },
+    {
+      "id": 30,
+      "type": "temporal",
+      "q": "What is the final launch date for the Shopify app?",
+      "gold": "October 27.",
+      "evidence": [
+        "final decision: launch October 27"
+      ],
+      "system": "Lightning, full day in prompt",
+      "answer": "October 27",
+      "latency_ms": 450,
+      "input_tokens": 3925,
+      "output_tokens": 5,
+      "cost_usd": 0.00023669999999999998,
+      "correct": true,
+      "reason": "The answer matches the gold answer exactly."
+    },
+    {
+      "id": 30,
+      "type": "temporal",
+      "q": "What is the final launch date for the Shopify app?",
+      "gold": "October 27.",
+      "evidence": [
+        "final decision: launch October 27"
+      ],
+      "system": "Super, full day in prompt",
+      "answer": "October 27",
+      "latency_ms": 584,
+      "input_tokens": 3925,
+      "output_tokens": 5,
+      "cost_usd": 0.001182,
+      "correct": true,
+      "reason": "The answer matches the gold answer exactly."
+    },
+    {
+      "id": 30,
+      "type": "temporal",
+      "q": "What is the final launch date for the Shopify app?",
+      "gold": "October 27.",
+      "evidence": [
+        "final decision: launch October 27"
+      ],
+      "system": "Ultra, full day in prompt",
+      "answer": "The final launch date for the Shopify app is October 27.",
+      "latency_ms": 835,
+      "input_tokens": 3925,
+      "output_tokens": 16,
+      "cost_usd": 0.003973,
+      "correct": true,
+      "reason": "The answer matches the gold answer exactly."
+    },
+    {
+      "id": 31,
+      "type": "temporal",
+      "q": "How did the size of the Halden pilot change during the day?",
+      "gold": "Halden has 40 stores; in the afternoon Priya decided to start the pilot with 12 stores and expand in January.",
+      "evidence": [
+        "we have 40 stores",
+        "start the pilot with 12 stores and expand in January"
+      ],
+      "system": "Earshot (/ask, memory)",
+      "answer": "The pilot remained unchanged throughout the day—still covering up to 50 stores under the $1,800/month plan discussed with Priya.",
+      "latency_ms": 8979,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": 0,
+      "correct": false,
+      "reason": "The answer claims the pilot remained unchanged at up to 50 stores, but the gold answer says it started with 12 stores in the afternoon and expanded later, indicating a change."
+    },
+    {
+      "id": 31,
+      "type": "temporal",
+      "q": "How did the size of the Halden pilot change during the day?",
+      "gold": "Halden has 40 stores; in the afternoon Priya decided to start the pilot with 12 stores and expand in January.",
+      "evidence": [
+        "we have 40 stores",
+        "start the pilot with 12 stores and expand in January"
+      ],
+      "system": "Lightning, full day in prompt",
+      "answer": "The Halden pilot was reduced from 40 stores to 12 stores to start.",
+      "latency_ms": 418,
+      "input_tokens": 3927,
+      "output_tokens": 20,
+      "cost_usd": 0.00024042,
+      "correct": true,
+      "reason": "The answer correctly reflects that the pilot started with 12 stores out of 40, indicating a reduction for the pilot launch."
+    },
+    {
+      "id": 31,
+      "type": "temporal",
+      "q": "How did the size of the Halden pilot change during the day?",
+      "gold": "Halden has 40 stores; in the afternoon Priya decided to start the pilot with 12 stores and expand in January.",
+      "evidence": [
+        "we have 40 stores",
+        "start the pilot with 12 stores and expand in January"
+      ],
+      "system": "Super, full day in prompt",
+      "answer": "The Halden pilot started as a potential rollout across all 40 stores, but was scaled down to begin with 12 stores initially, with plans to expand in January.",
+      "latency_ms": 768,
+      "input_tokens": 3927,
+      "output_tokens": 38,
+      "cost_usd": 0.0012123,
+      "correct": true,
+      "reason": "The answer correctly captures the initial plan for 40 stores, the reduction to 12 stores for the pilot launch, and the planned expansion in January."
+    },
+    {
+      "id": 31,
+      "type": "temporal",
+      "q": "How did the size of the Halden pilot change during the day?",
+      "gold": "Halden has 40 stores; in the afternoon Priya decided to start the pilot with 12 stores and expand in January.",
+      "evidence": [
+        "we have 40 stores",
+        "start the pilot with 12 stores and expand in January"
+      ],
+      "system": "Ultra, full day in prompt",
+      "answer": "The Halden pilot was reduced from 40 stores to 12 stores to start, with expansion planned for January.",
+      "latency_ms": 866,
+      "input_tokens": 3927,
+      "output_tokens": 26,
+      "cost_usd": 0.004005,
+      "correct": true,
+      "reason": "The answer correctly reflects that the pilot started with 12 out of 40 stores in the afternoon, with plans to expand in January."
+    },
+    {
+      "id": 32,
+      "type": "temporal",
+      "q": "When is the intro with Mark Delaney?",
+      "gold": "Tuesday at 10 AM (Priya first promised an intro next week, then set it up for Tuesday at 10 AM).",
+      "evidence": [
+        "I'll introduce you to Mark next week",
+        "Tuesday at 10 AM works for him"
+      ],
+      "system": "Earshot (/ask, memory)",
+      "answer": "Dave offered to send you an intro to the Stripe partnerships team by Monday.",
+      "latency_ms": 6792,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": 0,
+      "correct": false,
+      "reason": "The answer mentions Dave offering an intro on Monday, which contradicts the gold answer stating Priya set up the intro with Mark Delaney for Tuesday at 10 AM."
+    },
+    {
+      "id": 32,
+      "type": "temporal",
+      "q": "When is the intro with Mark Delaney?",
+      "gold": "Tuesday at 10 AM (Priya first promised an intro next week, then set it up for Tuesday at 10 AM).",
+      "evidence": [
+        "I'll introduce you to Mark next week",
+        "Tuesday at 10 AM works for him"
+      ],
+      "system": "Lightning, full day in prompt",
+      "answer": "next week",
+      "latency_ms": 359,
+      "input_tokens": 3922,
+      "output_tokens": 3,
+      "cost_usd": 0.00023604,
+      "correct": false,
+      "reason": "The answer 'next week' misses the specific time 'Tuesday at 10 AM' stated in the gold answer."
+    },
+    {
+      "id": 32,
+      "type": "temporal",
+      "q": "When is the intro with Mark Delaney?",
+      "gold": "Tuesday at 10 AM (Priya first promised an intro next week, then set it up for Tuesday at 10 AM).",
+      "evidence": [
+        "I'll introduce you to Mark next week",
+        "Tuesday at 10 AM works for him"
+      ],
+      "system": "Super, full day in prompt",
+      "answer": "next week (from conversation at 09:40)",
+      "latency_ms": 614,
+      "input_tokens": 3922,
+      "output_tokens": 14,
+      "cost_usd": 0.0011891999999999998,
+      "correct": false,
+      "reason": "The answer 'next week' misses the specific time 'Tuesday at 10 AM' stated in the gold answer."
+    },
+    {
+      "id": 32,
+      "type": "temporal",
+      "q": "When is the intro with Mark Delaney?",
+      "gold": "Tuesday at 10 AM (Priya first promised an intro next week, then set it up for Tuesday at 10 AM).",
+      "evidence": [
+        "I'll introduce you to Mark next week",
+        "Tuesday at 10 AM works for him"
+      ],
+      "system": "Ultra, full day in prompt",
+      "answer": "Tuesday at 10AM.",
+      "latency_ms": 1027,
+      "input_tokens": 3922,
+      "output_tokens": 8,
+      "cost_usd": 0.003946,
+      "correct": true,
+      "reason": "The answer matches the time stated in the gold answer."
+    },
+    {
+      "id": 33,
+      "type": "synthesis",
+      "q": "Why was the launch decision reversed?",
+      "gold": "Halden Outdoor's Black Friday code freeze starts November 1, so a November 10 launch would lose them until January; Jordan's 3 other pilots have the same holiday freeze.",
+      "evidence": [
+        "Black Friday code freeze that starts November 1",
+        "we'd have to wait until January",
+        "all of them are retailers with the same holiday freeze"
+      ],
+      "system": "Earshot (/ask, memory)",
+      "answer": "The launch decision was reversed because Priya from Haldan Outdoor informed the team that their Black Friday code freeze starts November 1, meaning nothing new can go live after that date. Launching on November 10 would delay the pilot until January, so the team reverted to the original October 27 launch date to ensure the app could be used during the pilot before the freeze.",
+      "latency_ms": 3622,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": 0,
+      "correct": true,
+      "reason": "The answer correctly identifies the reason for reversing the launch decision as being due to Halden Outdoor's Black Friday code freeze starting November 1, which would delay the pilot until January if launched on November 10."
+    },
+    {
+      "id": 33,
+      "type": "synthesis",
+      "q": "Why was the launch decision reversed?",
+      "gold": "Halden Outdoor's Black Friday code freeze starts November 1, so a November 10 launch would lose them until January; Jordan's 3 other pilots have the same holiday freeze.",
+      "evidence": [
+        "Black Friday code freeze that starts November 1",
+        "we'd have to wait until January",
+        "all of them are retailers with the same holiday freeze"
+      ],
+      "system": "Lightning, full day in prompt",
+      "answer": "The launch was reversed because the team decided to launch the Shopify app on October 27 without Stripe integration, with a fast follow on November 10, to avoid losing all pilots due to the Black Friday code freeze starting November 1.",
+      "latency_ms": 518,
+      "input_tokens": 3920,
+      "output_tokens": 52,
+      "cost_usd": 0.00024767999999999996,
+      "correct": false,
+      "reason": "The answer incorrectly claims the reversal was due to launching early to avoid the freeze, but the gold answer says the reversal happened because a November 10 launch would lose pilots due to the freeze."
+    },
+    {
+      "id": 33,
+      "type": "synthesis",
+      "q": "Why was the launch decision reversed?",
+      "gold": "Halden Outdoor's Black Friday code freeze starts November 1, so a November 10 launch would lose them until January; Jordan's 3 other pilots have the same holiday freeze.",
+      "evidence": [
+        "Black Friday code freeze that starts November 1",
+        "we'd have to wait until January",
+        "all of them are retailers with the same holiday freeze"
+      ],
+      "system": "Super, full day in prompt",
+      "answer": "The launch decision was reversed because Priya from Haldan Outdoor mentioned a Black Friday code freeze starting November 1, meaning anything launched after that date wouldn't go live until January, making the November 10 launch ineffective for their pilot.",
+      "latency_ms": 1014,
+      "input_tokens": 3920,
+      "output_tokens": 50,
+      "cost_usd": 0.001221,
+      "correct": true,
+      "reason": "The answer correctly identifies the reason as the Black Friday code freeze starting November 1 at Halden Outdoor, which would delay any post-freeze launch until January, making the November 10 launch ineffective."
+    },
+    {
+      "id": 33,
+      "type": "synthesis",
+      "q": "Why was the launch decision reversed?",
+      "gold": "Halden Outdoor's Black Friday code freeze starts November 1, so a November 10 launch would lose them until January; Jordan's 3 other pilots have the same holiday freeze.",
+      "evidence": [
+        "Black Friday code freeze that starts November 1",
+        "we'd have to wait until January",
+        "all of them are retailers with the same holiday freeze"
+      ],
+      "system": "Ultra, full day in prompt",
+      "answer": "The launch was moved back to October 27 because a key pilot customer, Haldan Outdoor, has a Black Friday code freeze starting November 1, and launching on November 10 would delay the pilot until January.",
+      "latency_ms": 1266,
+      "input_tokens": 3920,
+      "output_tokens": 47,
+      "cost_usd": 0.004061,
+      "correct": true,
+      "reason": "The answer correctly identifies the reason for reversing the launch decision as being due to Halden Outdoor's Black Friday code freeze beginning November 1, which would delay the pilot until January if launched on November 10."
+    },
+    {
+      "id": 34,
+      "type": "synthesis",
+      "q": "What am I waiting on before deciding on the Nebius GPU commitment?",
+      "gold": "Maya's Nebius GPU usage report (due Thursday) and Elena's formal quote (due Friday).",
+      "evidence": [
+        "I want to see Maya's usage report first",
+        "I'll send you a formal quote by Friday"
+      ],
+      "system": "Earshot (/ask, memory)",
+      "answer": "Maya's usage report.",
+      "latency_ms": 2418,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": 0,
+      "correct": false,
+      "reason": "The answer omits Elena's formal quote due Friday, which is a required part of what you're waiting on."
+    },
+    {
+      "id": 34,
+      "type": "synthesis",
+      "q": "What am I waiting on before deciding on the Nebius GPU commitment?",
+      "gold": "Maya's Nebius GPU usage report (due Thursday) and Elena's formal quote (due Friday).",
+      "evidence": [
+        "I want to see Maya's usage report first",
+        "I'll send you a formal quote by Friday"
+      ],
+      "system": "Lightning, full day in prompt",
+      "answer": "Maya's usage report",
+      "latency_ms": 408,
+      "input_tokens": 3927,
+      "output_tokens": 6,
+      "cost_usd": 0.00023706,
+      "correct": false,
+      "reason": "The answer mentions only Maya's usage report but omits Elena's formal quote due Friday, which is also required for the decision."
+    },
+    {
+      "id": 34,
+      "type": "synthesis",
+      "q": "What am I waiting on before deciding on the Nebius GPU commitment?",
+      "gold": "Maya's Nebius GPU usage report (due Thursday) and Elena's formal quote (due Friday).",
+      "evidence": [
+        "I want to see Maya's usage report first",
+        "I'll send you a formal quote by Friday"
+      ],
+      "system": "Super, full day in prompt",
+      "answer": "I want to see Maya's usage report first, and then I'll give you a decision by the October 23.",
+      "latency_ms": 878,
+      "input_tokens": 3927,
+      "output_tokens": 26,
+      "cost_usd": 0.0012015,
+      "correct": false,
+      "reason": "The answer mentions only Maya's report but omits Elena's formal quote due Friday, which is a required piece of information for making the decision."
+    },
+    {
+      "id": 34,
+      "type": "synthesis",
+      "q": "What am I waiting on before deciding on the Nebius GPU commitment?",
+      "gold": "Maya's Nebius GPU usage report (due Thursday) and Elena's formal quote (due Friday).",
+      "evidence": [
+        "I want to see Maya's usage report first",
+        "I'll send you a formal quote by Friday"
+      ],
+      "system": "Ultra, full day in prompt",
+      "answer": "You are waiting on Maya's usage report before deciding on the Nebius GPU commitment by October 23.",
+      "latency_ms": 923,
+      "input_tokens": 3927,
+      "output_tokens": 23,
+      "cost_usd": 0.003996,
+      "correct": false,
+      "reason": "The answer omits the requirement for Elena's formal quote due Friday."
+    },
+    {
+      "id": 35,
+      "type": "synthesis",
+      "q": "Is Sofia's salary ask within our band?",
+      "gold": "Yes: she asked for about $165,000 and the band is $150,000 to $170,000.",
+      "evidence": [
+        "around $165,000",
+        "$150,000 to $170,000",
+        "That's within our band"
+      ],
+      "system": "Earshot (/ask, memory)",
+      "answer": "Yes, her target of $165,000 falls inside the $150,000–$170,000 range.",
+      "latency_ms": 7687,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": 0,
+      "correct": true,
+      "reason": "The answer correctly confirms Sofia's salary request of $165,000 is within the stated band of $150,000–$170,000."
+    },
+    {
+      "id": 35,
+      "type": "synthesis",
+      "q": "Is Sofia's salary ask within our band?",
+      "gold": "Yes: she asked for about $165,000 and the band is $150,000 to $170,000.",
+      "evidence": [
+        "around $165,000",
+        "$150,000 to $170,000",
+        "That's within our band"
+      ],
+      "system": "Lightning, full day in prompt",
+      "answer": "yes",
+      "latency_ms": 378,
+      "input_tokens": 3922,
+      "output_tokens": 2,
+      "cost_usd": 0.00023579999999999999,
+      "correct": true,
+      "reason": "The answer 'yes' correctly reflects that Sofia's salary request falls within the specified band."
+    },
+    {
+      "id": 35,
+      "type": "synthesis",
+      "q": "Is Sofia's salary ask within our band?",
+      "gold": "Yes: she asked for about $165,000 and the band is $150,000 to $170,000.",
+      "evidence": [
+        "around $165,000",
+        "$150,000 to $170,000",
+        "That's within our band"
+      ],
+      "system": "Super, full day in prompt",
+      "answer": "Yes, her request of around $165,000 falls within the $150,000–$170,000 range mentioned earlier.",
+      "latency_ms": 782,
+      "input_tokens": 3922,
+      "output_tokens": 39,
+      "cost_usd": 0.0012116999999999998,
+      "correct": true,
+      "reason": "The answer correctly confirms Sofia's salary ask is within the stated band."
+    },
+    {
+      "id": 35,
+      "type": "synthesis",
+      "q": "Is Sofia's salary ask within our band?",
+      "gold": "Yes: she asked for about $165,000 and the band is $150,000 to $170,000.",
+      "evidence": [
+        "around $165,000",
+        "$150,000 to $170,000",
+        "That's within our band"
+      ],
+      "system": "Ultra, full day in prompt",
+      "answer": "Yes, Sofia's salary ask of $165,000 is within the $150,000 to $170,000 band.",
+      "latency_ms": 1276,
+      "input_tokens": 3922,
+      "output_tokens": 38,
+      "cost_usd": 0.004036,
+      "correct": true,
+      "reason": "The answer correctly confirms Sofia's requested salary falls within the specified range."
+    },
+    {
+      "id": 36,
+      "type": "synthesis",
+      "q": "What dietary restrictions came up across the day's conversations?",
+      "gold": "Maya is vegetarian, Ava is lactose intolerant (dairy-free cake), and Nina is gluten-free.",
+      "evidence": [
+        "I'm vegetarian",
+        "she's lactose intolerant",
+        "I'm still gluten-free"
+      ],
+      "system": "Earshot (/ask, memory)",
+      "answer": "Lactose intolerance (Ava), vegetarianism (Speaker 1), and gluten-free diet (Nina) were mentioned.",
+      "latency_ms": 5801,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": 0,
+      "correct": true,
+      "reason": "The answer correctly identifies all three dietary restrictions with their associated individuals."
+    },
+    {
+      "id": 36,
+      "type": "synthesis",
+      "q": "What dietary restrictions came up across the day's conversations?",
+      "gold": "Maya is vegetarian, Ava is lactose intolerant (dairy-free cake), and Nina is gluten-free.",
+      "evidence": [
+        "I'm vegetarian",
+        "she's lactose intolerant",
+        "I'm still gluten-free"
+      ],
+      "system": "Lightning, full day in prompt",
+      "answer": "Lactose intolerance and gluten free needs were mentioned.",
+      "latency_ms": 393,
+      "input_tokens": 3924,
+      "output_tokens": 12,
+      "cost_usd": 0.00023831999999999998,
+      "correct": false,
+      "reason": "The answer omits Maya being vegetarian, which is a key fact in the gold answer."
+    },
+    {
+      "id": 36,
+      "type": "synthesis",
+      "q": "What dietary restrictions came up across the day's conversations?",
+      "gold": "Maya is vegetarian, Ava is lactose intolerant (dairy-free cake), and Nina is gluten-free.",
+      "evidence": [
+        "I'm vegetarian",
+        "she's lactose intolerant",
+        "I'm still gluten-free"
+      ],
+      "system": "Super, full day in prompt",
+      "answer": "Lactose intolerance (Ava) and gluten-free (Nina).",
+      "latency_ms": 935,
+      "input_tokens": 3924,
+      "output_tokens": 16,
+      "cost_usd": 0.0011916000000000001,
+      "correct": false,
+      "reason": "Missing Maya being vegetarian."
+    },
+    {
+      "id": 36,
+      "type": "synthesis",
+      "q": "What dietary restrictions came up across the day's conversations?",
+      "gold": "Maya is vegetarian, Ava is lactose intolerant (dairy-free cake), and Nina is gluten-free.",
+      "evidence": [
+        "I'm vegetarian",
+        "she's lactose intolerant",
+        "I'm still gluten-free"
+      ],
+      "system": "Ultra, full day in prompt",
+      "answer": "Ava is lactose intolerant, so her birthday cake will be dairy-free; Speaker 1 is vegetarian and asked the team dinner to accommodate that; and Nina is gluten-free and requested gluten-free options for the birthday dinner.",
+      "latency_ms": 1176,
+      "input_tokens": 3924,
+      "output_tokens": 47,
+      "cost_usd": 0.004065,
+      "correct": true,
+      "reason": "The answer correctly identifies all three individuals' dietary restrictions—Ava as lactose intolerant with a dairy-free cake, Speaker 1 (Maya) as vegetarian needing accommodation at team dinner, and Nina as gluten-free requesting options—matching the gold answer without contradiction."
+    },
+    {
+      "id": 37,
+      "type": "unanswerable",
+      "q": "What valuation did Rachel suggest for our next round?",
+      "gold": "not mentioned",
+      "absent": [
+        "valuation",
+        "series a"
+      ],
+      "system": "Earshot (/ask, memory)",
+      "answer": "I didn't hear any valuation suggested by Rachel.",
+      "latency_ms": 6755,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": 0,
+      "correct": true,
+      "reason": "The answer correctly declined to provide a valuation since it was not mentioned in the context."
+    },
+    {
+      "id": 37,
+      "type": "unanswerable",
+      "q": "What valuation did Rachel suggest for our next round?",
+      "gold": "not mentioned",
+      "absent": [
+        "valuation",
+        "series a"
+      ],
+      "system": "Lightning, full day in prompt",
+      "answer": "I did not hear that.",
+      "latency_ms": 370,
+      "input_tokens": 3923,
+      "output_tokens": 7,
+      "cost_usd": 0.00023706,
+      "correct": true,
+      "reason": "The answer correctly declined to provide information since the gold answer indicates the valuation was not mentioned."
+    },
+    {
+      "id": 37,
+      "type": "unanswerable",
+      "q": "What valuation did Rachel suggest for our next round?",
+      "gold": "not mentioned",
+      "absent": [
+        "valuation",
+        "series a"
+      ],
+      "system": "Super, full day in prompt",
+      "answer": "I didn't hear any mention of a suggested valuation for the next round in the conversation with Rachel.",
+      "latency_ms": 896,
+      "input_tokens": 3923,
+      "output_tokens": 21,
+      "cost_usd": 0.0011958,
+      "correct": true,
+      "reason": "The answer correctly states that no valuation suggestion by Rachel was heard, matching the 'not mentioned' gold answer."
+    },
+    {
+      "id": 37,
+      "type": "unanswerable",
+      "q": "What valuation did Rachel suggest for our next round?",
+      "gold": "not mentioned",
+      "absent": [
+        "valuation",
+        "series a"
+      ],
+      "system": "Ultra, full day in prompt",
+      "answer": "I did not hear that.",
+      "latency_ms": 791,
+      "input_tokens": 3923,
+      "output_tokens": 7,
+      "cost_usd": 0.003944,
+      "correct": true,
+      "reason": "The answer correctly declined to provide information since the gold answer indicates the valuation was not mentioned."
+    },
+    {
+      "id": 38,
+      "type": "unanswerable",
+      "q": "What hourly price did Elena quote for an H200?",
+      "gold": "not mentioned",
+      "absent": [
+        "per hour",
+        "an hour",
+        "hourly"
+      ],
+      "system": "Earshot (/ask, memory)",
+      "answer": "$5.40 per hour.",
+      "latency_ms": 6354,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": 0,
+      "correct": false,
+      "reason": "The answer provides a specific price when the gold answer indicates this information was not mentioned."
+    },
+    {
+      "id": 38,
+      "type": "unanswerable",
+      "q": "What hourly price did Elena quote for an H200?",
+      "gold": "not mentioned",
+      "absent": [
+        "per hour",
+        "an hour",
+        "hourly"
+      ],
+      "system": "Lightning, full day in prompt",
+      "answer": "I did not hear that.",
+      "latency_ms": 369,
+      "input_tokens": 3926,
+      "output_tokens": 7,
+      "cost_usd": 0.00023724,
+      "correct": true,
+      "reason": "The answer correctly declined to provide information as the gold answer indicates the hourly price for an H200 was not mentioned."
+    },
+    {
+      "id": 38,
+      "type": "unanswerable",
+      "q": "What hourly price did Elena quote for an H200?",
+      "gold": "not mentioned",
+      "absent": [
+        "per hour",
+        "an hour",
+        "hourly"
+      ],
+      "system": "Super, full day in prompt",
+      "answer": "I didn't hear that.",
+      "latency_ms": 648,
+      "input_tokens": 3926,
+      "output_tokens": 7,
+      "cost_usd": 0.0011841,
+      "correct": true,
+      "reason": "The answer correctly declined to state the hourly price since it was not mentioned in the context."
+    },
+    {
+      "id": 38,
+      "type": "unanswerable",
+      "q": "What hourly price did Elena quote for an H200?",
+      "gold": "not mentioned",
+      "absent": [
+        "per hour",
+        "an hour",
+        "hourly"
+      ],
+      "system": "Ultra, full day in prompt",
+      "answer": "I did not hear that.",
+      "latency_ms": 1016,
+      "input_tokens": 3926,
+      "output_tokens": 7,
+      "cost_usd": 0.003947,
+      "correct": true,
+      "reason": "The answer correctly declined to provide information since the gold answer indicates the hourly price for an H200 was not mentioned."
+    },
+    {
+      "id": 39,
+      "type": "unanswerable",
+      "q": "What is Sofia's current salary at Shopify?",
+      "gold": "not mentioned",
+      "absent": [
+        "current salary",
+        "making now",
+        "earn"
+      ],
+      "system": "Earshot (/ask, memory)",
+      "answer": "I didn't hear that.",
+      "latency_ms": 2801,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": 0,
+      "correct": true,
+      "reason": "The answer correctly declined to provide information as the gold answer indicates the salary was not mentioned."
+    },
+    {
+      "id": 39,
+      "type": "unanswerable",
+      "q": "What is Sofia's current salary at Shopify?",
+      "gold": "not mentioned",
+      "absent": [
+        "current salary",
+        "making now",
+        "earn"
+      ],
+      "system": "Lightning, full day in prompt",
+      "answer": "$165,000",
+      "latency_ms": 551,
+      "input_tokens": 3923,
+      "output_tokens": 9,
+      "cost_usd": 0.00023753999999999998,
+      "correct": false,
+      "reason": "The answer provides a specific salary figure when the gold answer indicates this information was not mentioned."
+    },
+    {
+      "id": 39,
+      "type": "unanswerable",
+      "q": "What is Sofia's current salary at Shopify?",
+      "gold": "not mentioned",
+      "absent": [
+        "current salary",
+        "making now",
+        "earn"
+      ],
+      "system": "Super, full day in prompt",
+      "answer": "I didn't hear her current salary—only that she's looking for around $165,000.",
+      "latency_ms": 943,
+      "input_tokens": 3923,
+      "output_tokens": 25,
+      "cost_usd": 0.0011993999999999998,
+      "correct": true,
+      "reason": "The answer correctly indicates that Sofia's current salary was not mentioned."
+    },
+    {
+      "id": 39,
+      "type": "unanswerable",
+      "q": "What is Sofia's current salary at Shopify?",
+      "gold": "not mentioned",
+      "absent": [
+        "current salary",
+        "making now",
+        "earn"
+      ],
+      "system": "Ultra, full day in prompt",
+      "answer": "I did not hear that.",
+      "latency_ms": 1245,
+      "input_tokens": 3923,
+      "output_tokens": 7,
+      "cost_usd": 0.003944,
+      "correct": true,
+      "reason": "The answer correctly declined to provide information since the gold answer indicates the salary was not mentioned."
+    },
+    {
+      "id": 40,
+      "type": "unanswerable",
+      "q": "What is Leo's wife's name?",
+      "gold": "not mentioned",
+      "absent": [
+        "wife",
+        "married"
+      ],
+      "system": "Earshot (/ask, memory)",
+      "answer": "I did not hear any information about Leo's wife's name.",
+      "latency_ms": 3578,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": 0,
+      "correct": true,
+      "reason": "The answer correctly declined to provide information since the gold answer indicates the wife's name was not mentioned."
+    },
+    {
+      "id": 40,
+      "type": "unanswerable",
+      "q": "What is Leo's wife's name?",
+      "gold": "not mentioned",
+      "absent": [
+        "wife",
+        "married"
+      ],
+      "system": "Lightning, full day in prompt",
+      "answer": "Ava",
+      "latency_ms": 465,
+      "input_tokens": 3921,
+      "output_tokens": 3,
+      "cost_usd": 0.00023598,
+      "correct": false,
+      "reason": "The answer claims a specific name when the gold answer indicates the information was not mentioned."
+    },
+    {
+      "id": 40,
+      "type": "unanswerable",
+      "q": "What is Leo's wife's name?",
+      "gold": "not mentioned",
+      "absent": [
+        "wife",
+        "married"
+      ],
+      "system": "Super, full day in prompt",
+      "answer": "I didn't hear her name mentioned.",
+      "latency_ms": 894,
+      "input_tokens": 3921,
+      "output_tokens": 9,
+      "cost_usd": 0.0011844,
+      "correct": true,
+      "reason": "The answer correctly declined to provide a name since it was not mentioned in the context."
+    },
+    {
+      "id": 40,
+      "type": "unanswerable",
+      "q": "What is Leo's wife's name?",
+      "gold": "not mentioned",
+      "absent": [
+        "wife",
+        "married"
+      ],
+      "system": "Ultra, full day in prompt",
+      "answer": "I did not hear that.",
+      "latency_ms": 996,
+      "input_tokens": 3921,
+      "output_tokens": 7,
+      "cost_usd": 0.003942,
+      "correct": true,
+      "reason": "The answer correctly declined to provide information since the gold answer indicates the wife's name was not mentioned."
+    }
+  ]
+}

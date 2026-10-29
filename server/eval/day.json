@@ -1,0 +1,729 @@
+[
+  {
+    "id": "3c2a9386-aa3b-48f1-bdc4-cb75ac6060eb",
+    "start": "09:00",
+    "speakers": {
+      "0": "Daniel",
+      "1": "Moira",
+      "2": "Reed (English (US))"
+    },
+    "lines": [
+      {
+        "s": "1",
+        "t": "Morning, Dev. Okay, are we, uh, are we waiting for anyone else or just us three today?"
+      },
+      {
+        "s": "0",
+        "t": "Just us three. Jordan's on a call. Tomás, how was the weekend? Did the cat survive the move?"
+      },
+      {
+        "s": "2",
+        "t": "Ha, barely. Pickles hid under the bed for two days straight. She's fine now, she owns the place."
+      },
+      {
+        "s": "0",
+        "t": "Classic. Okay, let's do it quickly. Maya, where are we on the Shopify app?"
+      },
+      {
+        "s": "1",
+        "t": "So the core app is basically done. The checkout analytics dashboard works, the install flow works. The thing that's not done is the Stripe integration. Payment events from Stripe are maybe sixty percent there, and honestly I don't think it's solid enough to ship on the twenty-seventh."
+      },
+      {
+        "s": "0",
+        "t": "Hmm. And the plan was to launch the Shopify app on October 27."
+      },
+      {
+        "s": "1",
+        "t": "Right. My proposal is we push the launch to November 10 and ship it with Stripe in one go. Launching without Stripe means half the dashboard is empty for most merchants."
+      },
+      {
+        "s": "2",
+        "t": "I'd honestly support that. It also gives me time on onboarding, which is, um, still seven steps. It's too long."
+      },
+      {
+        "s": "0",
+        "t": "Okay. I don't love it, but fine. Decision: we move the Shopify launch from October 27 to November 10, and Stripe ships with it. Let's tell the team."
+      },
+      {
+        "s": "1",
+        "t": "Cool. One more thing. The Nebius GPU bill last month was $14,200. That's up a lot. I want to dig into it."
+      },
+      {
+        "s": "0",
+        "t": "Yeah, that's way more than I expected. Can you get me a breakdown?"
+      },
+      {
+        "s": "1",
+        "t": "Yep. I'll send you the Nebius GPU usage report by Thursday."
+      },
+      {
+        "s": "0",
+        "t": "Great. Tomás, onboarding?"
+      },
+      {
+        "s": "2",
+        "t": "I'll have new onboarding mockups for you by Wednesday. I'm aiming for four steps instead of seven."
+      },
+      {
+        "s": "0",
+        "t": "Love it. Okay, that's it. Go, go, go."
+      }
+    ]
+  },
+  {
+    "id": "9c2f2c9b-2052-408d-b924-3444f4fbcee4",
+    "start": "09:40",
+    "speakers": {
+      "0": "Daniel",
+      "1": "Tara"
+    },
+    "lines": [
+      {
+        "s": "1",
+        "t": "Hi Dev, it's Priya. Sorry, I'm in the car, so if I drop, I'll call you right back."
+      },
+      {
+        "s": "0",
+        "t": "No worries, Priya. Thanks for making time. So, last time you said Halden Outdoor was looking at a pilot?"
+      },
+      {
+        "s": "1",
+        "t": "Yes. So we have 40 stores and the Shopify storefront, and our ops team is basically blind on why people abandon checkout. Your dashboard is exactly what we need."
+      },
+      {
+        "s": "0",
+        "t": "That's great to hear. On pricing, we're at $1,800 a month, and that covers up to 50 stores."
+      },
+      {
+        "s": "1",
+        "t": "Okay, $1,800 a month. That's, uh, that's within what I can sign off on for a pilot. But here's the catch. We have a Black Friday code freeze that starts November 1. Nothing new goes live in our stack after November 1, full stop."
+      },
+      {
+        "s": "0",
+        "t": "Got it. November 1. That's, um, that's good to know."
+      },
+      {
+        "s": "1",
+        "t": "So if you can't be live before that, honestly we'd have to wait until January."
+      },
+      {
+        "s": "0",
+        "t": "Understood. Let me check on our side. In the meantime, I'll send you the pilot contract by Friday."
+      },
+      {
+        "s": "1",
+        "t": "Perfect. And the other thing, our CFO, Mark Delaney, will want to see the numbers. I'll introduce you to Mark next week."
+      },
+      {
+        "s": "0",
+        "t": "That would be great. Thanks, Priya. Drive safe."
+      },
+      {
+        "s": "1",
+        "t": "Ha, I will. Talk soon."
+      }
+    ]
+  },
+  {
+    "id": "305c7365-941d-44e3-920a-68b5978911bf",
+    "start": "10:30",
+    "speakers": {
+      "0": "Daniel",
+      "1": "Rishi"
+    },
+    "lines": [
+      {
+        "s": "1",
+        "t": "Dev! Over here. I already got you a flat white."
+      },
+      {
+        "s": "0",
+        "t": "Leo, you legend. How are you, man? How's the family?"
+      },
+      {
+        "s": "1",
+        "t": "Good, good. Chaotic. Ava turns seven this Saturday, so the house is basically party planning headquarters."
+      },
+      {
+        "s": "0",
+        "t": "Seven already? That's crazy. Is there a party?"
+      },
+      {
+        "s": "1",
+        "t": "Yeah, Saturday at 3 PM at the trampoline park on Elm Street. You're coming, right? She asked if Uncle Dev is coming."
+      },
+      {
+        "s": "0",
+        "t": "Of course I'm coming. What's she into these days?"
+      },
+      {
+        "s": "1",
+        "t": "Space. Everything is rockets and planets. Oh, and, uh, she's lactose intolerant now, it turns out, so no ice cream cake this year. We're doing a dairy-free cake."
+      },
+      {
+        "s": "0",
+        "t": "Noted. Rockets it is. Hey, how's Stripe treating you?"
+      },
+      {
+        "s": "1",
+        "t": "Busy. Solutions engineering never sleeps. Why, you still trying to get a partnership going?"
+      },
+      {
+        "s": "0",
+        "t": "Yeah, we're building a Stripe integration into our Shopify app and it would really help to talk to someone on the partnerships side."
+      },
+      {
+        "s": "1",
+        "t": "Easy. I know the person who runs partner onboarding. I'll send you an intro to the Stripe partnerships team by Monday."
+      },
+      {
+        "s": "0",
+        "t": "That would be amazing. Thank you."
+      },
+      {
+        "s": "1",
+        "t": "Don't thank me, just show up Saturday with a good present."
+      }
+    ]
+  },
+  {
+    "id": "9b1336ba-e155-4086-a272-313e131e7645",
+    "start": "11:15",
+    "speakers": {
+      "0": "Daniel",
+      "1": "Karen"
+    },
+    "lines": [
+      {
+        "s": "1",
+        "t": "Hi Dev, Rachel here. Can you hear me okay? The video's a bit choppy."
+      },
+      {
+        "s": "0",
+        "t": "I can hear you fine, Rachel. Thanks for the time."
+      },
+      {
+        "s": "1",
+        "t": "Of course. So, quick check-in before our partner meeting at Northvane. Give me the headline numbers."
+      },
+      {
+        "s": "0",
+        "t": "Sure. MRR is $42,000. We have 9 paying customers. Burn is about $95,000 a month, and runway is 14 months."
+      },
+      {
+        "s": "1",
+        "t": "Okay, that's solid. And the team?"
+      },
+      {
+        "s": "0",
+        "t": "We're 11 people today. We're opening two backend roles, so we should be 13 by January."
+      },
+      {
+        "s": "1",
+        "t": "Good. And are you still in the NVIDIA Inception program? The partners love that."
+      },
+      {
+        "s": "0",
+        "t": "Yes, we joined NVIDIA Inception in August. And we run our models on Nebius, so we've been using the Nemotron models there."
+      },
+      {
+        "s": "1",
+        "t": "Great. Here's what I need. Can you send me the updated investor deck by Friday?"
+      },
+      {
+        "s": "0",
+        "t": "Yes, I'll send you the updated deck by Friday."
+      },
+      {
+        "s": "1",
+        "t": "Lovely. And on my side, I'll introduce you to two retail CTOs from our network. I'll do that by next Wednesday."
+      },
+      {
+        "s": "0",
+        "t": "That would be really useful. Thank you, Rachel."
+      },
+      {
+        "s": "1",
+        "t": "Anytime. Good luck with the launch."
+      }
+    ]
+  },
+  {
+    "id": "88cd95c5-e822-4e7e-a049-abdf8d8baaec",
+    "start": "12:30",
+    "speakers": {
+      "0": "Daniel",
+      "1": "Moira"
+    },
+    "lines": [
+      {
+        "s": "0",
+        "t": "Okay, what are you getting? I'm going with the chicken bowl."
+      },
+      {
+        "s": "1",
+        "t": "The falafel wrap. I'm vegetarian, remember? Which, by the way, please remember for the team dinner. Last time it was a steakhouse and I ate bread for two hours."
+      },
+      {
+        "s": "0",
+        "t": "Oh no, I'm sorry. I'll remember, vegetarian, got it."
+      },
+      {
+        "s": "1",
+        "t": "Thank you. So, the hiring stuff. Are we actually opening the two backend roles?"
+      },
+      {
+        "s": "0",
+        "t": "Yes. Two backend engineers. I want the salary band at $150,000 to $170,000."
+      },
+      {
+        "s": "1",
+        "t": "That's fair for the market. I'll write the job description today, if you post it on LinkedIn."
+      },
+      {
+        "s": "0",
+        "t": "Deal. I actually have a call later with a candidate, Sofia, she's at Shopify right now."
+      },
+      {
+        "s": "1",
+        "t": "Ooh, Shopify experience would be huge for us. Okay, um, anything else? I'm going to steal one of your fries."
+      },
+      {
+        "s": "0",
+        "t": "Go for it. No, that's it. Eat."
+      },
+      {
+        "s": "1",
+        "t": "Also, did you see the rain this morning? I biked in and got completely soaked."
+      },
+      {
+        "s": "0",
+        "t": "I saw. I took the bus like a coward. Are you still doing the bike thing every day?"
+      },
+      {
+        "s": "1",
+        "t": "Every day. It is the only exercise I get. Anyway, sorry, that was a tangent."
+      }
+    ]
+  },
+  {
+    "id": "0b785bd5-f3a8-4f03-a188-b09dbf8646ef",
+    "start": "13:15",
+    "speakers": {
+      "0": "Daniel",
+      "1": "Flo (English (UK))"
+    },
+    "lines": [
+      {
+        "s": "1",
+        "t": "Hello Dev, it's Elena from Nebius. Thanks for jumping on."
+      },
+      {
+        "s": "0",
+        "t": "Hi Elena. Yeah, so, our GPU bill has been climbing, and I want to understand our options."
+      },
+      {
+        "s": "1",
+        "t": "Absolutely. So right now you're fully on demand. If you commit for six months, we can do a 20% discount on committed use."
+      },
+      {
+        "s": "0",
+        "t": "Twenty percent for six months. Okay. And what would we be committing to?"
+      },
+      {
+        "s": "1",
+        "t": "For your workload, I'd suggest reserving 8 H200 GPUs. That covers your peak with headroom."
+      },
+      {
+        "s": "0",
+        "t": "Eight H200s. Hmm. And are the Nemotron models on Token Factory covered by that, or is that separate?"
+      },
+      {
+        "s": "1",
+        "t": "Token Factory is separate, that's per token, so it's not part of the GPU commitment."
+      },
+      {
+        "s": "0",
+        "t": "Got it. Can you put this in writing?"
+      },
+      {
+        "s": "1",
+        "t": "Yes, I'll send you a formal quote by Friday."
+      },
+      {
+        "s": "0",
+        "t": "Great. I want to see Maya's usage report first, and then I'll give you a decision by October 23."
+      },
+      {
+        "s": "1",
+        "t": "Sounds good. Talk then."
+      }
+    ]
+  },
+  {
+    "id": "8e4c3fee-60e4-4296-858e-910f65797756",
+    "start": "14:00",
+    "speakers": {
+      "0": "Daniel",
+      "1": "Moira",
+      "2": "Aman"
+    },
+    "lines": [
+      {
+        "s": "0",
+        "t": "Okay, so I need to reopen something from this morning. Sorry, Maya."
+      },
+      {
+        "s": "1",
+        "t": "Uh oh. Is this about the launch date?"
+      },
+      {
+        "s": "0",
+        "t": "It is. I talked to Priya at Halden Outdoor. They have a Black Friday code freeze starting November 1. If we launch November 10, we lose Halden until January."
+      },
+      {
+        "s": "2",
+        "t": "And it's not just Halden. I've got 3 more pilots in the pipeline, and all of them are retailers with the same holiday freeze."
+      },
+      {
+        "s": "1",
+        "t": "Okay. So what are you proposing?"
+      },
+      {
+        "s": "0",
+        "t": "We go back to the original date. The Shopify app launches October 27, without Stripe. Stripe becomes a fast follow on November 10."
+      },
+      {
+        "s": "1",
+        "t": "Hmm. Honestly, I can live with that if we cut scope. The dashboard can show Shopify checkout data only, and we hide the payments tab until Stripe lands."
+      },
+      {
+        "s": "2",
+        "t": "Merchants won't care about the payments tab in week one. They care about abandonment."
+      },
+      {
+        "s": "0",
+        "t": "Okay. So final decision: launch October 27, Shopify only, Stripe fast follow on November 10. This replaces what we said this morning."
+      },
+      {
+        "s": "1",
+        "t": "Fine. I'll cut the payments tab and send you the revised scope tonight."
+      },
+      {
+        "s": "2",
+        "t": "And I'll update the Halden proposal with the new date."
+      },
+      {
+        "s": "0",
+        "t": "Perfect. And I'll tell Priya myself this afternoon."
+      }
+    ]
+  },
+  {
+    "id": "a4f4898f-f588-4622-940a-fe9f82e749f8",
+    "start": "15:00",
+    "speakers": {
+      "0": "Daniel",
+      "1": "Aman"
+    },
+    "lines": [
+      {
+        "s": "1",
+        "t": "Got five minutes? I want to talk pricing before I send anything out."
+      },
+      {
+        "s": "0",
+        "t": "Sure, Jordan. What's up?"
+      },
+      {
+        "s": "1",
+        "t": "So, for these three pilots, I think $1,800 a month is going to scare a couple of them. I want to go in at $1,500."
+      },
+      {
+        "s": "0",
+        "t": "Hmm. No, I want to hold at $1,800. Priya accepted it this morning without blinking."
+      },
+      {
+        "s": "1",
+        "t": "Okay, but can I give them something?"
+      },
+      {
+        "s": "0",
+        "t": "Yeah. If they prepay annually, give them a 10% discount. That's the only discount."
+      },
+      {
+        "s": "1",
+        "t": "Okay, $1,800, and 10% off for annual prepay. I can work with that. I'll send all three pilot proposals by Monday."
+      },
+      {
+        "s": "0",
+        "t": "Great. Hey, aren't you running the marathon this weekend?"
+      },
+      {
+        "s": "1",
+        "t": "Sunday. My first full one. I'm, uh, mostly trying not to die."
+      },
+      {
+        "s": "0",
+        "t": "You'll crush it. Good luck."
+      },
+      {
+        "s": "1",
+        "t": "Thanks. Honestly, my knees are not excited about it. I did twenty miles last weekend and could barely walk on Monday."
+      },
+      {
+        "s": "0",
+        "t": "Ha. Well, take it easy on Monday then. Just not too easy, I need those proposals."
+      },
+      {
+        "s": "1",
+        "t": "Yeah, yeah, I know. They will be in your inbox. Okay, back to it."
+      }
+    ]
+  },
+  {
+    "id": "ace8f953-cfe2-47e6-b615-2741232d565f",
+    "start": "15:45",
+    "speakers": {
+      "0": "Daniel",
+      "1": "Tara"
+    },
+    "lines": [
+      {
+        "s": "0",
+        "t": "Hi Priya, it's Dev again. Quick update, good news."
+      },
+      {
+        "s": "1",
+        "t": "Oh, hi Dev. Sorry, give me one second, I am just walking out of a meeting. Okay. Okay, I am here."
+      },
+      {
+        "s": "0",
+        "t": "No rush. How did the rest of the drive go this morning?"
+      },
+      {
+        "s": "1",
+        "t": "Terrible traffic, but I made it. So, what is the news?"
+      },
+      {
+        "s": "0",
+        "t": "We're launching on October 27, so we'll be live well before your November 1 freeze."
+      },
+      {
+        "s": "1",
+        "t": "That's fantastic. Okay, so then here's what I'd like. Let's not do all 40 stores at once. Let's start the pilot with 12 stores and expand in January."
+      },
+      {
+        "s": "0",
+        "t": "Twelve stores to start makes total sense."
+      },
+      {
+        "s": "1",
+        "t": "And our security team will ask for your SOC 2 report. Do you have one?"
+      },
+      {
+        "s": "0",
+        "t": "We have the SOC 2 Type I letter. I'll send it to you by Wednesday."
+      },
+      {
+        "s": "1",
+        "t": "Great. And I set up the intro with Mark Delaney, our CFO. Tuesday at 10 AM works for him."
+      },
+      {
+        "s": "0",
+        "t": "Tuesday at 10 AM. Perfect. Thanks, Priya."
+      },
+      {
+        "s": "1",
+        "t": "Thank you. Bye."
+      }
+    ]
+  },
+  {
+    "id": "f2950ec2-4cb4-4731-9c1c-bd85ede676da",
+    "start": "16:30",
+    "speakers": {
+      "0": "Daniel",
+      "1": "Samantha"
+    },
+    "lines": [
+      {
+        "s": "0",
+        "t": "Hi Sofia, thanks for joining. I'm Dev, the founder. How's your day going?"
+      },
+      {
+        "s": "1",
+        "t": "Hi! Good, thanks. Busy, but good."
+      },
+      {
+        "s": "0",
+        "t": "So tell me a bit about what you're doing at Shopify."
+      },
+      {
+        "s": "1",
+        "t": "Sure. I'm a backend engineer on the checkout team. I've been there three years, and I have six years of experience overall, mostly Go and Postgres."
+      },
+      {
+        "s": "0",
+        "t": "Three years at Shopify, nice. And what made you start looking now?"
+      },
+      {
+        "s": "1",
+        "t": "Mostly that I want more ownership. At a big company you work on a tiny slice of something. I want to see the whole thing, from the database all the way to the customer."
+      },
+      {
+        "s": "0",
+        "t": "That is very much how we work. Everyone touches everything. It is a little chaotic, but in a good way, I think."
+      },
+      {
+        "s": "1",
+        "t": "That sounds great to me, honestly."
+      },
+      {
+        "s": "0",
+        "t": "And checkout is exactly our world. Anything else you are looking for?"
+      },
+      {
+        "s": "1",
+        "t": "Honestly, a smaller team where I can own a whole system. And, um, to be upfront about compensation, I'm looking for around $165,000."
+      },
+      {
+        "s": "0",
+        "t": "That's within our band. And what's your notice period?"
+      },
+      {
+        "s": "1",
+        "t": "Four weeks."
+      },
+      {
+        "s": "0",
+        "t": "Okay. Next step is a short take-home. I'll send you the take-home assignment by tomorrow."
+      },
+      {
+        "s": "1",
+        "t": "Sounds good. I'll look out for it."
+      }
+    ]
+  },
+  {
+    "id": "79c7f4dc-f7d6-4028-b731-9838793641b4",
+    "start": "17:30",
+    "speakers": {
+      "0": "Daniel",
+      "1": "Reed (English (US))",
+      "2": "Moira"
+    },
+    "lines": [
+      {
+        "s": "1",
+        "t": "Got a sec? I want to show you the onboarding sketch before I go further."
+      },
+      {
+        "s": "0",
+        "t": "Sure, Tomás. Maya, stay, you'll want to see this."
+      },
+      {
+        "s": "1",
+        "t": "So we go from seven steps to four. Connect the Shopify store, pick your goals, invite the team, done."
+      },
+      {
+        "s": "2",
+        "t": "Nice. Where does Stripe go?"
+      },
+      {
+        "s": "1",
+        "t": "Stripe becomes an optional card on the dashboard after November 10. Not part of onboarding."
+      },
+      {
+        "s": "0",
+        "t": "I like it. Is this still on track for Wednesday?"
+      },
+      {
+        "s": "1",
+        "t": "Yep, full mockups on Wednesday, like I said this morning."
+      },
+      {
+        "s": "2",
+        "t": "Oh, and good news, by the way. We moved the recommendation model to NVIDIA Nemotron on Nebius yesterday. Latency dropped from 900 milliseconds to 350 milliseconds."
+      },
+      {
+        "s": "0",
+        "t": "From 900 to 350? That's huge. Put that in the launch post."
+      },
+      {
+        "s": "2",
+        "t": "Will do."
+      },
+      {
+        "s": "1",
+        "t": "Okay, I am going to grab a coffee before the next round. Anyone want one?"
+      },
+      {
+        "s": "0",
+        "t": "I am good, thanks. I have had four already today."
+      }
+    ]
+  },
+  {
+    "id": "843ce3c5-41b4-4da8-9059-c4ab29a1fcbe",
+    "start": "18:45",
+    "speakers": {
+      "0": "Daniel",
+      "1": "Tessa"
+    },
+    "lines": [
+      {
+        "s": "1",
+        "t": "Hey, it's Nina. Are you still at the office?"
+      },
+      {
+        "s": "0",
+        "t": "Hey sis. Yeah, just wrapping up. What's up?"
+      },
+      {
+        "s": "1",
+        "t": "Dad's birthday dinner. It's Sunday at 7. Did you book a place yet? You said you would."
+      },
+      {
+        "s": "0",
+        "t": "Not yet. I'll book a table for 6 at Olive and Ash for Sunday at 7. Tonight, I promise."
+      },
+      {
+        "s": "1",
+        "t": "Okay, good. And make sure they have gluten-free options, I'm still gluten-free."
+      },
+      {
+        "s": "0",
+        "t": "Got it, gluten-free. Hey, random question, what do you get a seven-year-old who loves space?"
+      },
+      {
+        "s": "1",
+        "t": "Easy. The Lego space shuttle. Every kid loves it."
+      },
+      {
+        "s": "0",
+        "t": "Perfect. I'll get the Lego space shuttle for Ava's party on Saturday."
+      },
+      {
+        "s": "1",
+        "t": "Okay, go home. Don't work too late."
+      },
+      {
+        "s": "0",
+        "t": "Yes, yes. Hey, is Mom coming to the dinner too?"
+      },
+      {
+        "s": "1",
+        "t": "Of course she is. She already asked what we are getting Dad. I said you are handling it."
+      },
+      {
+        "s": "0",
+        "t": "Great, so now I am handling the restaurant and the gift. Classic."
+      },
+      {
+        "s": "1",
+        "t": "You are the organized one. Okay, now go home."
+      }
+    ]
+  }
+]

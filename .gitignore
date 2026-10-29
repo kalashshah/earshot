@@ -6,3 +6,5 @@ build/
 DerivedData/
 .DS_Store
 Shared/Secrets.swift
+server/.dev.vars
+server/eval/audio/

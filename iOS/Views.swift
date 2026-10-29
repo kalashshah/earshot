@@ -1,10 +1,12 @@
 import SwiftUI
+import VoiceGlowKit
 
 // MARK: Record
 
 struct RecordView: View {
     @ObservedObject private var watch = WatchLink.shared
     @ObservedObject private var uploader = Uploader.shared
+    @State private var confirmUnpair = false
 
     var body: some View {
         NavigationStack {
@@ -14,26 +16,31 @@ struct RecordView: View {
                     watch.setRecording(!watch.isOn)
                 } label: {
                     ZStack {
-                        Circle()
-                            .fill(watch.isOn ? Color.red.gradient : Color.secondary.opacity(0.25).gradient)
-                            .shadow(color: watch.isOn ? .red.opacity(0.4) : .clear, radius: 24)
+                        ParticleOrb(level: orbLevel, active: watch.isOn, count: 520, dotSize: 2.6)
                         if watch.busy {
-                            ProgressView().tint(.white).controlSize(.large)
-                        } else {
-                            Image(systemName: watch.isOn ? "stop.fill" : "mic.fill")
-                                .font(.system(size: 54, weight: .semibold))
-                                .foregroundStyle(.white)
+                            ProgressView().controlSize(.large)
+                        } else if !watch.isOn {
+                            Image(systemName: "mic.fill")
+                                .font(.system(size: 40, weight: .semibold))
+                                .foregroundStyle(Color.ember)
                         }
                     }
-                    .frame(width: 180, height: 180)
+                    .frame(width: 260, height: 260)
+                    .contentShape(Circle())
                 }
                 .buttonStyle(.plain)
                 .disabled(watch.busy)
                 .accessibilityLabel(watch.isOn ? "Stop recording on watch" : "Start recording on watch")
 
                 VStack(spacing: 6) {
-                    Text(watch.isOn ? "Recording on your watch" : "Not recording")
+                    ListeningBars(level: orbLevel, active: watch.isOn)
+                        .frame(width: 120, height: 26)
+                        .padding(.bottom, 4)
+                    Text(watch.isOn ? (watch.capturing ? "Capturing a conversation" : "Listening on your watch") : "Not recording")
                         .font(.title2.bold())
+                    if watch.isOn {
+                        Text("Tap the orb to stop").font(.footnote).foregroundStyle(.secondary)
+                    }
                     if let since = watch.since, watch.isOn {
                         Text("Since \(since.formatted(date: .omitted, time: .shortened))")
                             .foregroundStyle(.secondary)
@@ -52,6 +59,8 @@ struct RecordView: View {
                     if let last = uploader.lastUploadAt {
                         StatusRow(icon: "checkmark.circle", label: "Last upload", value: last.formatted(.relative(presentation: .named)))
                     }
+                    Divider()
+                    PrepRow()
                 }
                 .padding()
                 .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 16))
@@ -62,9 +71,41 @@ struct RecordView: View {
                     .padding(.horizontal, 32)
             }
             .padding(.bottom)
+            // VoiceGlow along the bottom edge, in Earshot's ember. The phone doesn't record, so it follows
+            // the watch's state (listening / capturing) rather than a microphone here.
+            .voiceGlow(type: .mobile, levelProvider: { orbLevel }, active: watch.isOn, cornerRadius: 0, options: Self.glow)
             .navigationTitle("Earshot")
+            .toolbar {
+                Menu {
+                    Button("Sign out", systemImage: "rectangle.portrait.and.arrow.right", role: .destructive) { confirmUnpair = true }
+                } label: {
+                    Image(systemName: "gearshape")
+                }
+                .accessibilityLabel("Settings")
+            }
+            .confirmationDialog("Sign out of Earshot?", isPresented: $confirmUnpair, titleVisibility: .visible) {
+                // ponytail: local only; the website still lists the device until removed there.
+                Button("Sign out", role: .destructive) { DeviceToken.clear() }
+            } message: {
+                Text("Earshot on this iPhone and your watch stops syncing until you sign in again.")
+            }
         }
     }
+
+    /// The watch sends state, not audio levels, so the phone shows a gentle sway while capturing.
+    private var orbLevel: Double {
+        guard watch.isOn else { return 0 }
+        guard watch.capturing else { return 0.1 }
+        let t = Date().timeIntervalSinceReferenceDate
+        return 0.45 + 0.25 * sin(t * 3.1) * cos(t * 1.7)
+    }
+
+    private static let glow: VoiceGlowOptions = {
+        var o = VoiceGlowOptions()
+        // centre, neighbours, outer pair, far pair: ember into amber
+        o.colors = ["#ff4d00", "#ff7a1f", "#ff7a1f", "#ffb347", "#ffb347", "#d93a00", "#d93a00"].compactMap { VoiceGlowColor(hex: $0) }
+        return o
+    }()
 
     private var watchStatus: String {
         if !watch.paired { return "Not paired" }
@@ -237,6 +278,180 @@ private struct TranscriptLine: View {
         } else {
             Text(line)
         }
+    }
+}
+
+// MARK: Promises
+
+@MainActor
+final class PromisesModel: ObservableObject {
+    @Published var items: [Promise] = []
+    @Published var moments: [Moment] = []
+    @Published var routines: [Routine] = []
+    @Published var error: String?
+    @Published var loading = false
+
+    var mine: [Promise] { items.filter(\.mine) }
+    var theirs: [Promise] { items.filter { !$0.mine } }
+
+    func load() async {
+        loading = true
+        defer { loading = false }
+        do {
+            async let m = API.moments()
+            async let r = API.routines()
+            items = try await API.promises()
+            moments = try await m
+            routines = try await r
+            await Reminders.sync()   // also works out which places still need pinning
+            error = nil
+        } catch {
+            self.error = error.localizedDescription
+        }
+    }
+
+    func close(_ p: Promise, _ status: String) async {
+        items.removeAll { $0.id == p.id }
+        do { try await API.close(p.id, status: status) } catch { self.error = error.localizedDescription; await load() }
+    }
+
+    func forget(_ r: Routine) async {
+        routines.removeAll { $0.id == r.id }
+        do { try await API.forget(routine: r.id); await Reminders.sync() } catch { self.error = error.localizedDescription; await load() }
+    }
+
+    func forget(_ m: Moment) async {
+        moments.removeAll { $0.id == m.id }
+        do { try await API.forget(moment: m.id); await Reminders.sync() } catch { self.error = error.localizedDescription; await load() }
+    }
+}
+
+struct PromisesView: View {
+    @StateObject private var model = PromisesModel()
+    @ObservedObject private var places = Places.shared
+
+    var body: some View {
+        NavigationStack {
+            List {
+                if !model.moments.isEmpty {
+                    Section("Coming up") {
+                        ForEach(model.moments) { m in
+                            MomentRow(m: m).swipeActions {
+                                Button("Forget", role: .destructive) { Task { await model.forget(m) } }
+                            }
+                        }
+                    }
+                }
+                if !model.routines.isEmpty || !places.missing.isEmpty {
+                    Section {
+                        ForEach(model.routines) { r in
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(r.title).font(.headline)
+                                Text(r.detail).font(.caption).foregroundStyle(.secondary)
+                            }
+                            .swipeActions { Button("Forget", role: .destructive) { Task { await model.forget(r) } } }
+                        }
+                        ForEach(places.missing, id: \.self) { place in
+                            HStack {
+                                Label("Where is \(place)?", systemImage: "mappin.slash").font(.subheadline)
+                                Spacer()
+                                Button("I'm here now") { Task { await places.pinHere(place) } }.buttonStyle(.bordered)
+                            }
+                        }
+                    } header: {
+                        Text("Routines & places")
+                    } footer: {
+                        if !places.missing.isEmpty { Text("Maps couldn't find these nearby. Next time you're there, tap I'm here now. Your location stays on this iPhone.") }
+                    }
+                }
+                if !model.mine.isEmpty {
+                    Section("You promised") { ForEach(model.mine) { row($0) } }
+                }
+                if !model.theirs.isEmpty {
+                    Section("Owed to you") { ForEach(model.theirs) { row($0) } }
+                }
+            }
+            .overlay {
+                if model.items.isEmpty && model.moments.isEmpty && model.routines.isEmpty && !model.loading {
+                    ContentUnavailableView(model.error == nil ? "No reminders yet" : "Couldn't load",
+                                           systemImage: "checklist",
+                                           description: Text(model.error ?? "Promises and dates you mention in conversation show up here, and Earshot reminds you ahead of time. You can also tell your watch things like \u{201C}Our anniversary is November 2, remind me\u{201D} or \u{201C}Remind me to buy milk when I'm at a grocery store.\u{201D}"))
+                }
+            }
+            .navigationTitle("Reminders")
+            .refreshable { await model.load() }
+            .task { await model.load() }
+        }
+    }
+
+    private func row(_ p: Promise) -> some View {
+        PromiseRow(p: p) { status in Task { await model.close(p, status) } }
+            .swipeActions {
+                Button("Dismiss", role: .destructive) { Task { await model.close(p, "dismissed") } }
+            }
+    }
+}
+
+private struct MomentRow: View {
+    let m: Moment
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            HStack(alignment: .firstTextBaseline) {
+                Text(m.title).font(.headline)
+                Spacer()
+                if let day = m.day {
+                    Text(day.formatted(.dateTime.weekday(.abbreviated).month(.abbreviated).day()))
+                        .font(.subheadline).foregroundStyle(Color.ember)
+                }
+            }
+            if let prep = m.prep { Text(prep.prefix(1).uppercased() + prep.dropFirst()).font(.subheadline) }
+            if let ideas = m.ideas { Text(ideas).font(.caption).foregroundStyle(.secondary) }
+        }
+        .padding(.vertical, 2)
+    }
+}
+
+private struct PromiseRow: View {
+    let p: Promise
+    let close: (String) -> Void
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(p.what).font(.headline)
+            Text(context).font(.caption).foregroundStyle(.secondary)
+            if p.mine, let draft = p.draft, !draft.isEmpty {
+                Text(draft)
+                    .font(.subheadline)
+                    .padding(10)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 10))
+                    .textSelection(.enabled)
+            }
+            HStack {
+                if p.mine {
+                    if let draft = p.draft, !draft.isEmpty {
+                        ShareLink("Send", item: draft)
+                    }
+                } else {
+                    Label("Waiting on \(p.owner)", systemImage: "hourglass").font(.subheadline).foregroundStyle(.secondary)
+                }
+                Spacer()
+                Button("Done") { close("done") }
+            }
+            // Bordered styles keep each button tappable on its own inside a List row.
+            .buttonStyle(.bordered)
+        }
+        .padding(.vertical, 4)
+    }
+
+    private var context: String {
+        var parts: [String] = []
+        if p.mine, let to = p.counterpart, !to.isEmpty { parts.append("To \(to)") }
+        if let due = p.due, !due.isEmpty { parts.append("Due \(due)") }
+        if let title = p.recordingTitle { parts.append(title) }
+        if let date = p.date { parts.append(date.formatted(.relative(presentation: .named))) }
+        return parts.joined(separator: " · ")
     }
 }
 
