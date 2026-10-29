@@ -22,7 +22,7 @@ For founders, consultants and anyone whose day is back-to-back conversations: pr
                                                             └─ Nemotron 3 Ultra reads the whole day (1M ctx) ─▶ morning brief
  Watch "Ask" ─▶ POST /ask ─▶ memory search + Lightning picks conversations ─▶ Super reads them ─▶ cited answer
  iPhone calendar ─▶ POST /prep ─▶ memory + promises + Tavily news ─▶ Super ─▶ notification on your wrist before the meeting
- Web dashboard (server/public) ─▶ brief, promises, ask, timeline, memory, privacy, cost
+ Web app (web/, Next.js on OpenNext) ─▶ record or upload a voice note, brief, promises, ask, timeline, memory, privacy
 ```
 
 ## How Earshot uses Nebius Token Factory and NVIDIA Nemotron

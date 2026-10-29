@@ -1,4 +1,4 @@
-// Formatting + the brief's markdown renderer, ported from server/public/index.html.
+// Formatting + the brief's markdown renderer, ported from the original single-file dashboard.
 
 export const esc = (s: unknown) =>
   String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!)

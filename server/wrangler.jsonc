@@ -26,8 +26,6 @@
   },
   // Hourly: each user gets their brief at 07:00 in their own timezone.
   "triggers": { "crons": ["0 * * * *"] },
-  // Dashboard (public/) is served as static files; every API path falls through to the Worker.
-  "assets": { "directory": "./public" },
   // Secrets: NEBIUS_API_KEY, TAVILY_API_KEY, INTERNAL_SECRET (shared with earshot-web),
   // MEMORYHQ_WORKSPACE + MEMORYHQ_KEY (one workspace; each user is an end user in it),
   // and APP_TOKEN for the legacy single-user token (user "me", settings from the vars above)

@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { api, Empty, ErrBox, Head, Loading, refreshCounts, Spin } from '@/components/ui'
 import { fmtDay, fmtDur, fmtTime, parseJSON, plural } from '@/lib/format'
+import { VoiceNote } from '@/components/voice-note'
 
 type Rec = {
   id: string; started_at: number; duration_ms: number; status: string; title?: string | null; summary?: string | null
@@ -38,6 +39,23 @@ export default function TimelinePage() {
     })().catch(setError)
   }, [])
 
+  const [note, setNote] = useState('')
+
+  // A fresh voice note: show it at the top, then re-read the newest page until it's processed.
+  // It vanishes from the list if no speech was heard ("empty" isn't listed).
+  async function track(r: Pick<Rec, 'id' | 'started_at' | 'duration_ms'>) {
+    setNote('')
+    setRecs((all) => [{ ...r, status: 'queued' }, ...(all || [])])
+    for (let i = 0; i < 60; i++) {
+      await new Promise((res) => setTimeout(res, 4000))
+      const fresh = (await fetchPage().catch(() => null))?.find((x) => x.id === r.id)
+      if (fresh === undefined) { setRecs((all) => all!.filter((x) => x.id !== r.id)); setNote('No speech was heard in that recording.'); return }
+      if (!fresh) continue
+      setRecs((all) => all!.map((x) => (x.id === r.id ? fresh : x)))
+      if (['done', 'failed'].includes(fresh.status)) { refreshCounts(); return }
+    }
+  }
+
   async function loadMore() {
     setMore({ busy: true })
     try { const page = await fetchPage(recs!.at(-1)!.started_at); setRecs((r) => r!.concat(page)); setDone(page.length < PAGE); setMore({ busy: false }) }
@@ -53,9 +71,12 @@ export default function TimelinePage() {
 
   return (
     <>
-      <Head title="Timeline" sub="Every conversation your watch heard, newest first." />
+      <Head title="Timeline" sub="Every conversation your watch heard, newest first. Or record one here.">
+        <VoiceNote onUploaded={track} />
+      </Head>
+      {note && <div className="note">{note}</div>}
       {error ? <ErrBox error={error} /> : !recs ? <Loading n={6} /> : !recs.length ? (
-        <Empty title="No conversations yet"><p>Tap record on your Apple Watch. Audio is transcribed, then deleted — what remains shows up here.</p></Empty>
+        <Empty title="No conversations yet"><p>Tap record on your Apple Watch, or use Record above. Audio is transcribed, then deleted — what remains shows up here.</p></Empty>
       ) : (
         <>
           {missing && <div className="note">That conversation is no longer available — it may have been forgotten.</div>}

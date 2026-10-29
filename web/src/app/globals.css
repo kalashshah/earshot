@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-/* Palette and atoms ported from the original single-file dashboard (server/public/index.html).
+/* Palette and atoms ported from the original single-file dashboard.
    Light/dark follows the system. Tokens are also Tailwind colors: text-muted, bg-sunk, border-line… */
 :root {
   --bg: #fbfbfa; --panel: #ffffff; --sunk: #f3f3f1; --line: #e7e6e3; --line-strong: #d6d5d1;
@@ -88,6 +88,9 @@ a.btn { color: var(--text); text-decoration: none; }
 .btn.ghost:hover { background: var(--sunk); color: var(--text); }
 .btn.danger { color: var(--red); }
 .btn.sm { height: 28px; padding: 0 10px; font-size: 12.5px; border-radius: 7px; }
+.dot-rec { width: 8px; height: 8px; border-radius: 50%; background: currentColor; animation: pulse 1s ease-in-out infinite alternate; }
+@keyframes pulse { to { opacity: .3; } }
+@media (prefers-reduced-motion: reduce) { .dot-rec { animation: none; } }
 .btn.lg { height: 50px; padding: 0 24px; font-size: 16px; border-radius: 10px; }
 .chip { display: inline-flex; align-items: center; gap: 5px; padding: 1px 8px; border-radius: 99px; background: var(--sunk); color: var(--muted); font-size: 12px; border: 1px solid transparent; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 button.chip { cursor: pointer; border-color: var(--line); background: var(--panel); color: var(--text); padding: 3px 10px; }

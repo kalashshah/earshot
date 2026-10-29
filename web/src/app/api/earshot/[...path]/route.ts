@@ -3,7 +3,8 @@ import { createAuth } from '@/lib/auth'
 import { earshotFetch } from '@/lib/earshot-api'
 
 // The browser's only door to earshot-api. Identity comes from the session, never from the
-// request: only method, query, body and content-type are forwarded (no cookies).
+// request: only method, query, body, content-type and the recording headers are forwarded (no cookies).
+const FORWARD = ['x-started-at', 'x-duration-ms']
 async function handler(request: Request, { params }: { params: Promise<{ path: string[] }> }) {
   const { env } = await getCloudflareContext({ async: true })
   const session = await createAuth(env).api.getSession({ headers: request.headers })
@@ -16,6 +17,7 @@ async function handler(request: Request, { params }: { params: Promise<{ path: s
     method: request.method,
     body: hasBody ? await request.arrayBuffer() : null,
     contentType: request.headers.get('content-type'),
+    extra: new Headers(FORWARD.flatMap((h) => { const v = request.headers.get(h); return v ? [[h, v] as [string, string]] : [] })),
   })
 
   const headers = new Headers({ 'cache-control': 'no-store' })
@@ -29,4 +31,5 @@ async function handler(request: Request, { params }: { params: Promise<{ path: s
 export const GET = handler
 export const POST = handler
 export const PATCH = handler
+export const PUT = handler
 export const DELETE = handler
