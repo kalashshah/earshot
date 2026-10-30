@@ -592,7 +592,7 @@ async function runBrief(env: Env, user: User, day: string) {
   const llm = llmEnv(env, user)
   const orgs = clips.flatMap((c) => {
     const e = JSON.parse(c.entities ?? '{}') as Partial<Entities>
-    return [...(e.orgs ?? []), ...(e.people ?? []).map((p) => p.org).filter(Boolean)] as string[]
+    return [...(e.orgs ?? []), ...(e.people ?? []).flatMap((p) => [p.name, p.org]).filter(Boolean)] as string[]
   })
   const summaries = clips.map((c) => `- ${stamp(c.started_at, tz)} ${c.title}: ${c.summary ?? ''}`)
   const news = env.TAVILY_API_KEY ? await research(llm, user.id, day, summaries, orgs) : []

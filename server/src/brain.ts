@@ -256,9 +256,9 @@ export async function research(env: LlmEnv & { TAVILY_API_KEY: string }, userId:
         {
           role: 'system',
           content:
-            'You decide what fresh outside information would help the user act on yesterday\'s conversations: news about a company they are pitching, a product launch they discussed, a public event coming up. Never search private people. Max 3 searches; an empty list is right when nothing public matters. Reply JSON: {"searches": [{"query": "web search query", "about": "company or topic", "why": "how it helps the user"}]}',
+            'You decide what fresh outside information would help the user act on yesterday\'s conversations: news about a company they are pitching, a product launch they discussed, a public event coming up, or the public work of a well-known person someone recommended (search their name with their blog or best-known book, e.g. \"Jane Doe blog growth\"). Never search private people. Max 3 searches; an empty list is right when nothing public matters. Reply JSON: {"searches": [{"query": "web search query", "about": "company or topic", "why": "how it helps the user"}]}',
         },
-        { role: 'user', content: `Day: ${day}\nCompanies mentioned: ${[...new Set(orgs)].join(', ') || '(none)'}\n\nConversations:\n${summaries.join('\n')}` },
+        { role: 'user', content: `Day: ${day}\nCompanies and people mentioned: ${[...new Set(orgs)].join(', ') || '(none)'}\n\nConversations:\n${summaries.join('\n')}` },
       ],
     }),
   )
@@ -275,8 +275,8 @@ export async function research(env: LlmEnv & { TAVILY_API_KEY: string }, userId:
         purpose: 'condense',
         userId,
         messages: [
-          { role: 'system', content: 'From the page, write 1-2 factual sentences that matter for the stated reason, with dates and numbers. If nothing on the page is relevant, reply exactly NONE.' },
-          { role: 'user', content: `Reason: ${s.why}\n\nPage (${top.url}):\n${page}` },
+          { role: 'system', content: 'From the page, write 1-2 factual sentences about the stated subject that matter for the stated reason, with dates and numbers. Only state what the page says about that subject; if the page is not about it, or nothing on it is relevant, reply exactly NONE.' },
+          { role: 'user', content: `Subject: ${s.about}\nReason: ${s.why}\n\nPage (${top.url}):\n${page}` },
         ],
       })
     ).trim()

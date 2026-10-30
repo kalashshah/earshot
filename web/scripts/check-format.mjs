@@ -9,6 +9,8 @@ assert.ok(html.includes('&lt;img src=x onerror=alert(1)&gt;') && !html.includes(
 assert.ok(html.includes('<a href="#"') && !html.includes('javascript:'))
 assert.ok(html.endsWith('<p>ok <sup class="cite"><a>3</a></sup></p>'))
 assert.equal(renderMd('[x](javascript:alert(1))'), '<p>[x](javascript:alert(1))</p>')
+// a table from the model renders as a list, header and divider dropped
+assert.equal(renderMd('| What | Due |\n|---|:-:|\n| Meet Ana | **Today** |'), '<ul><li>Meet Ana · <strong>Today</strong></li></ul>')
 
 const m = parseMemory('[2026-10-15 10:05 · clip 00000001-aaaa-4bbb-8ccc-000000000001] Priya said hi')
 assert.deepEqual([m.tag, m.clip, m.content], ['2026-10-15 10:05', '00000001-aaaa-4bbb-8ccc-000000000001', 'Priya said hi'])

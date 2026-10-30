@@ -8,3 +8,7 @@ DerivedData/
 Shared/Secrets.swift
 server/.dev.vars
 server/eval/audio/
+video/out/
+video/public/
+video/audio/
+video/attic/

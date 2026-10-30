@@ -1,0 +1,31 @@
+{
+  "conversations": [
+    ["Classroom instruction on adjectives", 10],
+    ["Teacher checks student focus", 10],
+    ["Meeting coordination discussion", 10],
+    ["Family chat about fair and meeting", 10],
+    ["Chaotic tech chat", 10],
+    ["Casual chat about feeling exhausted", 10],
+    ["Conversation", 10],
+    ["Confused emotional exchange", 8],
+    ["Layer discussion", 8],
+    ["Confused chat about apps", 4],
+    ["Discussing food delivery options", 2],
+    ["Testing new tracking system", 1],
+    ["Discussing app ad strategy with dad", 1]
+  ],
+  "clusters": [
+    { "hub": "Dad · the call", "x": 560, "y": 130, "facts": ["Look up Andrew Chen", "Your cousin swears by him", "Ads on hold: unsure of the cost"], "research": [["Installs ~$1.75 each", "businessofapps.com"]] },
+    { "hub": "Andrew Chen", "x": 960, "y": 110, "facts": ["Led rider growth at Uber", "Former Uber growth lead", "Writes about how apps grow"], "dupe": 1, "research": [["a16z partner, Speedrun Alpha", "tradersunion.com"], ["Uber's rider growth playbook", "simplywall.st"]] },
+    { "hub": "Ashish Tiwari", "x": 1360, "y": 130, "facts": ["Leads the AI team at Capgemini", "Fifteen years at LG before that", "Open to lunch in Bangalore", "Keeps meetings to 2–3 hours"], "research": [["Chief architect, GenAI summit talk", "apaconferences.net"]] },
+    { "hub": "Class", "x": 560, "y": 690, "facts": ["Adjectives: page 38, chapter four", "Ishant and Tishan help out", "Surprise maths test counts", "Start the test with question 1"] },
+    { "hub": "The fair", "x": 960, "y": 730, "facts": ["The mela is on Sunday", "3–4 km away, in Whitefield", "No network at the fair", "Part of Dashehra"] },
+    { "hub": "Tech and home", "x": 1360, "y": 690, "facts": ["Streaming fails on Brave and Chrome", "Swiggy may deliver it at home", "The leftovers were Raj's"] }
+  ],
+  "promises": [
+    ["Check out Andrew Chen's advice", "To your dad", "Later"],
+    ["Meet Ashish Tiwari", "To Ashish Tiwari", "Tomorrow"],
+    ["Send the sign-in details", "To someone", "Tomorrow"],
+    ["Call Anuj to review", "To Anuj", "After calls"]
+  ]
+}

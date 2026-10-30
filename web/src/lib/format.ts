@@ -51,11 +51,21 @@ function inlineMd(s: string, sources: Source[]) {
 /** Markdown subset → HTML. Every input character is escaped before any tag is added. */
 export function renderMd(md: string, sources: Source[] = []) {
   const out: string[] = []
-  let list = false
+  let list = false, table = false
   const close = () => { if (list) { out.push('</ul>'); list = false } }
   for (const raw of String(md || '').split('\n')) {
     const line = raw.trimEnd()
     let m
+    // ponytail: a Markdown table becomes a list, one row per item (cells joined); the header row is dropped
+    if (line.trimStart().startsWith('|')) {
+      const cells = line.split('|').slice(1, -1).map((c) => c.trim())
+      if (!table) { table = true; continue }
+      if (cells.every((c) => /^:?-+:?$/.test(c))) continue
+      if (!list) { out.push('<ul>'); list = true }
+      out.push(`<li>${inlineMd(cells.filter(Boolean).join(' · '), sources)}</li>`)
+      continue
+    }
+    table = false
     if ((m = line.match(/^#{1,2}\s+(.*)/))) { close(); out.push(`<h3>${inlineMd(m[1], sources)}</h3>`) }
     else if ((m = line.match(/^#{3,6}\s+(.*)/))) { close(); out.push(`<h4>${inlineMd(m[1], sources)}</h4>`) }
     else if ((m = line.match(/^\s*(?:[-*•]|\d+\.)\s+(.*)/))) { if (!list) { out.push('<ul>'); list = true } out.push(`<li>${inlineMd(m[1], sources)}</li>`) }

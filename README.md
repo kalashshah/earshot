@@ -4,7 +4,7 @@
 
 For founders, consultants and anyone whose day is back-to-back conversations: promises made out loud are lost by evening. Earshot surfaces every one by morning, with the evidence.
 
-[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE) · **Demo:** `DEMO_URL` · **Video:** `VIDEO_URL` · Built for the [Nebius x NVIDIA Global AI Hackathon](https://nebiusglobalaihackathon.devpost.com/), Personal AI track.
+[![License: AGPL-3.0](https://img.shields.io/badge/license-AGPL--3.0-blue.svg)](LICENSE) · **Demo:** https://earshot.keronlabs.com · **Video:** `VIDEO_URL` · Built for the [Nebius x NVIDIA Global AI Hackathon](https://nebiusglobalaihackathon.devpost.com/), Personal AI track.
 
 ## How it works
 
@@ -115,4 +115,4 @@ First commit: October 7, 2026, inside the submission window. Everything in this 
 
 ## License
 
-MIT
+AGPL-3.0

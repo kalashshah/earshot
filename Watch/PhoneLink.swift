@@ -62,6 +62,10 @@ final class PhoneLink: NSObject, ObservableObject, WCSessionDelegate {
     }
 
     private func applyToken(_ ctx: [String: Any]) {
+        #if DEBUG
+        // simulator WatchConnectivity is unreliable: `SIMCTL_CHILD_EARSHOT_TOKEN=… simctl launch` hands the token over directly
+        if let t = ProcessInfo.processInfo.environment["EARSHOT_TOKEN"] { return DispatchQueue.main.async { DeviceToken.save(t) } }
+        #endif
         guard let token = ctx[Link.token] as? String else { return }
         token.isEmpty ? DeviceToken.clear() : DeviceToken.save(token)
     }

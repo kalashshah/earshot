@@ -8,15 +8,47 @@ struct AskButton: View {
 
     var body: some View {
         TextFieldLink(prompt: Text("Ask your memory")) {
-            Image(systemName: "questionmark.bubble")
+            ParticleQuestion().frame(width: 40, height: 44)
         } onSubmit: { q in
             let q = q.trimmingCharacters(in: .whitespacesAndNewlines)
             if !q.isEmpty { question = q }
         }
+        .buttonStyle(.plain)
         .accessibilityLabel("Ask")
         .sheet(isPresented: Binding(get: { question != nil }, set: { if !$0 { question = nil } })) {
             if let question { AskView(question: question) }
         }
+    }
+}
+
+/// A "?" made of the orb's grey dots, each twinkling on its own, floating a little: Earshot's own
+/// button rather than a toolbar blob.
+private struct ParticleQuestion: View {
+    @State private var born = Date()
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.isLuminanceReduced) private var dimmed
+
+    var body: some View {
+        TimelineView(.animation(minimumInterval: 1.0 / 30, paused: reduceMotion || dimmed)) { tl in
+            let t = reduceMotion ? 0 : tl.date.timeIntervalSince(born)
+            Canvas { ctx, size in
+                ctx.blendMode = .plusLighter
+                let step: CGFloat = 2.6
+                for gy in stride(from: step / 2, to: size.height, by: step) {
+                    for gx in stride(from: step / 2, to: size.width, by: step) {
+                        let seed = Double(gx * 12.9 + gy * 78.2)
+                        let jitter = sin(seed) * 0.3
+                        let glow = 0.55 + 0.4 * sin(t * 1.8 + seed)
+                        let d: CGFloat = 1.5
+                        let rect = CGRect(x: gx - d / 2 + jitter, y: gy - d / 2, width: d, height: d)
+                        ctx.fill(Path(ellipseIn: rect), with: .color(Color(white: 0.8).opacity(glow)))
+                    }
+                }
+            }
+            .mask(Text("?").font(.system(size: 42, weight: .black, design: .rounded)))
+            .offset(y: sin(t * 1.4) * 1.5)
+        }
+        .onAppear { born = Date() }
     }
 }
 
@@ -40,12 +72,12 @@ private struct AskView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 8) {
-                Text(question).font(.footnote).foregroundStyle(.secondary)
+                Text(question).font(.footnote).foregroundStyle(Color(white: 0.6))
                 if let answer {
-                    Text(answer.answer)
+                    Text(answer.answer).foregroundStyle(.white)
                     ForEach(answer.sources) { s in
                         Text("\(s.title ?? "Conversation") · \(s.date.formatted(.dateTime.weekday(.abbreviated).hour().minute()))")
-                            .font(.caption2).foregroundStyle(.secondary)
+                            .font(.caption2).foregroundStyle(Color(white: 0.6))
                     }
                 } else if let error {
                     Text(error).font(.footnote).foregroundStyle(.orange)
