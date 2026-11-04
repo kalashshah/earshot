@@ -1,0 +1,13 @@
+# Earshot
+
+> Earshot is a private memory of everything you say out loud. It runs on your Apple Watch, captures the conversations you have through the day, and turns them into memory you can ask about, follow-ups it drafts for the promises you made, and a cited morning brief. Built on NVIDIA Nemotron (Nebius Token Factory) with Tavily for web research. Made by Keron Labs.
+
+- Platforms: Apple Watch (watchOS) and iPhone (iOS) apps, plus a web app
+- Privacy: audio is deleted the moment it is transcribed; transcripts are erased after 30 days; every memory links to the conversation it came from
+
+## Key pages
+
+- [Home](https://earshot.keronlabs.com/): what Earshot does, how a day works, features and privacy
+- [Sign in](https://earshot.keronlabs.com/sign-in): sign in to the web app (brief, promises, ask, timeline, memory)
+- [Source code](https://github.com/kalashshah/earshot): AGPL-3.0
+- [Keron Labs](https://keronlabs.com): the company behind Earshot

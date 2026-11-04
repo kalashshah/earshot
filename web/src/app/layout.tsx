@@ -7,6 +7,7 @@ const display = Bricolage_Grotesque({ subsets: ['latin'], weight: ['500', '600',
 const mono = JetBrains_Mono({ subsets: ['latin'], weight: ['400', '500'], variable: '--jbmono', display: 'swap' })
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://earshot.keronlabs.com'),
   title: 'Earshot',
   description: 'A private memory of everything you say out loud.',
 }
