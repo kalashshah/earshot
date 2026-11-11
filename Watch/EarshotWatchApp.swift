@@ -13,6 +13,7 @@ struct WatchHome: View {
     @ObservedObject private var recorder = Recorder.shared
     @ObservedObject private var link = PhoneLink.shared
     @State private var paired = DeviceToken.current != nil
+    @Environment(\.scenePhase) private var scenePhase
 
     var body: some View {
         VStack(spacing: 10) {
@@ -54,6 +55,8 @@ struct WatchHome: View {
         .toolbar {
             if paired { ToolbarItem(placement: .topBarTrailing) { AskButton() } }
         }
+        // Coming back to the app (e.g. from the "stopped recording" notification) is when the mic can be taken back.
+        .onChange(of: scenePhase) { _, phase in if phase == .active { recorder.checkAlive() } }
         .onReceive(NotificationCenter.default.publisher(for: DeviceToken.changed)) { _ in paired = DeviceToken.current != nil }
     }
 

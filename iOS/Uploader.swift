@@ -35,6 +35,9 @@ final class Uploader: NSObject, ObservableObject, URLSessionTaskDelegate {
                     req.setValue(String(sounds.music), forHTTPHeaderField: "x-music")
                     if !sounds.ambient.isEmpty { req.setValue(sounds.ambient, forHTTPHeaderField: "x-ambient") }
                 }
+                if let levels = try? String(contentsOf: Clip.levelsURL(for: clip.url), encoding: .utf8) {
+                    req.setValue(levels, forHTTPHeaderField: "x-levels")
+                }
                 let task = self.session.uploadTask(with: req, fromFile: clip.url)
                 task.taskDescription = clip.url.lastPathComponent
                 task.resume()
@@ -70,7 +73,7 @@ final class Uploader: NSObject, ObservableObject, URLSessionTaskDelegate {
         let status = (task.response as? HTTPURLResponse)?.statusCode ?? 0
         DeviceToken.check(task.response, for: task.originalRequest)
         if error == nil, (200..<300).contains(status), let name = task.taskDescription {
-            try? FileManager.default.removeItem(at: Clip.outbox().appendingPathComponent(name))
+            Clip.remove(Clip.outbox().appendingPathComponent(name))
             DispatchQueue.main.async { self.lastUploadAt = Date() }
         }
         // Failures stay in the outbox; the next flush (new clip / app foreground) retries them.

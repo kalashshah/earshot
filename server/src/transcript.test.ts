@@ -36,3 +36,27 @@ test('speaker labels become who they are', async () => {
   assert.equal(unlabelSpeakers('Speaker 4 suggests Speaker 0 (Kalash) meet Ashish.', names, 'Kalash'), 'your dad suggests you meet Ashish.')
   assert.equal(unlabelSpeakers("Speaker 2's badge, Speaker 7 too", names), "someone's badge, someone too")
 })
+
+test('previous clip is relabelled with who its speakers were', async () => {
+  const { nameSpeakers } = await import('./transcript.ts')
+  const t = 'Speaker 0: Papa, chai?\nSpeaker 1: Haan.\nSpeaker 2: Speaker 0: is not a label here'
+  assert.equal(nameSpeakers(t, { 'Speaker 0': 'Kalash', 'Speaker 1': 'your dad' }, 'Kalash'), 'you: Papa, chai?\nyour dad: Haan.\nPerson C: Speaker 0: is not a label here')
+  assert.equal(nameSpeakers('Speaker 0: hi', {}), 'Person A: hi')
+})
+
+test('loudest speaker at the mic is pointed out, only when clearly so', async () => {
+  const { speakerLoudness, loudnessHint, levelDb } = await import('./transcript.ts')
+  assert.equal(levelDb('0'), -93)
+  assert.equal(levelDb('Z'), -1.5)
+  // 0–4 s quiet (-45 dB = 'w'), 4–8 s loud (-30 dB = 'G'); a third speaker says one word
+  const levels = 'wwwwGGGG'
+  const out = { results: { utterances: [
+    { speaker: 0, start: 0.2, end: 3.8 }, { speaker: 1, start: 4.1, end: 7.9 }, { speaker: 2, start: 7.9, end: 8.4 },
+  ] } }
+  const db = speakerLoudness(out, levels)
+  assert.deepEqual(db, { 'Speaker 0': -45, 'Speaker 1': -30 })
+  assert.match(loudnessHint(db)!, /Speaker 1 -30 dB, Speaker 0 -45 dB.*so Speaker 1, clearly/)
+  assert.equal(loudnessHint({ 'Speaker 0': -40, 'Speaker 1': -42 }), null)
+  assert.equal(loudnessHint({ 'Speaker 0': -40 }), null)
+  assert.equal(loudnessHint(null), null)
+})

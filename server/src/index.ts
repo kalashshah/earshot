@@ -1,4 +1,4 @@
-import { formatTranscript, wordCount } from './transcript'
+import { formatTranscript, loudnessHint, nameSpeakers, speakerLoudness, wordCount } from './transcript'
 import { answer, clipIdsFrom, draftFollowUp, routeQuestion, extractClip, morningBrief, prepCard, prepIdeas, research, routineAnswer, type Entities } from './brain'
 import { addDays, confirmation, dedupeKey, iosWeekdays, nextOccurrence, nextRun, reminders, type DueAction, type Moment, type MomentInput, type Routine } from './remind'
 import { tavilySearch, type LlmEnv } from './llm'
@@ -31,6 +31,7 @@ type Recording = {
   status: string; title: string | null; summary: string | null; transcript: string | null
   memories_added: number; error: string | null; created_at: number; updated_at: number
   entities: string | null; memory_ids: string | null; music: number | null; ambient: string | null
+  levels: string | null; speaker_db: string | null
 }
 
 type User = {
@@ -132,7 +133,8 @@ async function route(req: Request, env: Env): Promise<Response> {
   const tz = user.tz
 
   // PUT /recordings/:id  body = audio (id minted on the watch → idempotent), headers x-started-at (ms), x-duration-ms,
-  // x-music (0–100), x-ambient ("crowd, dishes": the iPhone's sound classifier, trimmed to letters/commas here)
+  // x-music (0–100), x-ambient ("crowd, dishes": the iPhone's sound classifier, trimmed to letters/commas here),
+  // x-levels (the watch's per-second mic loudness, one character a second)
   if (req.method === 'PUT' && parts[0] === 'recordings' && parts[1]) {
     const id = parts[1]
     if (!/^[0-9A-Fa-f-]{36}$/.test(id)) return json({ error: 'id must be a UUID' }, 400)
@@ -140,6 +142,7 @@ async function route(req: Request, env: Env): Promise<Response> {
     const durationMs = Number(req.headers.get('x-duration-ms') ?? 0)
     const music = req.headers.has('x-music') ? Math.max(0, Math.min(100, Math.round(Number(req.headers.get('x-music'))))) : null
     const ambient = (req.headers.get('x-ambient') ?? '').replace(/[^a-z, ]/gi, '').trim().slice(0, 120) || null
+    const levels = (req.headers.get('x-levels') ?? '').replace(/[^0-9a-zA-Z]/g, '').slice(0, 1000) || null
     if (!Number.isFinite(startedAt) || startedAt <= 0) return json({ error: 'x-started-at required' }, 400)
     const contentType = req.headers.get('content-type') ?? 'audio/mp4'
     const len = Number(req.headers.get('content-length') ?? 0)
@@ -152,9 +155,9 @@ async function route(req: Request, env: Env): Promise<Response> {
     const obj = await env.AUDIO.put(key, req.body, { httpMetadata: { contentType } })
     const now = Date.now()
     const { meta } = await env.DB.prepare(
-      `INSERT OR IGNORE INTO recordings (id, user_id, started_at, duration_ms, bytes, r2_key, music, ambient, status, created_at, updated_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'queued', ?, ?)`
-    ).bind(id, user.id, startedAt, durationMs, obj.size, key, music, ambient, now, now).run()
+      `INSERT OR IGNORE INTO recordings (id, user_id, started_at, duration_ms, bytes, r2_key, music, ambient, levels, status, created_at, updated_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'queued', ?, ?)`
+    ).bind(id, user.id, startedAt, durationMs, obj.size, key, music, ambient, levels, now, now).run()
     if (!meta.changes) return json({ error: 'id already used' }, 409)
     await env.PROCESS.send({ id })
     return json({ id, status: 'queued' }, 202)
@@ -507,6 +510,7 @@ async function processRecording(env: Env, id: string) {
 
   // Each stage saves its output, so a retry after a later failure doesn't redo (or re-bill) it.
   let transcript = rec.transcript
+  let speakerDb = rec.speaker_db
   if (transcript == null) {
     const obj = await env.AUDIO.get(rec.r2_key)
     if (!obj) throw new Error('audio missing from R2')
@@ -522,7 +526,8 @@ async function processRecording(env: Env, id: string) {
       language: 'multi',
     } as any)) as any
     transcript = formatTranscript(out)
-    await setFields(env, id, { transcript })
+    if (rec.levels) speakerDb = JSON.stringify(speakerLoudness(out, rec.levels))
+    await setFields(env, id, { transcript, speaker_db: speakerDb })
     await env.DB.prepare('INSERT INTO usage (ts, user_id, model, purpose, input_tokens, output_tokens, cost_usd) VALUES (?, ?, ?, ?, 0, 0, ?)')
       .bind(Date.now(), rec.user_id, 'deepgram/nova-3', 'transcribe', (rec.duration_ms / 60_000) * DEEPGRAM_USD_PER_MIN).run()
     // Privacy: the audio is gone the moment we have words. Nothing re-listens later.
@@ -541,10 +546,11 @@ async function processRecording(env: Env, id: string) {
     const prev = await env.DB.prepare(
       `SELECT transcript, entities FROM recordings WHERE user_id = ? AND started_at < ? AND started_at > ? AND transcript IS NOT NULL ORDER BY started_at DESC LIMIT 1`
     ).bind(rec.user_id, rec.started_at, rec.started_at - 30 * 60_000).first<{ transcript: string; entities: string | null }>()
-    // Only the transcript's end: given the previous summary too, the model retells it.
-    const prevScreen = prev && (JSON.parse(prev.entities ?? '{}') as { screen?: string }).screen
-    const before = prev && `${prevScreen ? `(${prevScreen} was playing.)\n` : ''}${prev.transcript.slice(-4000)}`
-    const x = await extractClip(llm, rec.user_id, transcript, when, before || undefined, rec.music, rec.ambient)
+    // Only the transcript's end: given the previous summary too, the model retells it. Its speakers go by who they
+    // were, not by label: this clip's "Speaker 0" is numbered afresh and may be someone else.
+    const prevWas = JSON.parse(prev?.entities ?? '{}') as { screen?: string; speakers?: Record<string, string | null> }
+    const before = prev && `${prevWas.screen ? `(${prevWas.screen} was playing.)\n` : ''}${nameSpeakers(prev.transcript.slice(-4000), prevWas.speakers ?? {}, user.name ?? undefined)}`
+    const x = await extractClip(llm, rec.user_id, transcript, when, before || undefined, rec.music, rec.ambient, loudnessHint(JSON.parse(speakerDb ?? 'null')))
     facts = x.facts
     // Action ids are derived from the clip → a retry re-inserts nothing.
     const stmts: D1PreparedStatement[] = []
@@ -562,7 +568,7 @@ async function processRecording(env: Env, id: string) {
     if (stmts.length) await env.DB.batch(stmts)
     if (x.moments.length) await fillIdeas(env, user).catch((err) => console.error('ideas failed', user.id, err))
     // Facts ride along in entities until written to MemoryHQ, so a MemoryHQ failure doesn't re-run extraction.
-    await setFields(env, id, { title: x.title, summary: x.summary, entities: JSON.stringify({ people: x.people, orgs: x.orgs, facts: x.facts, screen: x.screen }) })
+    await setFields(env, id, { title: x.title, summary: x.summary, entities: JSON.stringify({ people: x.people, orgs: x.orgs, facts: x.facts, screen: x.screen, speakers: x.speakers }) })
   } else {
     facts = (JSON.parse(rec.entities ?? '{}') as { facts?: string[] }).facts ?? []
   }

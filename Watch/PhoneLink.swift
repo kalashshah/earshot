@@ -11,24 +11,20 @@ final class PhoneLink: NSObject, ObservableObject, WCSessionDelegate {
     private let recorder = Recorder.shared
 
     func activate() {
-        recorder.onClip = { [weak self] url in self?.send(url) }
+        recorder.onClip = { [weak self] _ in self?.flush() }
         recorder.onStateChange = { [weak self] in self?.pushState() }
         WCSession.default.delegate = self
         WCSession.default.activate()
     }
 
-    private func send(_ url: URL) {
-        guard WCSession.default.activationState == .activated else { refreshPending(); return }
-        WCSession.default.transferFile(url, metadata: nil)
-        refreshPending()
-    }
-
-    /// Re-queue anything in the outbox the session isn't already carrying (e.g. after a failed
-    /// transfer or an app relaunch).
+    /// Queue everything in the outbox the session isn't already carrying: the new clip, and any whose
+    /// transfer failed earlier or that a previous run left behind.
     private func flush() {
+        guard WCSession.default.activationState == .activated else { refreshPending(); return }
         let inFlight = Set(WCSession.default.outstandingFileTransfers.map { $0.file.fileURL.lastPathComponent })
         for clip in Clip.pending() where !inFlight.contains(clip.url.lastPathComponent) {
-            WCSession.default.transferFile(clip.url, metadata: nil)
+            let levels = try? String(contentsOf: Clip.levelsURL(for: clip.url), encoding: .utf8)
+            WCSession.default.transferFile(clip.url, metadata: levels.map { [Link.levels: $0] })
         }
         refreshPending()
     }
@@ -71,7 +67,7 @@ final class PhoneLink: NSObject, ObservableObject, WCSessionDelegate {
     }
 
     func session(_ session: WCSession, didFinish fileTransfer: WCSessionFileTransfer, error: Error?) {
-        if error == nil { try? FileManager.default.removeItem(at: fileTransfer.file.fileURL) }
+        if error == nil { Clip.remove(fileTransfer.file.fileURL) }
         refreshPending()
     }
 

@@ -41,3 +41,43 @@ export function unlabelSpeakers(text: string, names: Record<string, string | nul
     return v && !/^speaker/i.test(v) ? who(v, userName) : 'someone'
   })
 }
+
+/** A stored transcript with each "Speaker N:" swapped for who that turned out to be. Diarization renumbers
+ *  speakers in every clip, so the previous clip's raw labels would point the model at the wrong people. */
+export function nameSpeakers(transcript: string, names: Record<string, string | null>, userName?: string): string {
+  return transcript.replace(/^Speaker (\d+):/gm, (_, n: string) => {
+    const v = names[`Speaker ${n}`]
+    return `${v && !/^speaker/i.test(v) ? who(v, userName) : `Person ${String.fromCharCode(65 + (Number(n) % 26))}`}:`
+  })
+}
+
+const LEVELS = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+/** Inverse of the watch's ClipWriter.levelChar: 62 steps of 1.5 dB from -93 dBFS. */
+export const levelDb = (c: string) => -93 + 1.5 * Math.max(0, LEVELS.indexOf(c))
+
+/** Mean loudness (dB) at the watch's mic while each speaker talked: `levels` has one character per second
+ *  of the clip, on the same clock as Deepgram's utterance times. Speakers with under 2 s of talk are left out. */
+export function speakerLoudness(out: any, levels: string): Record<string, number> {
+  const sum: Record<string, { db: number; s: number }> = {}
+  for (const u of (out?.results?.utterances ?? []) as { speaker?: number; start?: number; end?: number }[]) {
+    if (u.start == null || u.end == null) continue
+    const k = `Speaker ${u.speaker ?? 0}`
+    for (let i = Math.floor(u.start); i < Math.min(Math.ceil(u.end), levels.length); i++) {
+      const s = Math.min(u.end, i + 1) - Math.max(u.start, i)
+      sum[k] ??= { db: 0, s: 0 }
+      sum[k].db += levelDb(levels[i]) * s
+      sum[k].s += s
+    }
+  }
+  return Object.fromEntries(Object.entries(sum).filter(([, v]) => v.s >= 2).map(([k, v]) => [k, Math.round(v.db / v.s)]))
+}
+
+// ponytail: a 4 dB lead is a guess at "clearly nearest" (wrist vs. across a table is 6–12 dB); tune on real clips.
+export const NEAREST_DB = 4
+
+/** A line for the model when one speaker was clearly the loudest at the mic, else null. */
+export function loudnessHint(db: Record<string, number> | null): string | null {
+  const ranked = Object.entries(db ?? {}).sort((a, b) => b[1] - a[1])
+  if (ranked.length < 2 || ranked[0][1] - ranked[1][1] < NEAREST_DB) return null
+  return `Loudness at the watch's mic: ${ranked.map(([k, v]) => `${k} ${v} dB`).join(', ')}. The watch is on the user's wrist, so ${ranked[0][0]}, clearly the loudest, is probably the user, unless what is said shows otherwise (a phone on speaker or a TV close to the watch can be louder).`
+}

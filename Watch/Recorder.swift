@@ -28,6 +28,11 @@ final class Recorder: ObservableObject {
     private let silenceToClose: Double = 45    // seconds of quiet that end a conversation
     private let targetDb: Float = -23          // voiced audio is boosted toward this before encoding
     private let maxGainDb: Float = 24          // the watch's input gain isn't settable, so this is all software
+    private let gainDrop: Float = 0.6          // share of the way down per buffer when something is loud: near-instant, or the next word clips
+    private let gainLift: Float = 0.05         // share of the way up per buffer on quiet speech (~2 s to settle)
+    private let liftMarginDb: Float = 3        // only lift on sound this far above the noise floor, never on the hush between words
+    private let stallSeconds: Double = 10      // no audio from the mic for this long while on → restart it
+    private let interruptionGrace: Double = 120 // Siri, dictation or a call has the mic: wait this long for it to come back by itself
     private let maxClip: Double = 10 * 60      // rotate long conversations into clips: past this, cut at the next pause…
     private let hardClip: Double = 12 * 60     // …and here even mid-sentence (a cut mid-word loses the word and renumbers speakers)
     private let minVoiced: Double = 3          // drop clips with less voice than this (a cough, a door)
@@ -45,7 +50,6 @@ final class Recorder: ObservableObject {
     // Only touched on `q`.
     private var noiseFloorDb: Float = -50
     private var gainDb: Float = 0
-    private var held: [AVAudioPCMBuffer] = []
     private var heldSeconds: Double = 0
     private var framePos: AVAudioFramePosition = 0
     private var speechUntil = -Double.infinity   // stream position (s) where speech was last heard
@@ -62,10 +66,14 @@ final class Recorder: ObservableObject {
         guard (try? analyzer.add(req, withObserver: observer)) != nil else { return nil }
         return (analyzer, observer)
     }()
-    private var file: AVAudioFile?
-    private var clipURL: URL?
-    private var clipID = UUID()
-    private var clipStart = Date()
+    private var held: [(pcm: AVAudioPCMBuffer, rawDb: Float)] = []
+    private var clip: ClipWriter?
+    private var lastBufferAt = Date()
+    private let encodeQ = DispatchQueue(label: "earshot.encode", qos: .utility)
+    // Only touched on main.
+    private var watchdog: Timer?
+    private var interruptedAt: Date?
+    private var stalled = false
     private var clipSeconds: Double = 0
     private var voicedSeconds: Double = 0
     private var silenceSeconds: Double = 0
@@ -79,6 +87,10 @@ final class Recorder: ObservableObject {
         nc.addObserver(forName: .AVAudioEngineConfigurationChange, object: engine, queue: .main) { [weak self] _ in
             guard let self, self.isOn else { return }
             self.restart(reason: "audio route changed")
+        }
+        encodeQ.async {
+            let recovered = ClipWriter.recover(minSeconds: self.minVoiced)
+            DispatchQueue.main.async { recovered.forEach { self.onClip?($0) } }
         }
     }
 
@@ -96,6 +108,10 @@ final class Recorder: ObservableObject {
                     self.isOn = true
                     self.since = Date()
                     self.lastError = nil
+                    self.interruptedAt = nil
+                    self.stalled = false
+                    self.q.async { self.lastBufferAt = Date() }
+                    self.watchdog = Timer.scheduledTimer(withTimeInterval: 15, repeats: true) { [weak self] _ in self?.checkAlive() }
                     self.onStateChange?()
                 } catch {
                     self.lastError = "Couldn't start: \(error.localizedDescription)"
@@ -111,6 +127,8 @@ final class Recorder: ObservableObject {
         since = nil
         inConversation = false
         level = 0
+        watchdog?.invalidate()
+        watchdog = nil
         engine.inputNode.removeTap(onBus: 0)
         engine.stop()
         try? AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation)
@@ -149,6 +167,8 @@ final class Recorder: ObservableObject {
         } catch {
             isOn = false
             since = nil
+            watchdog?.invalidate()
+            watchdog = nil
             lastError = "Stopped: \(reason)"
             q.async { self.closeClip() }
             notifyStopped(reason)
@@ -161,11 +181,36 @@ final class Recorder: ObservableObject {
               let type = AVAudioSession.InterruptionType(rawValue: raw) else { return }
         switch type {
         case .began:
+            interruptedAt = Date()
             q.async { self.closeClip() }   // a call/Siri took the mic: ship what we have
         case .ended:
+            interruptedAt = nil
             restart(reason: "interrupted by another app")
         @unknown default:
             break
+        }
+    }
+
+    /// The system doesn't always say when an interruption is over, and a tap can simply stop delivering: either way
+    /// the watch showed "on" while recording nothing. If the mic has gone quiet, restart it, and keep trying;
+    /// say so once if a minute passes, without turning off, so recording resumes by itself when it can.
+    func checkAlive() {
+        guard isOn else { return }
+        let quiet = q.sync { Date().timeIntervalSince(lastBufferAt) }
+        guard quiet > stallSeconds else {
+            if stalled { stalled = false; lastError = nil; onStateChange?() }
+            return
+        }
+        if let interruptedAt, Date().timeIntervalSince(interruptedAt) < interruptionGrace { return }   // don't grab the mic back mid-dictation
+        q.async { self.closeClip() }
+        engine.inputNode.removeTap(onBus: 0)
+        engine.stop()
+        try? startEngine()   // if this worked, buffers arrive and the next check clears `stalled`
+        if !stalled, quiet > 60 {
+            stalled = true
+            lastError = "Not hearing anything. Open Earshot to resume."
+            notifyStopped("the microphone went quiet")
+            onStateChange?()
         }
     }
 
@@ -183,6 +228,7 @@ final class Recorder: ObservableObject {
         guard let pcm = resample(buffer), pcm.frameLength > 0 else { return }
         let seconds = Double(pcm.frameLength) / outFormat.sampleRate
         let db = Self.levelDb(pcm)
+        lastBufferAt = Date()
 
         // Noise floor drops instantly to quieter levels and creeps up slowly (~a minute),
         // so steady background noise (fan, car) stops counting as voice.
@@ -190,27 +236,31 @@ final class Recorder: ObservableObject {
         let loud = db > max(noiseFloorDb + voiceMarginDb, voiceFloorDb)
         let voiced = speech == nil ? loud : Double(framePos) / outFormat.sampleRate - speechUntil < speechHang
         publishLevel(db)
-        // Follow the level of speech only (not silence), smoothly, and lift it toward targetDb.
+        // Lift speech toward targetDb. Down is near-instant on anything loud, speech or not: a gain left high by a
+        // quiet stretch squares off the next word. Up is slow, and only on speech sounding right now: `voiced` also
+        // covers the hang after speech, where following the level would pump the gain to its maximum in every pause.
         let gainWas = gainDb
-        if voiced { gainDb += (min(max(targetDb - db, 0), maxGainDb) - gainDb) * 0.2 }
+        let want = min(max(targetDb - db, 0), maxGainDb)
+        if want < gainDb { gainDb += (want - gainDb) * gainDrop }
+        else if voiced && db > noiseFloorDb + liftMarginDb { gainDb += (want - gainDb) * gainLift }
         Self.amplify(pcm, fromDb: gainWas, toDb: gainDb)
         speech?.0.analyze(pcm, atAudioFramePosition: framePos)   // its verdict arrives a window later; `held` covers that
         framePos += AVAudioFramePosition(pcm.frameLength)
 
         if voiced {
-            if file == nil { openClip() }
-            for b in held { write(b); clipSeconds += Double(b.frameLength) / outFormat.sampleRate }
+            if clip == nil { openClip() }
+            for b in held { write(b.pcm, rawDb: b.rawDb); clipSeconds += Double(b.pcm.frameLength) / outFormat.sampleRate }
             held.removeAll(); heldSeconds = 0
-            write(pcm)
+            write(pcm, rawDb: db)
             clipSeconds += seconds; voicedSeconds += seconds; silenceSeconds = 0
-        } else if file != nil && silenceSeconds < tailSeconds {
-            write(pcm)
+        } else if clip != nil && silenceSeconds < tailSeconds {
+            write(pcm, rawDb: db)
             clipSeconds += seconds; silenceSeconds += seconds
         } else {
             // Outside a clip this is pre-roll; inside, the middle of a pause. Only the last holdSeconds survive.
-            held.append(pcm); heldSeconds += seconds
-            while heldSeconds > holdSeconds, let first = held.first { heldSeconds -= Double(first.frameLength) / outFormat.sampleRate; held.removeFirst() }
-            if file != nil { silenceSeconds += seconds }
+            held.append((pcm, db)); heldSeconds += seconds
+            while heldSeconds > holdSeconds, let first = held.first { heldSeconds -= Double(first.pcm.frameLength) / outFormat.sampleRate; held.removeFirst() }
+            if clip != nil { silenceSeconds += seconds }
         }
         let rotate = clipSeconds >= maxClip && (silenceSeconds >= 1 || clipSeconds >= hardClip)
         if silenceSeconds >= silenceToClose || rotate { closeClip() }
@@ -226,42 +276,27 @@ final class Recorder: ObservableObject {
     }
 
     private func openClip() {
-        clipID = UUID()
-        clipStart = Date().addingTimeInterval(-heldSeconds)
         clipSeconds = 0; voicedSeconds = 0; silenceSeconds = 0
-        let url = FileManager.default.temporaryDirectory.appendingPathComponent("\(clipID.uuidString).m4a")
-        file = try? AVAudioFile(forWriting: url, settings: [
-            AVFormatIDKey: kAudioFormatMPEG4AAC,
-            AVSampleRateKey: 16000,
-            AVNumberOfChannelsKey: 1,
-            AVEncoderBitRateKey: 48000,   // 32k smeared consonants on quiet, far voices; ~360 KB per minute of talk
-        ], commonFormat: .pcmFormatFloat32, interleaved: false)
-        clipURL = url
+        clip = ClipWriter(start: Date().addingTimeInterval(-heldSeconds))
+        guard clip != nil else { DispatchQueue.main.async { self.lastError = "Couldn't save audio: storage unavailable" }; return }
         DispatchQueue.main.async { self.inConversation = true; self.onStateChange?() }
     }
 
-    private func write(_ pcm: AVAudioPCMBuffer) {
-        do { try file?.write(from: pcm) } catch { DispatchQueue.main.async { self.lastError = "Write failed: \(error.localizedDescription)" } }
+    private func write(_ pcm: AVAudioPCMBuffer, rawDb: Float) {
+        do { try clip?.write(pcm, rawDb: rawDb) } catch { DispatchQueue.main.async { self.lastError = "Write failed: \(error.localizedDescription)" } }
     }
 
     private func closeClip() {
-        guard file != nil, let url = clipURL else { return }
-        file = nil   // releasing the AVAudioFile finalizes the m4a
-        clipURL = nil
+        guard let clip else { return }
+        self.clip = nil
         DispatchQueue.main.async { self.inConversation = false; self.onStateChange?() }
-
-        // Pauses are squeezed, so this is talk time (what transcription bills), not wall-clock time.
-        let durationMs = Int64(clipSeconds * 1000)
-        guard voicedSeconds >= minVoiced else { try? FileManager.default.removeItem(at: url); return }
-        let dest = Clip.outbox().appendingPathComponent(Clip.filename(id: clipID, startedAt: clipStart, durationMs: durationMs))
-        do {
-            try FileManager.default.moveItem(at: url, to: dest)
+        let keep = voicedSeconds >= minVoiced   // less than this is a cough or a door
+        encodeQ.async {
+            guard let dest = clip.finish(keep: keep) else { return }
             DispatchQueue.main.async {
                 self.clipsToday += 1
                 self.onClip?(dest)
             }
-        } catch {
-            try? FileManager.default.removeItem(at: url)
         }
     }
 

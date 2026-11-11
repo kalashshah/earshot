@@ -89,6 +89,9 @@ final class WatchLink: NSObject, ObservableObject, WCSessionDelegate {
         guard Clip(url: dest) != nil else { return }
         try? FileManager.default.removeItem(at: dest)
         try? FileManager.default.moveItem(at: file.fileURL, to: dest)
+        if let levels = file.metadata?[Link.levels] as? String {
+            try? levels.write(to: Clip.levelsURL(for: dest), atomically: true, encoding: .utf8)
+        }
         Uploader.shared.flush()
     }
 }

@@ -23,6 +23,15 @@ struct Clip {
         self.durationMs = duration
     }
 
+    /// Sidecar with the clip's per-second mic loudness (`ClipWriter.levels`); travels with the clip to the server.
+    static func levelsURL(for clip: URL) -> URL { clip.appendingPathExtension("lvl") }
+
+    /// Deletes a clip and its sidecar once the next hop has it.
+    static func remove(_ clip: URL) {
+        try? FileManager.default.removeItem(at: clip)
+        try? FileManager.default.removeItem(at: levelsURL(for: clip))
+    }
+
     static func outbox() -> URL {
         let dir = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
             .appendingPathComponent("Outbox", isDirectory: true)
@@ -45,4 +54,5 @@ enum Link {
     static let pending = "pending"    // clips still on the watch
     static let capturing = "capturing" // a conversation is being recorded right now
     static let token = "token"        // phone → watch device token; "" = unpaired
+    static let levels = "levels"      // file-transfer metadata: the clip's per-second mic loudness
 }

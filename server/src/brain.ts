@@ -20,12 +20,12 @@ const MOMENT_RULES = `Resolve dates against the recording time ("next Friday", "
 export const MUSIC_SCREEN = 15
 
 const speakerNote = (env: LlmEnv) =>
-  `Transcripts come from a watch worn by the user${env.USER_NAME ? `, ${env.USER_NAME}` : ''}. Speaker labels are arbitrary: work out which speaker is the user from context${env.USER_NAME ? ` (others call them "${env.USER_NAME}")` : ''}; if unclear, Speaker 0. Always call the user "you", never by name. Other people: their name if anyone says it, else their relation to the user when that's how they're addressed ("papa" → "your dad", "mummy" → "your mom"), else "someone". Never write a "Speaker N" label as a name.`
+  `Transcripts come from a watch worn by the user${env.USER_NAME ? `, ${env.USER_NAME}` : ''}. Speaker labels are arbitrary: work out which speaker is the user from context${env.USER_NAME ? ` (others call them "${env.USER_NAME}")` : ''}, and from the loudness line when there is one. A lone speaker is the user. If it stays unclear, don't guess: nobody is "you". Always call the user "you", never by name. Other people: their name if anyone says it, else their relation to the user when that's how they're addressed ("papa" → "your dad", "mummy" → "your mom"), else "someone". Never write a "Speaker N" label as a name.`
 
 // Super, thinking off: one clip → title, summary, people, durable facts, commitments.
 // Measured on the staged day: Lightning swapped who-owes-whom in ~half the group conversations, Super
 // in ~1 of 10, for ~$0.001 vs ~$0.0002 per clip. Attribution is the product, so Super it is.
-export async function extractClip(env: LlmEnv, userId: string, transcript: string, when: string, before?: string, music?: number | null, ambient?: string | null): Promise<Extraction> {
+export async function extractClip(env: LlmEnv, userId: string, transcript: string, when: string, before?: string, music?: number | null, ambient?: string | null, loudness?: string | null): Promise<Extraction> {
   // Measured on real clips: under 6% during a call, 17–32% with a film on. Transcripts alone don't give a film away.
   const filmy = music != null && music >= MUSIC_SCREEN
   const text = await chat(env, {
@@ -57,7 +57,7 @@ Empty arrays are fine.`,
       },
       {
         role: 'user',
-        content: `${before ? `Just before this, the same recording went on (context only: its facts are already saved, don't repeat them):\n${before}\n\n---\n` : ''}Recorded ${withWeekday(when)}.${ambient ? `\nBackground sounds through the clip: ${ambient} (a hint at where this happened).` : ''}${filmy ? `\nThe watch heard music under or between the speech for ${music}% of this clip, which usually means a film, show or video is playing.` : ''}\n\n${transcript.slice(0, 60000)}`,
+        content: `${before ? `Just before this, the same recording went on (context only: its facts are already saved, don't repeat them):\n${before}\n\n---\n` : ''}Recorded ${withWeekday(when)}.${ambient ? `\nBackground sounds through the clip: ${ambient} (a hint at where this happened).` : ''}${filmy ? `\nThe watch heard music under or between the speech for ${music}% of this clip, which usually means a film, show or video is playing.` : ''}${loudness ? `\n${loudness}` : ''}\n\n${transcript.slice(0, 60000)}`,
       },
     ],
   })
