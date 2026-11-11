@@ -268,11 +268,12 @@ private struct ConversationDetail: View {
 private struct TranscriptLine: View {
     let line: String
     var body: some View {
-        if let colon = line.firstIndex(of: ":"), line.hasPrefix("Speaker ") {
+        // The server names speakers once it has worked out who they are ("You", "Your dad", "Person B").
+        if let colon = line.firstIndex(of: ":"), line.distance(from: line.startIndex, to: colon) <= 30 {
             let speaker = String(line[..<colon])
             VStack(alignment: .leading, spacing: 2) {
-                Text(speaker == "Speaker 0" ? "You (probably)" : speaker)
-                    .font(.caption.bold()).foregroundStyle(speaker == "Speaker 0" ? .red : .blue)
+                Text(speaker)
+                    .font(.caption.bold()).foregroundStyle(speaker == "You" ? .red : .blue)
                 Text(line[line.index(after: colon)...].trimmingCharacters(in: .whitespaces))
             }
         } else {

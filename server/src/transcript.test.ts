@@ -20,6 +20,16 @@ test('marks badly heard turns', () => {
   assert.equal(wordCount(formatTranscript(out)), 6)
 })
 
+test('marks single badly heard words in a clear turn', () => {
+  const w = (word: string, confidence: number, punctuated_word = word) => ({ word, confidence, punctuated_word })
+  const out = { results: { utterances: [
+    { speaker: 0, transcript: 'Yes, Jacob but Zlori confirmed it.', confidence: 0.87,
+      words: [w('yes', 0.9, 'Yes,'), w('jacob', 0.29, 'Jacob'), w('but', 0.4), w('zlori', 0.61, 'Zlori'), w('confirmed', 1), w('it', 0.96, 'it.')] },
+    { speaker: 1, transcript: 'At 9:30.', confidence: 0.9, words: [w('at', 1, 'At'), w('nine', 0.99), w('thirty', 0.99)] },
+  ] } }
+  assert.equal(formatTranscript(out), 'Speaker 0: Yes, [unclear: Jacob but] Zlori confirmed it.\nSpeaker 1: At 9:30.')
+})
+
 test('falls back to channel transcript', () => {
   assert.equal(formatTranscript({ results: { channels: [{ alternatives: [{ transcript: ' hi there ' }] }] } }), 'hi there')
   assert.equal(formatTranscript({}), '')
@@ -40,7 +50,7 @@ test('speaker labels become who they are', async () => {
 test('previous clip is relabelled with who its speakers were', async () => {
   const { nameSpeakers } = await import('./transcript.ts')
   const t = 'Speaker 0: Papa, chai?\nSpeaker 1: Haan.\nSpeaker 2: Speaker 0: is not a label here'
-  assert.equal(nameSpeakers(t, { 'Speaker 0': 'Kalash', 'Speaker 1': 'your dad' }, 'Kalash'), 'you: Papa, chai?\nyour dad: Haan.\nPerson C: Speaker 0: is not a label here')
+  assert.equal(nameSpeakers(t, { 'Speaker 0': 'Kalash', 'Speaker 1': 'your dad' }, 'Kalash'), 'You: Papa, chai?\nYour dad: Haan.\nPerson C: Speaker 0: is not a label here')
   assert.equal(nameSpeakers('Speaker 0: hi', {}), 'Person A: hi')
 })
 

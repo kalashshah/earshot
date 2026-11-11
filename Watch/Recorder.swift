@@ -31,6 +31,7 @@ final class Recorder: ObservableObject {
     private let gainDrop: Float = 0.6          // share of the way down per buffer when something is loud: near-instant, or the next word clips
     private let gainLift: Float = 0.05         // share of the way up per buffer on quiet speech (~2 s to settle)
     private let liftMarginDb: Float = 3        // only lift on sound this far above the noise floor, never on the hush between words
+    private let rumbleHz: Double = 80          // cut below this before anything is measured: bumps and wind, not voice
     private let stallSeconds: Double = 10      // no audio from the mic for this long while on → restart it
     private let interruptionGrace: Double = 120 // Siri, dictation or a call has the mic: wait this long for it to come back by itself
     private let maxClip: Double = 10 * 60      // rotate long conversations into clips: past this, cut at the next pause…
@@ -68,6 +69,8 @@ final class Recorder: ObservableObject {
     }()
     private var held: [(pcm: AVAudioPCMBuffer, rawDb: Float)] = []
     private var clip: ClipWriter?
+    private lazy var highPass = HighPass(cutoff: rumbleHz, sampleRate: outFormat.sampleRate)
+    private var squeezed = false   // part of the current pause was dropped: the audio written next doesn't follow on
     private var lastBufferAt = Date()
     private let encodeQ = DispatchQueue(label: "earshot.encode", qos: .utility)
     // Only touched on main.
@@ -226,6 +229,7 @@ final class Recorder: ObservableObject {
 
     private func process(_ buffer: AVAudioPCMBuffer) {
         guard let pcm = resample(buffer), pcm.frameLength > 0 else { return }
+        highPass.apply(pcm)
         let seconds = Double(pcm.frameLength) / outFormat.sampleRate
         let db = Self.levelDb(pcm)
         lastBufferAt = Date()
@@ -249,6 +253,7 @@ final class Recorder: ObservableObject {
 
         if voiced {
             if clip == nil { openClip() }
+            if squeezed { Self.fadeIn(held.first?.pcm ?? pcm); squeezed = false }   // a hard cut clicks
             for b in held { write(b.pcm, rawDb: b.rawDb); clipSeconds += Double(b.pcm.frameLength) / outFormat.sampleRate }
             held.removeAll(); heldSeconds = 0
             write(pcm, rawDb: db)
@@ -259,7 +264,7 @@ final class Recorder: ObservableObject {
         } else {
             // Outside a clip this is pre-roll; inside, the middle of a pause. Only the last holdSeconds survive.
             held.append((pcm, db)); heldSeconds += seconds
-            while heldSeconds > holdSeconds, let first = held.first { heldSeconds -= Double(first.pcm.frameLength) / outFormat.sampleRate; held.removeFirst() }
+            while heldSeconds > holdSeconds, let first = held.first { heldSeconds -= Double(first.pcm.frameLength) / outFormat.sampleRate; held.removeFirst(); squeezed = clip != nil }
             if clip != nil { silenceSeconds += seconds }
         }
         let rotate = clipSeconds >= maxClip && (silenceSeconds >= 1 || clipSeconds >= hardClip)
@@ -276,7 +281,7 @@ final class Recorder: ObservableObject {
     }
 
     private func openClip() {
-        clipSeconds = 0; voicedSeconds = 0; silenceSeconds = 0
+        clipSeconds = 0; voicedSeconds = 0; silenceSeconds = 0; squeezed = false
         clip = ClipWriter(start: Date().addingTimeInterval(-heldSeconds))
         guard clip != nil else { DispatchQueue.main.async { self.lastError = "Couldn't save audio: storage unavailable" }; return }
         DispatchQueue.main.async { self.inConversation = true; self.onStateChange?() }
@@ -322,6 +327,13 @@ final class Recorder: ObservableObject {
         let n = Int(pcm.frameLength)
         let g0 = pow(10, fromDb / 20), g1 = pow(10, toDb / 20)
         for i in 0..<n { data[i] = tanh(data[i] * (g0 + (g1 - g0) * Float(i) / Float(n))) }
+    }
+
+    /// 10 ms ramp up from silence.
+    static func fadeIn(_ pcm: AVAudioPCMBuffer) {
+        guard let data = pcm.floatChannelData?[0] else { return }
+        let n = min(160, Int(pcm.frameLength))
+        for i in 0..<n { data[i] *= Float(i) / Float(n) }
     }
 
     static func levelDb(_ pcm: AVAudioPCMBuffer) -> Float {

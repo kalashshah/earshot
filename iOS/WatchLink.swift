@@ -1,5 +1,6 @@
 import Foundation
 import WatchConnectivity
+import UserNotifications
 
 /// Receives clips from the watch (the system wakes this app in the background to deliver them)
 /// and relays start/stop commands. Also hands the device token to the watch via application context.
@@ -79,7 +80,23 @@ final class WatchLink: NSObject, ObservableObject, WCSessionDelegate {
 
     // The watch saved a reminder ("remind me…"): this wakes the app in the background to schedule it.
     func session(_ session: WCSession, didReceiveUserInfo userInfo: [String: Any] = [:]) {
+        if let on = userInfo[Link.beat] as? Bool { return Self.armSilenceAlarm(on) }
         Task { await Reminders.sync() }
+    }
+
+    /// The watch sends a beat every 10 minutes while it records. Each one pushes this notification 30 minutes out,
+    /// so it only fires when the beats stop without the watch saying it was turned off: the app was killed, or
+    /// the watch died or went out of range.
+    private static func armSilenceAlarm(_ on: Bool) {
+        let center = UNUserNotificationCenter.current()
+        center.removePendingNotificationRequests(withIdentifiers: ["watch-silent"])
+        guard on else { return }
+        center.requestAuthorization(options: [.alert, .sound]) { _, _ in }
+        let content = UNMutableNotificationContent()
+        content.title = "Earshot may have stopped"
+        content.body = "Your watch hasn't checked in for 30 minutes. If you meant to be recording, open Earshot on the watch."
+        content.sound = .default
+        center.add(UNNotificationRequest(identifier: "watch-silent", content: content, trigger: UNTimeIntervalNotificationTrigger(timeInterval: 30 * 60, repeats: false)))
     }
 
     func session(_ session: WCSession, didReceive file: WCSessionFile) {

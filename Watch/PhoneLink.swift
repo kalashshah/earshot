@@ -9,12 +9,20 @@ final class PhoneLink: NSObject, ObservableObject, WCSessionDelegate {
     @Published private(set) var pending = 0
 
     private let recorder = Recorder.shared
+    private var beating = false
+    private var beat: Timer?
 
     func activate() {
         recorder.onClip = { [weak self] _ in self?.flush() }
         recorder.onStateChange = { [weak self] in self?.pushState() }
         WCSession.default.delegate = self
         WCSession.default.activate()
+        // If watchOS kills the app mid-recording nothing here can say so. The phone can: each beat pushes back a
+        // notification on the phone, which fires once the beats stop.
+        beat = Timer.scheduledTimer(withTimeInterval: 600, repeats: true) { [weak self] _ in
+            guard let self, self.beating, WCSession.default.activationState == .activated else { return }
+            WCSession.default.transferUserInfo([Link.beat: true])
+        }
     }
 
     /// Queue everything in the outbox the session isn't already carrying: the new clip, and any whose
@@ -44,6 +52,10 @@ final class PhoneLink: NSObject, ObservableObject, WCSessionDelegate {
     private func pushState() {
         guard WCSession.default.activationState == .activated else { return }
         try? WCSession.default.updateApplicationContext(state())
+        if recorder.isOn != beating {
+            beating = recorder.isOn
+            WCSession.default.transferUserInfo([Link.beat: beating])
+        }
     }
 
     // MARK: WCSessionDelegate

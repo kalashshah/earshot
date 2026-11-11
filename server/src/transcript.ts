@@ -6,13 +6,14 @@ export const UNCLEAR = 0.5
 // wrapped in [unclear: …] so the model doesn't build a promise on a mishearing. Falls back to
 // the plain transcript when utterances aren't present.
 export function formatTranscript(out: any): string {
-  const utterances: { speaker?: number; transcript?: string; confidence?: number }[] = out?.results?.utterances ?? []
+  const utterances: { speaker?: number; transcript?: string; confidence?: number; words?: Word[] }[] = out?.results?.utterances ?? []
   if (utterances.length) {
     const lines: { speaker: number; text: string }[] = []
     for (const u of utterances) {
       let text = (u.transcript ?? '').trim()
       if (!text) continue
       if (u.confidence != null && u.confidence < UNCLEAR) text = `[unclear: ${text}]`
+      else text = markWords(u.words) ?? text
       const speaker = u.speaker ?? 0
       const last = lines[lines.length - 1]
       if (last && last.speaker === speaker) last.text += ' ' + text
@@ -21,6 +22,24 @@ export function formatTranscript(out: any): string {
     return lines.map((l) => `Speaker ${l.speaker}: ${l.text}`).join('\n')
   }
   return (out?.results?.channels?.[0]?.alternatives?.[0]?.transcript ?? '').trim()
+}
+
+type Word = { word?: string; punctuated_word?: string; confidence?: number }
+
+// A clear sentence can still hold one garbled word, and it is usually the name: on a test clip "Nemotron" came back
+// as "Nematron" at 0.45 and "Jakub" as "Jacob" at 0.29, with the words around them at 0.99. Null when all are clear.
+function markWords(words?: Word[]): string | null {
+  if (!words?.some((w) => w.confidence != null && w.confidence < UNCLEAR)) return null
+  const out: string[] = []
+  let run: string[] = []
+  const flush = () => { if (run.length) out.push(`[unclear: ${run.join(' ')}]`); run = [] }
+  for (const w of words) {
+    const t = w.punctuated_word ?? w.word ?? ''
+    if (w.confidence != null && w.confidence < UNCLEAR) run.push(t)
+    else { flush(); out.push(t) }
+  }
+  flush()
+  return out.join(' ')
 }
 
 export const wordCount = (s: string) => s.split(/\s+/).filter((w) => w && !/^Speaker$|^\d+:$|^\[unclear:$/.test(w)).length
@@ -47,7 +66,8 @@ export function unlabelSpeakers(text: string, names: Record<string, string | nul
 export function nameSpeakers(transcript: string, names: Record<string, string | null>, userName?: string): string {
   return transcript.replace(/^Speaker (\d+):/gm, (_, n: string) => {
     const v = names[`Speaker ${n}`]
-    return `${v && !/^speaker/i.test(v) ? who(v, userName) : `Person ${String.fromCharCode(65 + (Number(n) % 26))}`}:`
+    const name = v && !/^speaker/i.test(v) ? who(v, userName) : `Person ${String.fromCharCode(65 + (Number(n) % 26))}`
+    return `${name[0].toUpperCase()}${name.slice(1)}:`
   })
 }
 

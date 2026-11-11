@@ -54,5 +54,6 @@ enum Link {
     static let pending = "pending"    // clips still on the watch
     static let capturing = "capturing" // a conversation is being recorded right now
     static let token = "token"        // phone → watch device token; "" = unpaired
+    static let beat = "beat"          // watch → phone user info, every 10 min while recording: true = still on, false = turned off
     static let levels = "levels"      // file-transfer metadata: the clip's per-second mic loudness
 }

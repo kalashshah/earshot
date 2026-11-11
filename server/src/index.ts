@@ -171,8 +171,8 @@ async function route(req: Request, env: Env): Promise<Response> {
       `SELECT id, started_at, duration_ms, status, title, summary, transcript, memories_added, entities, error
        FROM recordings WHERE user_id = ? AND started_at < ? AND status != 'empty'
        ORDER BY started_at DESC LIMIT ?`
-    ).bind(user.id, before, limit).all()
-    return json({ recordings: results })
+    ).bind(user.id, before, limit).all<Pick<Recording, 'transcript' | 'entities'>>()
+    return json({ recordings: results.map((r) => ({ ...r, transcript: named(r.transcript, r.entities, user) })) })
   }
 
   // POST /recordings/:id/retry — re-run a failed recording (finished stages are kept)
@@ -240,9 +240,9 @@ async function route(req: Request, env: Env): Promise<Response> {
     const routed = (await routeQuestion(llm, user.id, question.slice(0, 500), index)).filter((id) => known.has(id))
     const ids = [...new Set([...routed, ...clipIdsFrom(memories)])].slice(0, 7)
     const clips = ids.length
-      ? (await env.DB.prepare(`SELECT id, started_at, title, summary, transcript FROM recordings WHERE user_id = ? AND id IN (${ids.map(() => '?').join(',')}) ORDER BY started_at`)
-          .bind(user.id, ...ids).all<Pick<Recording, 'id' | 'started_at' | 'title' | 'summary' | 'transcript'>>()).results
-          .map((r) => ({ id: r.id, when: stamp(r.started_at, tz), title: r.title ?? 'Conversation', transcript: (r.transcript ?? r.summary ?? '').slice(0, 7000) }))
+      ? (await env.DB.prepare(`SELECT id, started_at, title, summary, transcript, entities FROM recordings WHERE user_id = ? AND id IN (${ids.map(() => '?').join(',')}) ORDER BY started_at`)
+          .bind(user.id, ...ids).all<Pick<Recording, 'id' | 'started_at' | 'title' | 'summary' | 'transcript' | 'entities'>>()).results
+          .map((r) => ({ id: r.id, when: stamp(r.started_at, tz), title: r.title ?? 'Conversation', transcript: (named(r.transcript, r.entities, user) ?? r.summary ?? '').slice(0, 7000) }))
       : []
     const out = await answer(llm, user.id, question.slice(0, 500), memories, clips, stamp(Date.now(), tz))
     // "remind me…" from the watch: the watch then tells the phone to re-sync its notifications
@@ -524,6 +524,8 @@ async function processRecording(env: Env, id: string) {
       // language per clip and dropped the other. Same Workers AI price per minute.
       // ponytail: 'multi' covers 10 languages; swap back to detect_language for a user whose language isn't one of them.
       language: 'multi',
+      // Keeps the audio out of Deepgram's model-improvement programme: it is deleted here the moment it's transcribed.
+      mip_opt_out: true,
     } as any)) as any
     transcript = formatTranscript(out)
     if (rec.levels) speakerDb = JSON.stringify(speakerLoudness(out, rec.levels))
@@ -550,7 +552,7 @@ async function processRecording(env: Env, id: string) {
     // were, not by label: this clip's "Speaker 0" is numbered afresh and may be someone else.
     const prevWas = JSON.parse(prev?.entities ?? '{}') as { screen?: string; speakers?: Record<string, string | null> }
     const before = prev && `${prevWas.screen ? `(${prevWas.screen} was playing.)\n` : ''}${nameSpeakers(prev.transcript.slice(-4000), prevWas.speakers ?? {}, user.name ?? undefined)}`
-    const x = await extractClip(llm, rec.user_id, transcript, when, before || undefined, rec.music, rec.ambient, loudnessHint(JSON.parse(speakerDb ?? 'null')))
+    const x = await extractClip(llm, rec.user_id, transcript, when, before || undefined, rec.music, rec.ambient, loudnessHint(JSON.parse(speakerDb ?? 'null')), await knownNames(env, user))
     facts = x.facts
     // Action ids are derived from the clip → a retry re-inserts nothing.
     const stmts: D1PreparedStatement[] = []
@@ -614,7 +616,7 @@ async function runBrief(env: Env, user: User, day: string) {
     llm,
     user.id,
     day,
-    clips.map((c) => ({ when: stamp(c.started_at, tz), title: c.title ?? 'Conversation', transcript: c.transcript ?? '' })),
+    clips.map((c) => ({ when: stamp(c.started_at, tz), title: c.title ?? 'Conversation', transcript: named(c.transcript, c.entities, user) ?? '' })),
     await openActionLines(env, user),
     news,
     (await openMoments(env, user)).flatMap((m) => {
@@ -704,6 +706,26 @@ async function clipsById(env: Env, user: User, ids: string[]) {
   const { results } = await env.DB.prepare(`SELECT id, started_at, title FROM recordings WHERE user_id = ? AND id IN (${ids.map(() => '?').join(',')})`)
     .bind(user.id, ...ids).all()
   return results
+}
+
+// A transcript for reading back: speakers by who they were, once extraction has worked that out. What is stored
+// keeps its "Speaker N" labels.
+function named(transcript: string | null, entities: string | null, user: User): string | null {
+  const speakers = (JSON.parse(entities ?? '{}') as { speakers?: Record<string, string | null> }).speakers
+  return transcript && speakers ? nameSpeakers(transcript, speakers, user.name ?? undefined) : transcript
+}
+
+// People and companies already heard, most mentioned first, so extraction can spell a garbled name right.
+// Nova-3's own keyterm boost would do this at the source, but Workers AI rejects it with language 'multi' (tested).
+async function knownNames(env: Env, user: User): Promise<string[]> {
+  const { results } = await env.DB.prepare(`SELECT entities FROM recordings WHERE user_id = ? AND entities IS NOT NULL ORDER BY started_at DESC LIMIT 300`)
+    .bind(user.id).all<{ entities: string }>()
+  const seen = new Map<string, number>()
+  for (const r of results) {
+    const e = JSON.parse(r.entities) as Partial<Entities>
+    for (const n of [...(e.orgs ?? []), ...(e.people ?? []).flatMap((p) => [p.name, p.org])]) if (n) seen.set(n, (seen.get(n) ?? 0) + 1)
+  }
+  return [...seen].sort((a, b) => b[1] - a[1]).slice(0, 40).map(([n]) => n)
 }
 
 // Companies of the people you're meeting, as heard in past conversations.
